@@ -1,0 +1,1684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2027 Reading Architecture & Cognitive Regimen</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- html2canvas for High-Res Poster Export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap');
+
+    :root {
+      --bg-cream: #fbfcf9;
+      --sage-50: #f4f7f4;
+      --sage-100: #e5ede5;
+      --sage-200: #cbdbcb;
+      --sage-300: #a7c1a7;
+      --sage-500: #5f8763;
+      --sage-700: #38593d;
+      --sage-800: #29442d;
+      --sage-900: #1b2e1e;
+      --emerald-dark: #122116;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #f7f9f6;
+      color: #1f3322;
+      overflow-x: hidden;
+    }
+
+    .font-serif-title {
+      font-family: 'Playfair Display', Georgia, serif;
+    }
+
+    .font-mono-code {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Custom Scrollbars */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #edf2eb;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #a9c2aa;
+      border-radius: 9999px;
+    }
+
+    /* Book Card Hover Elevation */
+    .book-card {
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      transform-origin: center;
+    }
+    .book-card:hover {
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 16px 28px -8px rgba(35, 60, 40, 0.18), 0 4px 10px -2px rgba(35, 60, 40, 0.08);
+      z-index: 40;
+    }
+    .book-card.highlighted {
+      ring: 3px solid #38593d;
+      outline: 3px solid #6ee7b7;
+      transform: scale(1.05);
+      z-index: 45;
+    }
+    .book-card.dimmed {
+      opacity: 0.25;
+      filter: grayscale(80%);
+    }
+
+    /* Canvas Zoom & Pan Surface */
+    #canvas-viewport {
+      cursor: grab;
+      user-select: none;
+    }
+    #canvas-viewport.panning {
+      cursor: grabbing;
+    }
+
+    /* Dashed accessory style for Fiction items */
+    .is-accessory {
+      border-style: dashed !important;
+      border-color: #5f8763 !important;
+      background-color: #f0f6f1 !important;
+    }
+
+    /* Ambient radial glow */
+    .radial-sage-glow {
+      background: radial-gradient(circle at 50% 50%, rgba(193, 222, 198, 0.35) 0%, rgba(247, 249, 246, 0) 70%);
+    }
+
+    /* Subtle print view */
+    @media print {
+      #top-navbar, #control-dock, #floating-drawer {
+        display: none !important;
+      }
+      body {
+        background: white;
+      }
+      #poster-canvas {
+        transform: scale(1) translate(0, 0) !important;
+      }
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-[#f6f8f5] flex flex-col text-slate-800">
+
+  <!-- TOP CONTROL TOOLBAR -->
+  <header id="top-navbar" class="sticky top-0 z-50 bg-white/85 backdrop-blur-md border-b border-[#dde6dc] px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-4 shadow-xs">
+    <div class="flex items-center space-x-3">
+      <div class="w-9 h-9 rounded-xl bg-[#29442d] text-white flex items-center justify-center shadow-sm">
+        <i data-lucide="compass" class="w-5 h-5"></i>
+      </div>
+      <div>
+        <h1 class="font-serif-title text-lg sm:text-xl font-bold tracking-tight text-[#1b2e1e]">2027 Cognitive Reading Map</h1>
+        <p class="text-xs text-[#527056] font-medium">60 Titles • Harmonic Sage Architecture • Functional Cognitive Regimen</p>
+      </div>
+    </div>
+
+    <!-- Central Filter Buttons for Muscle Groups -->
+    <div class="hidden xl:flex items-center space-x-1.5 bg-[#eef3ec] p-1 rounded-xl text-xs font-medium border border-[#d6e2d4]">
+      <button onclick="filterMuscleGroup('ALL')" class="filter-btn active px-2.5 py-1 rounded-lg text-[#1b2e1e] bg-white shadow-xs transition" data-group="ALL">All (60)</button>
+      <button onclick="filterMuscleGroup('Posterior Chain & Legs')" class="filter-btn px-2.5 py-1 rounded-lg text-[#4a674e] hover:text-[#1b2e1e] transition" data-group="Posterior Chain & Legs">Posterior / History (11)</button>
+      <button onclick="filterMuscleGroup('Back & Core')" class="filter-btn px-2.5 py-1 rounded-lg text-[#4a674e] hover:text-[#1b2e1e] transition" data-group="Back & Core">Back & Core / Politics (9)</button>
+      <button onclick="filterMuscleGroup('Chest & Delts')" class="filter-btn px-2.5 py-1 rounded-lg text-[#4a674e] hover:text-[#1b2e1e] transition" data-group="Chest & Delts">Chest / Econ (8)</button>
+      <button onclick="filterMuscleGroup('Arms')" class="filter-btn px-2.5 py-1 rounded-lg text-[#4a674e] hover:text-[#1b2e1e] transition" data-group="Arms">Arms / Mind & Bio (10)</button>
+      <button onclick="filterMuscleGroup('Hard Compound Pulls')" class="filter-btn px-2.5 py-1 rounded-lg text-[#4a674e] hover:text-[#1b2e1e] transition" data-group="Hard Compound Pulls">Hard Pulls / Physics (8)</button>
+      <button onclick="filterMuscleGroup('Cardio & Agility')" class="filter-btn px-2.5 py-1 rounded-lg text-[#4a674e] hover:text-[#1b2e1e] transition" data-group="Cardio & Agility">Cardio / Tech & AI (5)</button>
+      <button onclick="filterMuscleGroup('Mobility & Flexibility')" class="filter-btn px-2.5 py-1 rounded-lg text-[#4a674e] hover:text-[#1b2e1e] transition" data-group="Mobility & Flexibility">Mobility / Fiction (9)</button>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="flex items-center space-x-2">
+      <!-- Search Input -->
+      <div class="relative">
+        <i data-lucide="search" class="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-[#648467]"></i>
+        <input id="searchInput" type="text" placeholder="Find book or author..." oninput="handleSearch(this.value)" 
+          class="pl-8 pr-3 py-1.5 text-xs rounded-lg border border-[#cddccd] bg-[#fbfdfa] focus:outline-none focus:ring-1 focus:ring-[#38593d] w-36 sm:w-48 transition" />
+      </div>
+
+      <!-- Auto-generate styled artistic placeholders -->
+      <button onclick="generateAestheticCovers()" title="Generate decorative typographic cover art for all books" 
+        class="flex items-center space-x-1.5 px-3 py-1.5 bg-[#e4ede3] hover:bg-[#d5e3d4] text-[#243d27] rounded-lg text-xs font-semibold border border-[#bdd0bc] transition">
+        <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+        <span class="hidden sm:inline">Fill Mock Covers</span>
+      </button>
+
+      <!-- Export Poster Button -->
+      <button onclick="exportPoster()" 
+        class="flex items-center space-x-1.5 px-3.5 py-1.5 bg-[#29442d] hover:bg-[#1f3523] text-white rounded-lg text-xs font-semibold shadow-xs transition active:scale-95">
+        <i data-lucide="download" class="w-3.5 h-3.5"></i>
+        <span>Export Poster</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- WORKSPACE VIEWPORT FOR PAN/ZOOM -->
+  <main id="canvas-viewport" class="relative flex-1 overflow-hidden w-full bg-[#f4f7f3] min-h-[calc(100vh-65px)]">
+    
+    <!-- ZOOM / RESET CONTROLS DOCK (BOTTOM RIGHT) -->
+    <div id="control-dock" class="fixed bottom-6 right-6 z-50 flex items-center space-x-1 bg-white/90 backdrop-blur-md border border-[#cddccd] p-1.5 rounded-xl shadow-lg">
+      <button onclick="zoomAdjust(-0.15)" title="Zoom Out" class="p-2 text-[#3b583f] hover:bg-[#eef3ec] rounded-lg transition">
+        <i data-lucide="zoom-out" class="w-4 h-4"></i>
+      </button>
+      <span id="zoomLabel" class="text-[11px] font-mono-code font-bold text-[#2d4731] px-2 min-w-[50px] text-center">100%</span>
+      <button onclick="zoomAdjust(0.15)" title="Zoom In" class="p-2 text-[#3b583f] hover:bg-[#eef3ec] rounded-lg transition">
+        <i data-lucide="zoom-in" class="w-4 h-4"></i>
+      </button>
+      <div class="h-4 w-[1px] bg-[#d2ded1] mx-1"></div>
+      <button onclick="resetZoom()" title="Reset Canvas View" class="p-2 text-[#3b583f] hover:bg-[#eef3ec] rounded-lg transition">
+        <i data-lucide="maximize" class="w-4 h-4"></i>
+      </button>
+    </div>
+
+    <!-- INSTRUCTION BADGE (BOTTOM LEFT) -->
+    <div class="fixed bottom-6 left-6 z-40 hidden md:flex items-center space-x-2 bg-white/90 backdrop-blur-md border border-[#cddccd] px-3.5 py-2 rounded-xl text-xs text-[#3a583e] shadow-sm">
+      <i data-lucide="image-plus" class="w-4 h-4 text-[#29442d]"></i>
+      <span><strong>Tip:</strong> Drag & drop any book cover image directly onto its card to replace it!</span>
+    </div>
+
+    <!-- TRANSFORMABLE POSTER CANVAS CONTAINER -->
+    <div id="canvas-transform-layer" class="origin-top-left transition-transform duration-75">
+      
+      <!-- THE MASTER POSTER BOARD (Target dimensions for high resolution 2400 x 3000 Canvas) -->
+      <div id="poster-canvas" class="relative w-[2400px] min-h-[3050px] bg-[#fbfcf9] p-16 select-text overflow-hidden">
+        
+        <!-- Subtle Ambient Canvas Gradients and Watermarks -->
+        <div class="absolute inset-0 radial-sage-glow pointer-events-none"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1800px] h-[1800px] rounded-full border border-[#dde7dc] -z-0 opacity-40 pointer-events-none"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[2200px] h-[2200px] rounded-full border border-dashed border-[#c8d9c7] -z-0 opacity-25 pointer-events-none"></div>
+
+        <!-- POSTER HEADER BANNER -->
+        <div class="relative z-10 text-center mb-10 max-w-4xl mx-auto">
+          <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-[#e8f1e6] border border-[#cbdbcb] text-[#2e4d32] text-xs font-semibold tracking-wider uppercase mb-3">
+            <span class="w-2 h-2 rounded-full bg-[#46734c]"></span>
+            <span>Intellectual Regimen • 2027 Reading Architecture</span>
+          </div>
+          <h2 class="font-serif-title text-5xl font-bold tracking-tight text-[#16291a] mb-3">
+            The Topography of Non-Fiction & Literary Accessories
+          </h2>
+          <p class="text-base text-[#4d6a52] max-w-2xl mx-auto">
+            A continuous dialectic between deep chronologic scaffolding, pure foundational sciences, civil governance, and complementary fiction.
+          </p>
+        </div>
+
+
+        <!-- ========================================================================= -->
+        <!-- SECTION 1: UPPER KNOWLEDGE WHEEL (SCIENCE - PHILOSOPHY - RELIGION / CONSCIOUSNESS) -->
+        <!-- ========================================================================= -->
+        <section class="relative z-10 w-full mb-12">
+          
+          <!-- Wheel Semicircle Graphical Anchor -->
+          <div class="w-full flex justify-center mb-6">
+            <div class="relative w-[1000px] h-[220px] bg-gradient-to-b from-[#e5ede4] via-[#f1f6f0] to-transparent rounded-t-[500px] border-t-2 border-x-2 border-[#b5ccb5] shadow-xs flex flex-col items-center pt-5">
+              
+              <div class="text-center">
+                <span class="text-xs uppercase tracking-widest font-bold text-[#45694a]">Upper Knowledge Sphere</span>
+                <h3 class="font-serif-title text-2xl font-bold text-[#1a2f1e]">Pure Science • Epistemic Philosophy • Consciousness</h3>
+              </div>
+
+              <!-- Internal Wheels Structure Diagram Elements -->
+              <div class="flex items-center justify-between w-[85%] mt-6 px-12">
+                <!-- Science Pillar Marker -->
+                <div class="flex items-center space-x-3 bg-white/95 px-4 py-2 rounded-xl border border-[#b2cab2] shadow-sm">
+                  <div class="w-8 h-8 rounded-lg bg-[#27472c] text-white flex items-center justify-center font-bold text-sm">
+                    <i data-lucide="atom" class="w-4 h-4"></i>
+                  </div>
+                  <div>
+                    <div class="text-[10px] font-bold uppercase tracking-wider text-[#49704e]">Domain 01</div>
+                    <div class="text-sm font-extrabold text-[#1c3320]">Science Hierarchy</div>
+                  </div>
+                </div>
+
+                <!-- Center Core: Neuroscience & Consciousness / Religion -->
+                <div class="flex flex-col items-center bg-[#eff5ee] px-6 py-2 rounded-2xl border-2 border-[#8fae90] shadow-sm">
+                  <div class="flex items-center space-x-2 text-xs font-bold text-[#203a24]">
+                    <i data-lucide="brain" class="w-4 h-4 text-[#355a3a]"></i>
+                    <span>Neuroscience & Consciousness</span>
+                  </div>
+                  <div class="w-16 h-[1px] bg-[#9bb79c] my-1"></div>
+                  <span class="text-[11px] font-semibold text-[#547958]">Religion & The Moral Self</span>
+                </div>
+
+                <!-- Philosophy Pillar Marker -->
+                <div class="flex items-center space-x-3 bg-white/95 px-4 py-2 rounded-xl border border-[#b2cab2] shadow-sm">
+                  <div>
+                    <div class="text-[10px] font-bold uppercase tracking-wider text-[#49704e] text-right">Domain 02</div>
+                    <div class="text-sm font-extrabold text-[#1c3320]">Philosophy & Mind</div>
+                  </div>
+                  <div class="w-8 h-8 rounded-lg bg-[#3d6543] text-white flex items-center justify-center font-bold text-sm">
+                    <i data-lucide="scale" class="w-4 h-4"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Upper Content Grid: 3 Main Columns matching the Infographic Topology -->
+          <div class="grid grid-cols-12 gap-8 items-start">
+            
+            <!-- LEFT QUADRANT: PURE SCIENCES (Biology & Chemistry, Physics, Mathematics) -->
+            <div class="col-span-5 space-y-6">
+              
+              <!-- 1. Biology & Chemistry Sector (True Sciences) -->
+              <div class="bg-white/80 backdrop-blur-xs p-5 rounded-2xl border border-[#c1d6c1] shadow-xs">
+                <div class="flex items-center justify-between pb-3 mb-3 border-b border-[#e1ece0]">
+                  <div class="flex items-center space-x-2">
+                    <span class="w-3 h-3 rounded-full bg-[#27472c]"></span>
+                    <h4 class="font-bold text-sm text-[#1b311f] uppercase tracking-wide">Biology & Chemistry</h4>
+                  </div>
+                  <span class="text-[11px] text-[#46694a] font-medium bg-[#ecf4ea] px-2.5 py-0.5 rounded-full border border-[#cadcca]">3 Titles</span>
+                </div>
+                <div class="grid grid-cols-3 gap-3" id="cluster-bio-chem">
+                  <!-- Book 32, 34, 35 populated by JS -->
+                </div>
+              </div>
+
+              <!-- 2. Physics Sector -->
+              <div class="bg-white/80 backdrop-blur-xs p-5 rounded-2xl border border-[#c1d6c1] shadow-xs">
+                <div class="flex items-center justify-between pb-3 mb-3 border-b border-[#e1ece0]">
+                  <div class="flex items-center space-x-2">
+                    <span class="w-3 h-3 rounded-full bg-[#355a3a]"></span>
+                    <h4 class="font-bold text-sm text-[#1b311f] uppercase tracking-wide">Physics & Quantum Foundations</h4>
+                  </div>
+                  <span class="text-[11px] text-[#46694a] font-medium bg-[#ecf4ea] px-2.5 py-0.5 rounded-full border border-[#cadcca]">3 Titles</span>
+                </div>
+                <div class="grid grid-cols-3 gap-3" id="cluster-physics">
+                  <!-- Book 44, 45, 51 populated by JS -->
+                </div>
+              </div>
+
+              <!-- 3. Mathematics Sector (Circle with Math Operators) -->
+              <div class="bg-white/80 backdrop-blur-xs p-5 rounded-2xl border border-[#c1d6c1] shadow-xs">
+                <div class="flex items-center justify-between pb-3 mb-3 border-b border-[#e1ece0]">
+                  <div class="flex items-center space-x-2">
+                    <div class="w-6 h-6 rounded-full bg-[#27472c] text-white flex items-center justify-center text-[10px] font-mono-code font-bold">
+                      ±×÷
+                    </div>
+                    <h4 class="font-bold text-sm text-[#1b311f] uppercase tracking-wide">Mathematics & Causality</h4>
+                  </div>
+                  <span class="text-[11px] text-[#46694a] font-medium bg-[#ecf4ea] px-2.5 py-0.5 rounded-full border border-[#cadcca]">2 Titles</span>
+                </div>
+                <div class="grid grid-cols-2 gap-3" id="cluster-math">
+                  <!-- Book 48, 50 populated by JS -->
+                </div>
+              </div>
+
+            </div>
+
+            <!-- CENTER CORE: NEUROSCIENCE, MEMORY & CONSCIOUSNESS -->
+            <div class="col-span-3 space-y-6">
+              <div class="bg-[#f0f6ef]/90 p-5 rounded-2xl border-2 border-[#94b595] shadow-sm">
+                <div class="flex items-center justify-between pb-3 mb-3 border-b border-[#c8ddc7]">
+                  <div class="flex items-center space-x-2">
+                    <i data-lucide="brain-circuit" class="w-4 h-4 text-[#2b4c30]"></i>
+                    <h4 class="font-bold text-sm text-[#1b311f] uppercase tracking-wide">Consciousness & Mind</h4>
+                  </div>
+                  <span class="text-[11px] text-[#46694a] font-medium bg-white px-2 py-0.5 rounded-full border border-[#cadcca]">4 Titles</span>
+                </div>
+                <div class="grid grid-cols-2 gap-3" id="cluster-consciousness">
+                  <!-- Book 36, 37 (Solaris), 41, 42 populated by JS -->
+                </div>
+              </div>
+
+              <!-- Epistemological Summary Note -->
+              <div class="p-4 rounded-xl bg-white border border-[#cde0cb] text-xs text-[#39563c] leading-relaxed shadow-2xs">
+                <div class="font-bold text-[#1f3723] mb-1 flex items-center space-x-1.5">
+                  <i data-lucide="info" class="w-3.5 h-3.5"></i>
+                  <span>Philosophic Symmetry</span>
+                </div>
+                The Upper Sphere captures human selfhood: natural sciences descending from physics to biology, anchored against the internal phenomena of memory, consciousness, and moral philosophy.
+              </div>
+            </div>
+
+            <!-- RIGHT QUADRANT: PHILOSOPHY & THE EXTENSIONS (Anthropology, Psychology, Sociology) -->
+            <div class="col-span-4 space-y-6">
+              
+              <!-- Epistemic Philosophy & Agency -->
+              <div class="bg-white/80 backdrop-blur-xs p-5 rounded-2xl border border-[#c1d6c1] shadow-xs">
+                <div class="flex items-center justify-between pb-3 mb-3 border-b border-[#e1ece0]">
+                  <div class="flex items-center space-x-2">
+                    <span class="w-3 h-3 rounded-full bg-[#416847]"></span>
+                    <h4 class="font-bold text-sm text-[#1b311f] uppercase tracking-wide">Philosophy & Free Will</h4>
+                  </div>
+                  <span class="text-[11px] text-[#46694a] font-medium bg-[#ecf4ea] px-2.5 py-0.5 rounded-full border border-[#cadcca]">6 Titles</span>
+                </div>
+                <div class="grid grid-cols-3 gap-3" id="cluster-philosophy">
+                  <!-- Book 17, 20, 39, 40, 43, 46, 47 populated by JS -->
+                </div>
+              </div>
+
+              <!-- Biological Extensions (Anthropology, Psychology, Sociology) -->
+              <div class="bg-[#f7faf6] p-5 rounded-2xl border border-[#b8d0b7] shadow-xs">
+                <div class="flex items-center justify-between pb-3 mb-3 border-b border-[#dce9da]">
+                  <div>
+                    <div class="text-[10px] font-bold text-[#557b59] uppercase tracking-widest">Biological Extensions</div>
+                    <h4 class="font-bold text-sm text-[#1c3321] uppercase tracking-wide">Anthropology, Psychology & Sociology</h4>
+                  </div>
+                  <span class="text-[11px] text-[#46694a] font-medium bg-white px-2.5 py-0.5 rounded-full border border-[#cadcca]">4 Titles</span>
+                </div>
+                <div class="grid grid-cols-2 gap-3" id="cluster-social">
+                  <!-- Book 33, 38, 57, 60 populated by JS -->
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+        </section>
+
+
+        <!-- ========================================================================= -->
+        <!-- SECTION 2: CENTRAL TIMELINE (THE MAIN HISTORICAL HIGHWAY AXIS)           -->
+        <!-- ========================================================================= -->
+        <section class="relative z-20 my-16 bg-[#eef4ed] border-y-2 border-[#adc7ac] py-8 px-6 rounded-3xl shadow-sm">
+          
+          <div class="flex items-center justify-between mb-8 px-4">
+            <div class="flex items-center space-x-3">
+              <span class="w-3.5 h-3.5 rotate-45 bg-[#25432a]"></span>
+              <h3 class="font-serif-title text-2xl font-bold tracking-tight text-[#162a19]">
+                The Historical Axis • The Deep Scaffolding of Human Civilization
+              </h3>
+            </div>
+            <div class="flex items-center space-x-4 text-xs font-semibold text-[#446648]">
+              <span>West to East Diffusion</span>
+              <i data-lucide="arrow-right" class="w-4 h-4 text-[#2b4c30]"></i>
+              <span>Modernity Cascade</span>
+            </div>
+          </div>
+
+          <!-- Timeline Milestone Track Bar -->
+          <div class="relative w-full px-6 mb-10">
+            <!-- Continuous Horizontal Line -->
+            <div class="absolute top-1/2 left-6 right-6 h-1 bg-[#8fae90] -translate-y-1/2 rounded-full"></div>
+            
+            <!-- Milestones Row -->
+            <div class="relative z-10 flex justify-between items-center text-center">
+              
+              <!-- 1. Prehistoric World -->
+              <div class="flex flex-col items-center">
+                <div class="w-7 h-7 rotate-45 bg-white border-2 border-[#38593d] flex items-center justify-center shadow-xs">
+                  <div class="w-2.5 h-2.5 bg-[#29442d] rounded-full"></div>
+                </div>
+                <span class="mt-4 font-bold text-xs uppercase tracking-wide text-[#1c3420]">Prehistoric<br>World</span>
+              </div>
+
+              <!-- 2. Ancient World -->
+              <div class="flex flex-col items-center">
+                <div class="w-7 h-7 rotate-45 bg-white border-2 border-[#38593d] flex items-center justify-center shadow-xs">
+                  <div class="w-2.5 h-2.5 bg-[#29442d] rounded-full"></div>
+                </div>
+                <span class="mt-4 font-bold text-xs uppercase tracking-wide text-[#1c3420]">Ancient<br>World</span>
+              </div>
+
+              <!-- 3. Classical World -->
+              <div class="flex flex-col items-center">
+                <div class="w-7 h-7 rotate-45 bg-white border-2 border-[#38593d] flex items-center justify-center shadow-xs">
+                  <div class="w-2.5 h-2.5 bg-[#29442d] rounded-full"></div>
+                </div>
+                <span class="mt-4 font-bold text-xs uppercase tracking-wide text-[#1c3420]">Classical<br>World</span>
+              </div>
+
+              <!-- 4. Medieval World -->
+              <div class="flex flex-col items-center">
+                <div class="w-7 h-7 rotate-45 bg-[#29442d] text-white flex items-center justify-center shadow-xs">
+                  <div class="w-2.5 h-2.5 bg-white rounded-full"></div>
+                </div>
+                <span class="mt-4 font-bold text-xs uppercase tracking-wide text-[#1c3420]">Medieval<br>World</span>
+              </div>
+
+              <!-- 5. Early Modern World -->
+              <div class="flex flex-col items-center">
+                <div class="w-7 h-7 rotate-45 bg-white border-2 border-[#38593d] flex items-center justify-center shadow-xs">
+                  <div class="w-2.5 h-2.5 bg-[#29442d] rounded-full"></div>
+                </div>
+                <span class="mt-4 font-bold text-xs uppercase tracking-wide text-[#1c3420]">Early Modern<br>World</span>
+              </div>
+
+              <!-- 6. World of Empires -->
+              <div class="flex flex-col items-center">
+                <div class="w-7 h-7 rotate-45 bg-white border-2 border-[#38593d] flex items-center justify-center shadow-xs">
+                  <div class="w-2.5 h-2.5 bg-[#29442d] rounded-full"></div>
+                </div>
+                <span class="mt-4 font-bold text-xs uppercase tracking-wide text-[#1c3420]">World of<br>Empires</span>
+              </div>
+
+              <!-- 7. Modern World -->
+              <div class="flex flex-col items-center">
+                <div class="w-7 h-7 rotate-45 bg-white border-2 border-[#38593d] flex items-center justify-center shadow-xs">
+                  <div class="w-2.5 h-2.5 bg-[#29442d] rounded-full"></div>
+                </div>
+                <span class="mt-4 font-bold text-xs uppercase tracking-wide text-[#1c3420]">Modern<br>World</span>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- History Books Carousel Container: Maps all 12 History & Literary Scaffolding titles -->
+          <div class="grid grid-cols-6 gap-4" id="cluster-history">
+            <!-- Books 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 22, 58 rendered here -->
+          </div>
+        </section>
+
+
+        <!-- ========================================================================= -->
+        <!-- SECTION 3: LOWER KNOWLEDGE WHEEL (POLITICS - TECHNOLOGY/AI - ECONOMICS)   -->
+        <!-- ========================================================================= -->
+        <section class="relative z-10 w-full mt-10">
+          
+          <!-- Lower Semicircle Graphical Anchor -->
+          <div class="w-full flex justify-center mb-6">
+            <div class="relative w-[1000px] h-[220px] bg-gradient-to-t from-[#e5ede4] via-[#f1f6f0] to-transparent rounded-b-[500px] border-b-2 border-x-2 border-[#b5ccb5] shadow-xs flex flex-col items-center justify-end pb-5">
+              
+              <!-- Lower Triad Diagram Markers -->
+              <div class="flex items-center justify-between w-[85%] mb-4 px-12">
+                <!-- Politics Sector Anchor -->
+                <div class="flex items-center space-x-3 bg-white/95 px-4 py-2 rounded-xl border border-[#b2cab2] shadow-sm">
+                  <div class="w-8 h-8 rounded-lg bg-[#375a3c] text-white flex items-center justify-center font-bold text-sm">
+                    <i data-lucide="flag" class="w-4 h-4"></i>
+                  </div>
+                  <div>
+                    <div class="text-[10px] font-bold uppercase tracking-wider text-[#49704e]">Macro Core</div>
+                    <div class="text-sm font-extrabold text-[#1c3320]">Politics & Power</div>
+                  </div>
+                </div>
+
+                <!-- Center Technology Anchor (Directly below Science) -->
+                <div class="flex flex-col items-center bg-[#eff5ee] px-6 py-2.5 rounded-2xl border-2 border-[#8fae90] shadow-sm">
+                  <div class="flex items-center space-x-2 text-xs font-bold text-[#1f3823]">
+                    <i data-lucide="cpu" class="w-4 h-4 text-[#2d5032]"></i>
+                    <span>Technology (Applied Science)</span>
+                  </div>
+                  <div class="w-12 h-[1px] bg-[#9bb79c] my-1"></div>
+                  <span class="text-[11px] font-semibold text-[#547958]">Artificial Intelligence</span>
+                </div>
+
+                <!-- Economics Sector Anchor -->
+                <div class="flex items-center space-x-3 bg-white/95 px-4 py-2 rounded-xl border border-[#b2cab2] shadow-sm">
+                  <div>
+                    <div class="text-[10px] font-bold uppercase tracking-wider text-[#49704e] text-right">Metabolism</div>
+                    <div class="text-sm font-extrabold text-[#1c3320]">Economics & Capital</div>
+                  </div>
+                  <div class="w-8 h-8 rounded-lg bg-[#27472c] text-white flex items-center justify-center font-bold text-sm">
+                    <i data-lucide="trending-up" class="w-4 h-4"></i>
+                  </div>
+                </div>
+              </div>
+
+              <div class="text-center">
+                <h3 class="font-serif-title text-2xl font-bold text-[#1a2f1e]">Statecraft • Applied Systems • Material Allocation</h3>
+                <span class="text-xs uppercase tracking-widest font-bold text-[#45694a]">Lower Knowledge Sphere</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Lower Grid: 3 Main Structural Clusters -->
+          <div class="grid grid-cols-12 gap-8 items-start">
+            
+            <!-- LEFT: POLITICS & TOTALITARIANISM (Back & Core) -->
+            <div class="col-span-4 space-y-6">
+              <div class="bg-white/80 backdrop-blur-xs p-5 rounded-2xl border border-[#c1d6c1] shadow-xs">
+                <div class="flex items-center justify-between pb-3 mb-3 border-b border-[#e1ece0]">
+                  <div class="flex items-center space-x-2">
+                    <span class="w-3 h-3 rounded-full bg-[#375a3c]"></span>
+                    <h4 class="font-bold text-sm text-[#1b311f] uppercase tracking-wide">Politics, Power & Democracy</h4>
+                  </div>
+                  <span class="text-[11px] text-[#46694a] font-medium bg-[#ecf4ea] px-2.5 py-0.5 rounded-full border border-[#cadcca]">7 Titles</span>
+                </div>
+                <div class="grid grid-cols-2 gap-3" id="cluster-politics">
+                  <!-- Books 14, 15, 16, 18, 19, 21, 23 populated by JS -->
+                </div>
+              </div>
+            </div>
+
+            <!-- CENTER: TECHNOLOGY & ARTIFICIAL INTELLIGENCE (Directly aligned with Science) -->
+            <div class="col-span-4 space-y-6">
+              
+              <!-- Core Tech & Computing Systems -->
+              <div class="bg-[#f0f6ef]/90 p-5 rounded-2xl border-2 border-[#94b595] shadow-sm">
+                <div class="flex items-center justify-between pb-3 mb-3 border-b border-[#c8ddc7]">
+                  <div class="flex items-center space-x-2">
+                    <i data-lucide="cpu" class="w-4 h-4 text-[#26442b]"></i>
+                    <h4 class="font-bold text-sm text-[#1b311f] uppercase tracking-wide">Technology & Applied Science</h4>
+                  </div>
+                  <span class="text-[11px] text-[#46694a] font-medium bg-white px-2 py-0.5 rounded-full border border-[#cadcca]">3 Titles</span>
+                </div>
+                <div class="grid grid-cols-3 gap-3" id="cluster-tech">
+                  <!-- Books 49, 55, 56 populated by JS -->
+                </div>
+              </div>
+
+              <!-- AI Extensions Block (Connected to Technology) -->
+              <div class="bg-white/90 p-5 rounded-2xl border border-[#b7ceb6] shadow-xs">
+                <div class="flex items-center justify-between pb-3 mb-3 border-b border-[#e1ece0]">
+                  <div class="flex items-center space-x-2">
+                    <span class="w-3 h-3 rounded-full bg-[#27472c]"></span>
+                    <div>
+                      <h4 class="font-bold text-sm text-[#1b311f] uppercase tracking-wide">Artificial Intelligence & Computation</h4>
+                      <span class="text-[10px] text-[#5b7a5e]">Derived extension of applied technology</span>
+                    </div>
+                  </div>
+                  <span class="text-[11px] text-[#46694a] font-medium bg-[#ecf4ea] px-2.5 py-0.5 rounded-full border border-[#cadcca]">3 Titles</span>
+                </div>
+                <div class="grid grid-cols-3 gap-3" id="cluster-ai">
+                  <!-- Books 52, 53, 54 populated by JS -->
+                </div>
+              </div>
+
+            </div>
+
+            <!-- RIGHT: ECONOMICS, CAPITAL, ECOLOGY & FINANCE -->
+            <div class="col-span-4 space-y-6">
+              
+              <!-- Economics & Capital Systems -->
+              <div class="bg-white/80 backdrop-blur-xs p-5 rounded-2xl border border-[#c1d6c1] shadow-xs">
+                <div class="flex items-center justify-between pb-3 mb-3 border-b border-[#e1ece0]">
+                  <div class="flex items-center space-x-2">
+                    <span class="w-3 h-3 rounded-full bg-[#27472c]"></span>
+                    <h4 class="font-bold text-sm text-[#1b311f] uppercase tracking-wide">Capitalism & Global Economy</h4>
+                  </div>
+                  <span class="text-[11px] text-[#46694a] font-medium bg-[#ecf4ea] px-2.5 py-0.5 rounded-full border border-[#cadcca]">3 Titles</span>
+                </div>
+                <div class="grid grid-cols-3 gap-3" id="cluster-econ">
+                  <!-- Books 24, 25, 27 populated by JS -->
+                </div>
+              </div>
+
+              <!-- Branches: Finance & Sustainable Economics -->
+              <div class="grid grid-cols-2 gap-4">
+                
+                <!-- Finance Branch -->
+                <div class="bg-[#f7faf6] p-4 rounded-xl border border-[#b8d0b7] shadow-xs">
+                  <div class="pb-2 mb-2 border-b border-[#dce9da]">
+                    <span class="text-[10px] font-bold text-[#557b59] uppercase tracking-wider">Branch A</span>
+                    <h5 class="font-bold text-xs text-[#1c3321] uppercase">Finance</h5>
+                  </div>
+                  <div id="cluster-finance">
+                    <!-- Book 26 populated by JS -->
+                  </div>
+                </div>
+
+                <!-- Sustainable Economics & Biosphere Branch -->
+                <div class="bg-[#f7faf6] p-4 rounded-xl border border-[#b8d0b7] shadow-xs">
+                  <div class="pb-2 mb-2 border-b border-[#dce9da]">
+                    <span class="text-[10px] font-bold text-[#557b59] uppercase tracking-wider">Branch B</span>
+                    <h5 class="font-bold text-xs text-[#1c3321] uppercase">Sustainable Econ</h5>
+                  </div>
+                  <div class="space-y-3" id="cluster-sustainable">
+                    <!-- Books 28, 29, 30, 31, 59 populated by JS -->
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+        </section>
+
+        <!-- POSTER FOOTER / METADATA & LEGEND -->
+        <footer class="mt-20 pt-8 border-t border-[#cadbc9] flex flex-wrap items-center justify-between gap-6 text-xs text-[#4b6a50]">
+          <div class="flex items-center space-x-6">
+            <div class="flex items-center space-x-2">
+              <span class="w-3.5 h-3.5 rounded-sm bg-white border border-[#27472c]"></span>
+              <span class="font-medium">Core Nonfiction (47)</span>
+            </div>
+            <div class="flex items-center space-x-2">
+              <span class="w-3.5 h-3.5 rounded-sm bg-[#eef5ee] border border-dashed border-[#47704c]"></span>
+              <span class="font-medium">Accessory Fiction / Mobility (13)</span>
+            </div>
+          </div>
+          <div class="font-serif-title italic text-sm text-[#243e27]">
+            "A balanced intellectual regimen: 47 Heavy Non-Fiction Lifts & 13 Dialectical Novel Accessories."
+          </div>
+          <div class="font-mono-code text-[11px] text-[#638466]">
+            Target Year: 2027 • Canvas Spec: 2400x3050 px
+          </div>
+        </footer>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- JAVASCRIPT LOGIC & 60-BOOK DATA ARCHITECTURE -->
+  <script>
+    // COMPLETE ROSTER OF ALL 60 BOOKS
+    const BOOKS_DATA = [
+      {
+        id: 1,
+        muscle: "Posterior Chain & Legs",
+        domain: "history",
+        topic: "Ancient History",
+        title: "The History of the Ancient World",
+        author: "Susan Wise Bauer",
+        focus: "Deep chronologic scaffolding from origin to antiquity.",
+        accessory: false,
+        slot: "cluster-history"
+      },
+      {
+        id: 2,
+        muscle: "Posterior Chain & Legs",
+        domain: "history",
+        topic: "Bronze Age",
+        title: "1177 B.C.",
+        author: "Eric H. Cline",
+        focus: "Systemic network collapse across the late Bronze Age.",
+        accessory: false,
+        slot: "cluster-history"
+      },
+      {
+        id: 3,
+        muscle: "Posterior Chain & Legs",
+        domain: "history",
+        topic: "Near East",
+        title: "Persians",
+        author: "Lloyd Llewellyn-Jones",
+        focus: "Non-Hellenocentric imperial history of the Achaemenid world.",
+        accessory: false,
+        slot: "cluster-history"
+      },
+      {
+        id: 4,
+        muscle: "Posterior Chain & Legs",
+        domain: "history",
+        topic: "Rome",
+        title: "The Romans",
+        author: "Edward J. Watts",
+        focus: "Foundational socio-political evolution of the Roman state.",
+        accessory: false,
+        slot: "cluster-history"
+      },
+      {
+        id: 5,
+        muscle: "Posterior Chain & Legs",
+        domain: "history",
+        topic: "Rome",
+        title: "The Fall of the Roman Empire",
+        author: "Peter Heather",
+        focus: "Military and structural decomposition of classical empire.",
+        accessory: false,
+        slot: "cluster-history"
+      },
+      {
+        id: 6,
+        muscle: "Mobility & Flexibility",
+        domain: "history",
+        topic: "Fiction",
+        title: "Austerlitz",
+        author: "W.G. Sebald",
+        focus: "Accessory to #4–5. Memory as reconstruction; ruins of European order.",
+        accessory: true,
+        accessoryTo: "#4–5",
+        slot: "cluster-history"
+      },
+      {
+        id: 7,
+        muscle: "Posterior Chain & Legs",
+        domain: "history",
+        topic: "India",
+        title: "The Golden Road",
+        author: "William Dalrymple",
+        focus: "Trade routes, mathematical diffusion, and civilizational reach.",
+        accessory: false,
+        slot: "cluster-history"
+      },
+      {
+        id: 8,
+        muscle: "Posterior Chain & Legs",
+        domain: "history",
+        topic: "African History",
+        title: "An African History of Africa",
+        author: "Zeinab Badawi",
+        focus: "Comprehensive continental history from human dawn to independence.",
+        accessory: false,
+        slot: "cluster-history"
+      },
+      {
+        id: 9,
+        muscle: "Posterior Chain & Legs",
+        domain: "history",
+        topic: "Christianity",
+        title: "Christendom",
+        author: "Peter Heather",
+        focus: "Institutional establishment of the medieval European mind.",
+        accessory: false,
+        slot: "cluster-history"
+      },
+      {
+        id: 10,
+        muscle: "Posterior Chain & Legs",
+        domain: "history",
+        topic: "Liberalism",
+        title: "Inventing the Individual",
+        author: "Larry Siedentop",
+        focus: "Ideological origins of Western individualism and secular rights.",
+        accessory: false,
+        slot: "cluster-history"
+      },
+      {
+        id: 11,
+        muscle: "Mobility & Flexibility",
+        domain: "history",
+        topic: "Fiction",
+        title: "Wolf Hall",
+        author: "Hilary Mantel",
+        focus: "Accessory to #9–10. State-building as paperwork, patronage and proximity.",
+        accessory: true,
+        accessoryTo: "#9–10",
+        slot: "cluster-history"
+      },
+      {
+        id: 12,
+        muscle: "Posterior Chain & Legs",
+        domain: "history",
+        topic: "Trade Routes",
+        title: "The Silk Roads",
+        author: "Peter Frankopan",
+        focus: "Global historical pivot centered on Eurasian trade corridors.",
+        accessory: false,
+        slot: "cluster-history"
+      },
+      {
+        id: 13,
+        muscle: "Mobility & Flexibility",
+        domain: "history",
+        topic: "Fiction",
+        title: "One Hundred Years of Solitude",
+        author: "Gabriel García Márquez",
+        focus: "Accessory to #1, #12. Cyclical time against linear progress.",
+        accessory: true,
+        accessoryTo: "#1, #12",
+        slot: "cluster-history"
+      },
+      {
+        id: 14,
+        muscle: "Back & Core",
+        domain: "politics",
+        topic: "Totalitarianism",
+        title: "The Origins of Totalitarianism",
+        author: "Hannah Arendt",
+        focus: "Definitive anatomy of 20th-century ideological coercion.",
+        accessory: false,
+        slot: "cluster-politics"
+      },
+      {
+        id: 15,
+        muscle: "Mobility & Flexibility",
+        domain: "politics",
+        topic: "Fiction",
+        title: "Darkness at Noon",
+        author: "Arthur Koestler",
+        focus: "Accessory to #14. The purge trial from inside a loyalist's skull.",
+        accessory: true,
+        accessoryTo: "#14",
+        slot: "cluster-politics"
+      },
+      {
+        id: 16,
+        muscle: "Back & Core",
+        domain: "politics",
+        topic: "Statecraft",
+        title: "Seeing Like a State",
+        author: "James C. Scott",
+        focus: "High-modernist planning failures and social legibility.",
+        accessory: false,
+        slot: "cluster-politics"
+      },
+      {
+        id: 17,
+        muscle: "Back & Core",
+        domain: "philosophy",
+        topic: "Historiography",
+        title: "The Muqaddimah",
+        author: "Ibn Khaldun",
+        focus: "Rise-and-decline cycle: asabiyya and dynastic turnover.",
+        accessory: false,
+        slot: "cluster-philosophy"
+      },
+      {
+        id: 18,
+        muscle: "Back & Core",
+        domain: "politics",
+        topic: "Political Theory",
+        title: "The End of History and the Last Man",
+        author: "Francis Fukuyama",
+        focus: "Apex thesis of democratic liberal governance.",
+        accessory: false,
+        slot: "cluster-politics"
+      },
+      {
+        id: 19,
+        muscle: "Back & Core",
+        domain: "politics",
+        topic: "Geopolitics",
+        title: "The Clash of Civilizations",
+        author: "Samuel P. Huntington",
+        focus: "Civilizational fault lines vs. ideological states.",
+        accessory: false,
+        slot: "cluster-politics"
+      },
+      {
+        id: 20,
+        muscle: "Back & Core",
+        domain: "philosophy",
+        topic: "Political Philosophy",
+        title: "Confronting Leviathan",
+        author: "David Runciman",
+        focus: "Evolution and survival stakes of modern political thought.",
+        accessory: false,
+        slot: "cluster-philosophy"
+      },
+      {
+        id: 21,
+        muscle: "Mobility & Flexibility",
+        domain: "politics",
+        topic: "Fiction",
+        title: "The Dispossessed",
+        author: "Ursula K. Le Guin",
+        focus: "Accessory to #18–20. Anarchist scarcity vs. state-capitalist abundance.",
+        accessory: true,
+        accessoryTo: "#18–20",
+        slot: "cluster-politics"
+      },
+      {
+        id: 22,
+        muscle: "Back & Core",
+        domain: "history",
+        topic: "Modern History",
+        title: "The Sleepwalkers",
+        author: "Christopher Clark",
+        focus: "Multi-polar diplomatic paralysis and the cascade to world war.",
+        accessory: false,
+        slot: "cluster-history"
+      },
+      {
+        id: 23,
+        muscle: "Back & Core",
+        domain: "politics",
+        topic: "Democracy",
+        title: "The Great Experiment",
+        author: "Yascha Mounk",
+        focus: "Structural conditions for maintaining diverse democracies.",
+        accessory: false,
+        slot: "cluster-politics"
+      },
+      {
+        id: 24,
+        muscle: "Chest & Delts",
+        domain: "economics",
+        topic: "Capitalism",
+        title: "Capitalism",
+        author: "Jürgen Kocka",
+        focus: "Evolution of market economies, wage labor, and enterprise.",
+        accessory: false,
+        slot: "cluster-econ"
+      },
+      {
+        id: 25,
+        muscle: "Chest & Delts",
+        domain: "economics",
+        topic: "Economics",
+        title: "The Value of Everything",
+        author: "Mariana Mazzucato",
+        focus: "Distinction between value creation and financial extraction.",
+        accessory: false,
+        slot: "cluster-econ"
+      },
+      {
+        id: 26,
+        muscle: "Chest & Delts",
+        domain: "economics",
+        topic: "Finance",
+        title: "The Price of Time",
+        author: "Edward Chancellor",
+        focus: "Macro distortions and capital misallocations caused by interest rates.",
+        accessory: false,
+        slot: "cluster-finance"
+      },
+      {
+        id: 27,
+        muscle: "Chest & Delts",
+        domain: "economics",
+        topic: "Global Economy",
+        title: "The Economic Government of the World",
+        author: "Martin Daunton",
+        focus: "Multilateral institutions, currency compacts, and trade regimes.",
+        accessory: false,
+        slot: "cluster-econ"
+      },
+      {
+        id: 28,
+        muscle: "Chest & Delts",
+        domain: "economics",
+        topic: "Resource Systems",
+        title: "Growth",
+        author: "Vaclav Smil",
+        focus: "Physical, metabolic, and ecological constraints on scaling systems.",
+        accessory: false,
+        slot: "cluster-sustainable"
+      },
+      {
+        id: 29,
+        muscle: "Chest & Delts",
+        domain: "economics",
+        topic: "Ecology",
+        title: "The Economics of Biodiversity",
+        author: "Partha Dasgupta",
+        focus: "Embedding the natural biosphere directly into economic accounts.",
+        accessory: false,
+        slot: "cluster-sustainable"
+      },
+      {
+        id: 30,
+        muscle: "Chest & Delts",
+        domain: "economics",
+        topic: "Environment",
+        title: "Half-Earth",
+        author: "Edward O. Wilson",
+        focus: "Biosphere preservation imperatives and planetary boundaries.",
+        accessory: false,
+        slot: "cluster-sustainable"
+      },
+      {
+        id: 31,
+        muscle: "Mobility & Flexibility",
+        domain: "economics",
+        topic: "Fiction",
+        title: "The Overstory",
+        author: "Richard Powers",
+        focus: "Accessory to #28–30. Ecological time scales institutions cannot perceive.",
+        accessory: true,
+        accessoryTo: "#28–30",
+        slot: "cluster-sustainable"
+      },
+      {
+        id: 32,
+        muscle: "Arms",
+        domain: "science",
+        topic: "Epistemology",
+        title: "Consilience",
+        author: "Edward O. Wilson",
+        focus: "Unifying natural sciences, social systems, and humanities.",
+        accessory: false,
+        slot: "cluster-bio-chem"
+      },
+      {
+        id: 33,
+        muscle: "Arms",
+        domain: "science",
+        topic: "Evolutionary Anthropology",
+        title: "The Secret of Our Success",
+        author: "Joseph Henrich",
+        focus: "Dual-inheritance mechanisms and cumulative cultural evolution.",
+        accessory: false,
+        slot: "cluster-social"
+      },
+      {
+        id: 34,
+        muscle: "Arms",
+        domain: "science",
+        topic: "Evolutionary Biology",
+        title: "The Blind Watchmaker",
+        author: "Richard Dawkins",
+        focus: "Mechanics of natural selection without foresight.",
+        accessory: false,
+        slot: "cluster-bio-chem"
+      },
+      {
+        id: 35,
+        muscle: "Mobility & Flexibility",
+        domain: "science",
+        topic: "Fiction",
+        title: "The Periodic Table",
+        author: "Primo Levi",
+        focus: "Accessory to #32, #34. A chemist's way of knowing; matter as ethics.",
+        accessory: true,
+        accessoryTo: "#32, #34",
+        slot: "cluster-bio-chem"
+      },
+      {
+        id: 36,
+        muscle: "Arms",
+        domain: "consciousness",
+        topic: "Consciousness",
+        title: "The Origin of Consciousness in the Breakdown of the Bicameral Mind",
+        author: "Julian Jaynes",
+        focus: "Neuro-linguistic collapse of hallucinations into modern selfhood.",
+        accessory: false,
+        slot: "cluster-consciousness"
+      },
+      {
+        id: 37,
+        muscle: "Mobility & Flexibility",
+        domain: "consciousness",
+        topic: "Fiction",
+        title: "Solaris",
+        author: "Stanisław Lem",
+        focus: "Accessory to #36, #41. Encounter with a mind genuinely not ours.",
+        accessory: true,
+        accessoryTo: "#36, #41",
+        slot: "cluster-consciousness"
+      },
+      {
+        id: 38,
+        muscle: "Arms",
+        domain: "science",
+        topic: "Behavioral Science",
+        title: "Noise",
+        author: "Kahneman, Sibony, Sunstein",
+        focus: "Systemic variance and decision noise in human evaluation.",
+        accessory: false,
+        slot: "cluster-social"
+      },
+      {
+        id: 39,
+        muscle: "Arms",
+        domain: "philosophy",
+        topic: "Free Will",
+        title: "Free Agents",
+        author: "Kevin J. Mitchell",
+        focus: "Neurobiological origins and natural evolution of causal agency.",
+        accessory: false,
+        slot: "cluster-philosophy"
+      },
+      {
+        id: 40,
+        muscle: "Mobility & Flexibility",
+        domain: "philosophy",
+        topic: "Fiction",
+        title: "Never Let Me Go",
+        author: "Kazuo Ishiguro",
+        focus: "Accessory to #39. The interior ethical toll of designed human agency.",
+        accessory: true,
+        accessoryTo: "#39",
+        slot: "cluster-philosophy"
+      },
+      {
+        id: 41,
+        muscle: "Arms",
+        domain: "consciousness",
+        topic: "Neuroscience",
+        title: "A Universe of Consciousness",
+        author: "G. Edelman, G. Tononi",
+        focus: "Information integration and dynamic core neural frameworks.",
+        accessory: false,
+        slot: "cluster-consciousness"
+      },
+      {
+        id: 42,
+        muscle: "Arms",
+        domain: "consciousness",
+        topic: "Memory",
+        title: "Why We Remember",
+        author: "Charan Ranganath",
+        focus: "The predictive and adaptive machinery of human memory.",
+        accessory: false,
+        slot: "cluster-consciousness"
+      },
+      {
+        id: 43,
+        muscle: "Arms",
+        domain: "philosophy",
+        topic: "Linguistics",
+        title: "Metaphors We Live By",
+        author: "George Lakoff, Mark Johnson",
+        focus: "Embodied conceptual metaphors underpinning daily human thought.",
+        accessory: false,
+        slot: "cluster-philosophy"
+      },
+      {
+        id: 44,
+        muscle: "Hard Compound Pulls",
+        domain: "science",
+        topic: "Theoretical Physics",
+        title: "Quantum Mechanics",
+        author: "L. Susskind, A. Friedman",
+        focus: "Formal theoretical physics formulation of quantum systems.",
+        accessory: false,
+        slot: "cluster-physics"
+      },
+      {
+        id: 45,
+        muscle: "Hard Compound Pulls",
+        domain: "science",
+        topic: "Physics",
+        title: "The Fabric of Reality",
+        author: "David Deutsch",
+        focus: "Epistemology uniting quantum physics, computation, and evolution.",
+        accessory: false,
+        slot: "cluster-physics"
+      },
+      {
+        id: 46,
+        muscle: "Hard Compound Pulls",
+        domain: "philosophy",
+        topic: "Philosophy of Science",
+        title: "The Structure of Scientific Revolutions",
+        author: "Thomas S. Kuhn",
+        focus: "Paradigms, incommensurability, and scientific transitions.",
+        accessory: false,
+        slot: "cluster-philosophy"
+      },
+      {
+        id: 47,
+        muscle: "Mobility & Flexibility",
+        domain: "philosophy",
+        topic: "Fiction",
+        title: "A Canticle for Leibowitz",
+        author: "Walter M. Miller Jr.",
+        focus: "Accessory to #46, #2. Cyclical civilizational collapse and preservation.",
+        accessory: true,
+        accessoryTo: "#46, #2",
+        slot: "cluster-philosophy"
+      },
+      {
+        id: 48,
+        muscle: "Hard Compound Pulls",
+        domain: "science",
+        topic: "Causality",
+        title: "The Book of Why",
+        author: "Judea Pearl, Dana Mackenzie",
+        focus: "Causal diagrams and structural reasoning beyond passive data correlation.",
+        accessory: false,
+        slot: "cluster-math"
+      },
+      {
+        id: 49,
+        muscle: "Hard Compound Pulls",
+        domain: "technology",
+        topic: "Computer Science",
+        title: "Algorithms to Live By",
+        author: "Brian Christian, Tom Griffiths",
+        focus: "Optimal stopping, sorting, and scheduling applied to human life.",
+        accessory: false,
+        slot: "cluster-tech"
+      },
+      {
+        id: 50,
+        muscle: "Hard Compound Pulls",
+        domain: "science",
+        topic: "Probability",
+        title: "The Art of Uncertainty",
+        author: "David Spiegelhalter",
+        focus: "Navigating statistical risk, empirical error, and randomness.",
+        accessory: false,
+        slot: "cluster-math"
+      },
+      {
+        id: 51,
+        muscle: "Hard Compound Pulls",
+        domain: "science",
+        topic: "Quantum Foundations",
+        title: "What Is Real?",
+        author: "Adam Becker",
+        focus: "Interpretational foundations and the quantum measurement debate.",
+        accessory: false,
+        slot: "cluster-physics"
+      },
+      {
+        id: 52,
+        muscle: "Cardio & Agility",
+        domain: "technology",
+        topic: "Philosophy of Mind",
+        title: "The Emperor's New Mind",
+        author: "Roger Penrose",
+        focus: "Non-algorithmic limits of computation and physical consciousness.",
+        accessory: false,
+        slot: "cluster-ai"
+      },
+      {
+        id: 53,
+        muscle: "Cardio & Agility",
+        domain: "technology",
+        topic: "Artificial Intelligence",
+        title: "A Thousand Brains",
+        author: "Jeff Hawkins",
+        focus: "Neocortical reference frames and true structural intelligence.",
+        accessory: false,
+        slot: "cluster-ai"
+      },
+      {
+        id: 54,
+        muscle: "Cardio & Agility",
+        domain: "technology",
+        topic: "Machine Learning",
+        title: "AI Snake Oil",
+        author: "Arvind Narayanan, Sayash Kapoor",
+        focus: "Distinguishing predictive capabilities from generative hype.",
+        accessory: false,
+        slot: "cluster-ai"
+      },
+      {
+        id: 55,
+        muscle: "Cardio & Agility",
+        domain: "technology",
+        topic: "Semiconductors",
+        title: "Chip War",
+        author: "Chris Miller",
+        focus: "The semiconductor chokepoint as geopolitics and industrial policy.",
+        accessory: false,
+        slot: "cluster-tech"
+      },
+      {
+        id: 56,
+        muscle: "Cardio & Agility",
+        domain: "technology",
+        topic: "Computing",
+        title: "Computer Power and Human Reason",
+        author: "Joseph Weizenbaum",
+        focus: "The definitive 1976 argument on what computers should never decide.",
+        accessory: false,
+        slot: "cluster-tech"
+      },
+      {
+        id: 57,
+        muscle: "Mobility & Flexibility",
+        domain: "science",
+        topic: "Fiction",
+        title: "The Trial",
+        author: "Franz Kafka",
+        focus: "Sociological alienation, unaccountable bureaucracy, and absurdity.",
+        accessory: true,
+        accessoryTo: "#sociology",
+        slot: "cluster-social"
+      },
+      {
+        id: 58,
+        muscle: "Mobility & Flexibility",
+        domain: "history",
+        topic: "Literature",
+        title: "The African Trilogy",
+        author: "Chinua Achebe",
+        focus: "Narrative anatomy of cultural collision, change, and disintegration.",
+        accessory: true,
+        accessoryTo: "#8",
+        slot: "cluster-history"
+      },
+      {
+        id: 59,
+        muscle: "Mobility & Flexibility",
+        domain: "economics",
+        topic: "Speculative Fiction",
+        title: "The Ministry for the Future",
+        author: "Kim Stanley Robinson",
+        focus: "Institutional, monetary, and technological scenarios for climate adaptation.",
+        accessory: true,
+        accessoryTo: "#28–30",
+        slot: "cluster-sustainable"
+      },
+      {
+        id: 60,
+        muscle: "Mobility & Flexibility",
+        domain: "science",
+        topic: "Art",
+        title: "Your Brain on Art",
+        author: "Susan Magsamen, Ivy Ross",
+        focus: "Neuroaesthetics and physiological impacts of artistic expression.",
+        accessory: false,
+        slot: "cluster-social"
+      }
+    ];
+
+    // Card Renderer Function with Drag & Drop Listener
+    function createBookCardElement(book) {
+      const card = document.createElement('div');
+      card.id = `book-card-${book.id}`;
+      card.className = `book-card relative rounded-xl border p-2.5 flex flex-col justify-between cursor-pointer transition shadow-2xs ${
+        book.accessory 
+          ? 'is-accessory bg-[#edf5ee] border-[#97b998]' 
+          : 'bg-white border-[#c9dcc8]'
+      }`;
+      card.setAttribute('data-id', book.id);
+      card.setAttribute('data-muscle', book.muscle);
+
+      card.innerHTML = `
+        <!-- Card Header Info -->
+        <div class="flex items-start justify-between gap-1 mb-1.5">
+          <span class="inline-flex items-center justify-center w-5 h-5 rounded-md bg-[#2d4d31] text-white font-mono-code font-bold text-[10px]">
+            ${book.id}
+          </span>
+          <span class="text-[9px] font-semibold px-1.5 py-0.5 rounded-full ${book.accessory ? 'bg-[#d8e8d8] text-[#244227]' : 'bg-[#eef4ed] text-[#47684b]'} uppercase tracking-tight">
+            ${book.accessory ? 'Accessory' : book.topic}
+          </span>
+        </div>
+
+        <!-- Book Cover Preview / Drop Zone -->
+        <div id="cover-zone-${book.id}" class="cover-drop-zone relative w-full h-32 rounded-lg bg-gradient-to-br from-[#ebf2ea] to-[#d8e6d7] border border-[#bed3bd] overflow-hidden flex flex-col items-center justify-center p-2 text-center group">
+          
+          <!-- Default Visual Content (Typographic Mock) -->
+          <div class="cover-content flex flex-col items-center justify-center h-full pointer-events-none">
+            <span class="text-[9px] font-bold text-[#4c6e50] uppercase tracking-wider mb-1 line-clamp-1">${book.author}</span>
+            <span class="font-serif-title font-bold text-[11px] leading-tight text-[#182e1c] line-clamp-2 px-1">${book.title}</span>
+            ${book.accessory ? `<span class="mt-1 text-[8px] font-mono-code text-[#4a6b4d] italic">To ${book.accessoryTo}</span>` : ''}
+          </div>
+
+          <!-- Hidden File Input for Click-to-Upload Alternative -->
+          <input type="file" accept="image/*" class="hidden file-input" id="file-input-${book.id}" />
+
+          <!-- Hover Upload Overlay Hint -->
+          <div class="absolute inset-0 bg-[#244227]/75 text-white opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center transition p-1 text-center">
+            <i data-lucide="upload" class="w-4 h-4 mb-1"></i>
+            <span class="text-[9px] font-bold leading-tight">Drop Cover or Click</span>
+          </div>
+        </div>
+
+        <!-- Core Focus Summary -->
+        <div class="mt-2 pt-1.5 border-t border-[#e2ede1]">
+          <p class="text-[10px] text-[#426145] leading-snug line-clamp-2" title="${book.focus}">
+            ${book.focus}
+          </p>
+        </div>
+      `;
+
+      // Set up Drag & Drop and Click Events
+      const dropZone = card.querySelector(`#cover-zone-${book.id}`);
+      const fileInput = card.querySelector(`#file-input-${book.id}`);
+
+      card.addEventListener('click', (e) => {
+        // Trigger file input dialog if not clicking another action
+        fileInput.click();
+      });
+
+      fileInput.addEventListener('change', (e) => {
+        if (e.target.files && e.target.files[0]) {
+          loadCoverFile(e.target.files[0], dropZone, book);
+        }
+      });
+
+      // Drag and Drop listeners
+      dropZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropZone.classList.add('ring-2', 'ring-[#2f5534]', 'bg-[#d2e5d1]');
+      });
+
+      dropZone.addEventListener('dragleave', () => {
+        dropZone.classList.remove('ring-2', 'ring-[#2f5534]', 'bg-[#d2e5d1]');
+      });
+
+      dropZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropZone.classList.remove('ring-2', 'ring-[#2f5534]', 'bg-[#d2e5d1]');
+        if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+          loadCoverFile(e.dataTransfer.files[0], dropZone, book);
+        }
+      });
+
+      return card;
+    }
+
+    // Load Image file into Cover Zone
+    function loadCoverFile(file, container, book) {
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        container.innerHTML = `
+          <img src="${evt.target.result}" alt="${book.title}" class="w-full h-full object-cover rounded-md shadow-xs" />
+          <div class="absolute bottom-1 right-1 bg-black/60 text-white rounded p-1 text-[8px] opacity-0 hover:opacity-100 transition">
+            Replace
+          </div>
+        `;
+        // Store in localStorage if small, or keep in memory
+        try {
+          localStorage.setItem(`cover_2027_${book.id}`, evt.target.result);
+        } catch(err) {
+          // If storage quota exceeded, proceed gracefully in memory
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // Populate all Book Cards across the Clusters
+    function renderAllBooks() {
+      BOOKS_DATA.forEach(book => {
+        const targetContainer = document.getElementById(book.slot);
+        if (targetContainer) {
+          const cardEl = createBookCardElement(book);
+          targetContainer.appendChild(cardEl);
+
+          // Restore saved cover from localStorage if available
+          const savedCover = localStorage.getItem(`cover_2027_${book.id}`);
+          if (savedCover) {
+            const dropZone = cardEl.querySelector(`#cover-zone-${book.id}`);
+            if (dropZone) {
+              dropZone.innerHTML = `
+                <img src="${savedCover}" alt="${book.title}" class="w-full h-full object-cover rounded-md shadow-xs" />
+              `;
+            }
+          }
+        }
+      });
+      lucide.createIcons();
+    }
+
+    // Auto-generate aesthetic typographic book jacket mockups
+    function generateAestheticCovers() {
+      const sagePalettes = [
+        ['#2d4a32', '#f0f5ee', '#b8d1b6'],
+        ['#1b3320', '#e5ede3', '#85a883'],
+        ['#3c5b40', '#f4f7f3', '#c2d6c1'],
+        ['#4a6c4e', '#e9f1e8', '#9ebf9c'],
+        ['#223a26', '#dce8db', '#759973']
+      ];
+
+      BOOKS_DATA.forEach((book, index) => {
+        const dropZone = document.getElementById(`cover-zone-${book.id}`);
+        if (!dropZone) return;
+
+        const palette = sagePalettes[index % sagePalettes.length];
+        const bgColor = palette[0];
+        const textColor = palette[1];
+        const accentColor = palette[2];
+
+        dropZone.innerHTML = `
+          <div class="w-full h-full rounded-md p-2 flex flex-col justify-between shadow-xs transition" style="background-color: ${bgColor}; color: ${textColor};">
+            <div class="flex justify-between items-center border-b pb-1" style="border-color: ${accentColor}44;">
+              <span class="text-[7px] font-mono-code uppercase tracking-widest opacity-80">2027 Roster</span>
+              <span class="text-[8px] font-bold font-mono-code">#${book.id}</span>
+            </div>
+            
+            <div class="my-auto py-1">
+              <div class="font-serif-title font-bold text-[10px] leading-tight line-clamp-2" style="color: ${textColor};">
+                ${book.title}
+              </div>
+              <div class="text-[8px] font-medium tracking-wide mt-1" style="color: ${accentColor};">
+                ${book.author}
+              </div>
+            </div>
+
+            <div class="flex justify-between items-center text-[7px] border-t pt-1" style="border-color: ${accentColor}44;">
+              <span class="truncate max-w-[80px]">${book.topic}</span>
+              ${book.accessory ? `<span class="italic">Fiction</span>` : `<span>Non-Fiction</span>`}
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    // Filter Logic for Muscle Groups
+    let currentFilter = 'ALL';
+    function filterMuscleGroup(group) {
+      currentFilter = group;
+      
+      // Update UI buttons
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        if (btn.getAttribute('data-group') === group) {
+          btn.classList.add('bg-white', 'text-[#1b2e1e]', 'shadow-xs');
+          btn.classList.remove('text-[#4a674e]');
+        } else {
+          btn.classList.remove('bg-white', 'text-[#1b2e1e]', 'shadow-xs');
+          btn.classList.add('text-[#4a674e]');
+        }
+      });
+
+      // Apply dim/highlight styles to cards
+      document.querySelectorAll('.book-card').forEach(card => {
+        const cardMuscle = card.getAttribute('data-muscle');
+        if (group === 'ALL' || cardMuscle === group) {
+          card.classList.remove('dimmed');
+          if (group !== 'ALL') card.classList.add('highlighted');
+          else card.classList.remove('highlighted');
+        } else {
+          card.classList.add('dimmed');
+          card.classList.remove('highlighted');
+        }
+      });
+    }
+
+    // Live Search Functionality
+    function handleSearch(query) {
+      const q = query.trim().toLowerCase();
+      document.querySelectorAll('.book-card').forEach(card => {
+        const id = card.getAttribute('data-id');
+        const book = BOOKS_DATA.find(b => b.id == id);
+        if (!book) return;
+
+        const matches = 
+          book.title.toLowerCase().includes(q) ||
+          book.author.toLowerCase().includes(q) ||
+          book.topic.toLowerCase().includes(q) ||
+          book.muscle.toLowerCase().includes(q) ||
+          book.id.toString() === q;
+
+        if (!q || matches) {
+          card.classList.remove('dimmed');
+          if (q) card.classList.add('highlighted');
+          else card.classList.remove('highlighted');
+        } else {
+          card.classList.add('dimmed');
+          card.classList.remove('highlighted');
+        }
+      });
+    }
+
+    // CANVAS PAN & ZOOM INTERACTION
+    let zoomLevel = 0.65; // Initial comfortable poster view
+    let panX = 0;
+    let panY = 0;
+    let isPanning = false;
+    let startX = 0;
+    let startY = 0;
+
+    const viewport = document.getElementById('canvas-viewport');
+    const transformLayer = document.getElementById('canvas-transform-layer');
+    const zoomLabel = document.getElementById('zoomLabel');
+
+    function updateTransform() {
+      transformLayer.style.transform = `translate(${panX}px, ${panY}px) scale(${zoomLevel})`;
+      zoomLabel.textContent = `${Math.round(zoomLevel * 100)}%`;
+    }
+
+    function zoomAdjust(delta) {
+      zoomLevel = Math.min(Math.max(0.2, zoomLevel + delta), 1.6);
+      updateTransform();
+    }
+
+    function resetZoom() {
+      // Auto-fit to screen width
+      const viewportWidth = viewport.clientWidth;
+      zoomLevel = Math.min(0.85, (viewportWidth - 40) / 2400);
+      panX = 20;
+      panY = 20;
+      updateTransform();
+    }
+
+    // Pan with mouse drag
+    viewport.addEventListener('mousedown', (e) => {
+      // Ignore pan on interactive controls or cards
+      if (e.target.closest('.book-card') || e.target.closest('button') || e.target.closest('input')) return;
+      isPanning = true;
+      viewport.classList.add('panning');
+      startX = e.clientX - panX;
+      startY = e.clientY - panY;
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      if (!isPanning) return;
+      panX = e.clientX - startX;
+      panY = e.clientY - startY;
+      updateTransform();
+    });
+
+    window.addEventListener('mouseup', () => {
+      isPanning = false;
+      viewport.classList.remove('panning');
+    });
+
+    // Touch support for Pan on tablets/mobile
+    let touchStartX = 0;
+    let touchStartY = 0;
+    viewport.addEventListener('touchstart', (e) => {
+      if (e.touches.length === 1 && !e.target.closest('.book-card')) {
+        touchStartX = e.touches[0].clientX - panX;
+        touchStartY = e.touches[0].clientY - panY;
+      }
+    });
+    viewport.addEventListener('touchmove', (e) => {
+      if (e.touches.length === 1 && !e.target.closest('.book-card')) {
+        panX = e.touches[0].clientX - touchStartX;
+        panY = e.touches[0].clientY - touchStartY;
+        updateTransform();
+      }
+    });
+
+    // Wheel Zoom with Ctrl or Direct Trackpad Pinch
+    viewport.addEventListener('wheel', (e) => {
+      if (e.ctrlKey || e.metaKey) {
+        e.preventDefault();
+        const zoomDelta = e.deltaY * -0.002;
+        zoomLevel = Math.min(Math.max(0.2, zoomLevel + zoomDelta), 1.6);
+        updateTransform();
+      }
+    }, { passive: false });
+
+    // HIGH RESOLUTION POSTER EXPORT
+    function exportPoster() {
+      const poster = document.getElementById('poster-canvas');
+      const originalTransform = transformLayer.style.transform;
+
+      // Reset transform temporarily for pixel-perfect screenshot rendering
+      transformLayer.style.transform = 'translate(0px, 0px) scale(1)';
+      
+      const exportBadge = document.createElement('div');
+      exportBadge.className = 'fixed top-4 right-4 z-50 bg-[#29442d] text-white px-4 py-2 rounded-xl text-xs font-bold shadow-xl flex items-center space-x-2';
+      exportBadge.innerHTML = `<span class="animate-spin inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full"></span> <span>Generating High-Resolution Poster...</span>`;
+      document.body.appendChild(exportBadge);
+
+      html2canvas(poster, {
+        scale: 1.5, // Crisp 3600px rendering
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: '#fbfcf9'
+      }).then(canvas => {
+        // Restore interactive viewport position
+        transformLayer.style.transform = originalTransform;
+        exportBadge.remove();
+
+        // Download PNG
+        const link = document.createElement('a');
+        link.download = '2027_Cognitive_Reading_Map_Poster.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+      }).catch(err => {
+        transformLayer.style.transform = originalTransform;
+        exportBadge.remove();
+        console.error('Poster export error:', err);
+      });
+    }
+
+    // INITIALIZATION ON WINDOW LOAD
+    window.onload = function() {
+      renderAllBooks();
+      resetZoom();
+      lucide.createIcons();
+    };
+  </script>
+</body>
+</html>

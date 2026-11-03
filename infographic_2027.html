@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2027 Intellectual Regimen & Reading Infographic</title>
+<style>
+  :root {
+    --bg-sand: #f8faf7;
+    --panel-bg: rgba(255, 255, 255, 0.88);
+    --border-soft: #d3dfd5;
+    --primary-moss: #224229;
+    --accent-sage: #3e6b48;
+    --accent-emerald: #1b4d3e;
+    --light-sage: #e8efe9;
+    --tag-accessory: #6b4d3e;
+    --text-dark: #1a291e;
+    --text-muted: #526b58;
+    --card-shadow: 0 4px 14px rgba(34, 66, 41, 0.08);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif; }
+  body { background: var(--bg-sand); color: var(--text-dark); overflow: hidden; height: 100vh; width: 100vw; display: flex; flex-direction: column; }
+
+  /* Top Control Bar */
+  header {
+    background: #ffffff;
+    border-bottom: 1px solid var(--border-soft);
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+    z-index: 100;
+  }
+  .brand { display: flex; align-items: center; gap: 12px; }
+  .brand h1 { font-size: 1.15rem; font-weight: 700; color: var(--primary-moss); letter-spacing: -0.02em; }
+  .stats-badge { background: var(--light-sage); color: var(--primary-moss); padding: 3px 9px; border-radius: 12px; font-size: 0.75rem; font-weight: 600; }
+
+  .actions { display: flex; gap: 8px; align-items: center; }
+  .btn {
+    border: none;
+    padding: 7px 14px;
+    border-radius: 6px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s;
+  }
+  .btn-primary { background: var(--accent-sage); color: #fff; }
+  .btn-primary:hover { background: var(--primary-moss); }
+  .btn-secondary { background: var(--light-sage); color: var(--primary-moss); }
+  .btn-secondary:hover { background: #d5e4d7; }
+  .btn-danger { background: #e65c5c; color: #fff; }
+  .btn-danger:hover { background: #cf4343; }
+
+  /* Filter Ribbon */
+  .filter-ribbon {
+    background: #fbfdfb;
+    border-bottom: 1px solid var(--border-soft);
+    padding: 6px 16px;
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    align-items: center;
+    z-index: 99;
+  }
+  .filter-chip {
+    padding: 4px 10px;
+    border-radius: 14px;
+    font-size: 0.72rem;
+    cursor: pointer;
+    background: #fff;
+    border: 1px solid var(--border-soft);
+    color: var(--text-muted);
+    white-space: nowrap;
+    transition: 0.15s;
+  }
+  .filter-chip.active {
+    background: var(--accent-sage);
+    color: #fff;
+    border-color: var(--accent-sage);
+    font-weight: 600;
+  }
+
+  /* Main Canvas Container */
+  #viewport {
+    flex: 1;
+    position: relative;
+    overflow: auto;
+    background: radial-gradient(circle at center, #ffffff 0%, #f4f8f5 100%);
+    cursor: grab;
+  }
+  #viewport:active { cursor: grabbing; }
+
+  #infographic-board {
+    min-width: 2400px;
+    min-height: 1800px;
+    position: relative;
+    padding: 60px 40px;
+  }
+
+  /* Structural Diagram SVG */
+  #structural-svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* Book Card Cluster Containers */
+  .cluster-zone {
+    position: absolute;
+    z-index: 2;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  /* Book Card */
+  .book-card {
+    width: 130px;
+    background: #fff;
+    border: 1px solid var(--border-soft);
+    border-radius: 8px;
+    box-shadow: var(--card-shadow);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+    user-select: none;
+  }
+  .book-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 22px rgba(34, 66, 41, 0.16);
+    z-index: 10;
+  }
+  .book-card.is-fiction {
+    border: 1.5px dashed var(--tag-accessory);
+  }
+  .book-card.dimmed {
+    opacity: 0.22;
+    filter: grayscale(80%);
+  }
+
+  /* Card Cover Slot */
+  .card-cover {
+    width: 100%;
+    height: 175px;
+    background: linear-gradient(135deg, #e4eee6 0%, #d2e2d6 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    text-align: center;
+    position: relative;
+    cursor: pointer;
+  }
+  .card-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 4px;
+    display: block;
+  }
+  .card-cover .placeholder-text {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--primary-moss);
+    line-height: 1.2;
+    max-height: 80px;
+    overflow: hidden;
+  }
+  .card-cover .author-text {
+    font-size: 0.62rem;
+    color: var(--text-muted);
+    margin-top: 4px;
+  }
+  .card-cover .drag-hint {
+    font-size: 0.55rem;
+    color: #7b9482;
+    margin-top: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  /* Action overlay on card hover */
+  .card-actions-overlay {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    display: none;
+    gap: 4px;
+    z-index: 5;
+  }
+  .book-card:hover .card-actions-overlay { display: flex; }
+  .icon-btn {
+    background: rgba(255,255,255,0.92);
+    border: 1px solid var(--border-soft);
+    border-radius: 4px;
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 0.65rem;
+    color: var(--primary-moss);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  .icon-btn:hover { background: #fff; color: #000; }
+  .icon-btn.delete:hover { background: #ffeded; color: #d02020; }
+
+  .remove-cover-btn {
+    position: absolute;
+    bottom: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.65);
+    color: #fff;
+    border: none;
+    font-size: 0.58rem;
+    padding: 2px 6px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: none;
+    z-index: 5;
+  }
+  .card-cover:hover .remove-cover-btn { display: block; }
+  .remove-cover-btn:hover { background: #d02020; }
+
+  /* Card Meta Footer */
+  .card-meta {
+    padding: 6px 8px;
+    background: #fff;
+    border-top: 1px solid #edf3ee;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .card-num {
+    font-size: 0.62rem;
+    font-weight: 700;
+    color: var(--accent-sage);
+  }
+  .card-blurb {
+    font-size: 0.58rem;
+    color: #637869;
+    line-height: 1.25;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .card-tag {
+    font-size: 0.52rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: #7d9684;
+    letter-spacing: 0.03em;
+    margin-top: 2px;
+  }
+
+  /* Modal Form */
+  .modal-backdrop {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(20, 36, 25, 0.45);
+    backdrop-filter: blur(4px);
+    z-index: 1000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-backdrop.open { display: flex; }
+  .modal-dialog {
+    background: #fff;
+    border-radius: 12px;
+    width: 480px;
+    max-width: 90vw;
+    box-shadow: 0 16px 40px rgba(0,0,0,0.2);
+    overflow: hidden;
+    animation: popIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  @keyframes popIn { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+  .modal-header {
+    background: var(--light-sage);
+    padding: 12px 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-soft);
+  }
+  .modal-header h3 { font-size: 0.95rem; color: var(--primary-moss); }
+  .modal-body { padding: 18px; display: flex; flex-direction: column; gap: 12px; }
+  .form-group { display: flex; flex-direction: column; gap: 4px; }
+  .form-group label { font-size: 0.74rem; font-weight: 600; color: var(--text-muted); }
+  .form-control {
+    padding: 7px 10px;
+    border-radius: 6px;
+    border: 1px solid var(--border-soft);
+    font-size: 0.82rem;
+    outline: none;
+  }
+  .form-control:focus { border-color: var(--accent-sage); }
+  .modal-footer {
+    padding: 12px 18px;
+    background: #fdfdfd;
+    border-top: 1px solid var(--border-soft);
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+  }
+
+  /* File upload hidden input */
+  .hidden-file-input { display: none; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <h1>2027 Intellectual Regimen & Reading Infographic</h1>
+    <span class="stats-badge" id="statsCounter">60 Titles Placed</span>
+  </div>
+  <div class="actions">
+    <button class="btn btn-primary" onclick="openAddModal()">＋ Add New Title</button>
+    <button class="btn btn-secondary" onclick="exportDataJSON()">Backup JSON</button>
+    <button class="btn btn-secondary" onclick="document.getElementById('jsonFileInput').click()">Import JSON</button>
+    <input type="file" id="jsonFileInput" class="hidden-file-input" accept=".json" onchange="importDataJSON(event)">
+    <button class="btn btn-secondary" onclick="resetDefaults()">Reset Defaults</button>
+  </div>
+</header>
+
+<div class="filter-ribbon" id="filterRibbon">
+  <span class="filter-chip active" data-filter="all" onclick="applyFilter('all')">All Disciplines (60)</span>
+  <span class="filter-chip" data-filter="Posterior Chain" onclick="applyFilter('Posterior Chain')">Posterior Chain (History & Origins)</span>
+  <span class="filter-chip" data-filter="Back & Core" onclick="applyFilter('Back & Core')">Back & Core (Politics & Statecraft)</span>
+  <span class="filter-chip" data-filter="Chest & Delts" onclick="applyFilter('Chest & Delts')">Chest & Delts (Economics & Ecology)</span>
+  <span class="filter-chip" data-filter="Arms" onclick="applyFilter('Arms')">Arms (Neuroscience, Mind & Bio)</span>
+  <span class="filter-chip" data-filter="Hard Compound Pulls" onclick="applyFilter('Hard Compound Pulls')">Hard Compound Pulls (Physics & Math)</span>
+  <span class="filter-chip" data-filter="Cardio & Agility" onclick="applyFilter('Cardio & Agility')">Cardio & Agility (Tech & AI)</span>
+  <span class="filter-chip" data-filter="Mobility & Flexibility" onclick="applyFilter('Mobility & Flexibility')">Mobility (13 Accessory Novels)</span>
+</div>
+
+<div id="viewport">
+  <div id="infographic-board">
+    <!-- SVG Diagram Blueprint Background -->
+    <svg id="structural-svg">
+      <defs>
+        <radialGradient id="hubGlow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#3e6b48" stop-opacity="0.12"/>
+          <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+
+      <!-- Center Glows -->
+      <circle cx="1200" cy="500" r="320" fill="url(#hubGlow)" />
+      <circle cx="1200" cy="1300" r="280" fill="url(#hubGlow)" />
+
+      <!-- Center History Line -->
+      <line x1="200" y1="900" x2="2200" y2="900" stroke="#3e6b48" stroke-width="3" stroke-linecap="round"/>
+      <polygon points="2205,900 2190,893 2190,907" fill="#3e6b48" />
+
+      <!-- Timeline Diamonds & Labels -->
+      <g fill="#ffffff" stroke="#3e6b48" stroke-width="2">
+        <polygon points="300,900 307,893 314,900 307,907" />
+        <polygon points="600,900 607,893 614,900 607,907" />
+        <polygon points="900,900 907,893 914,900 907,907" />
+        <polygon points="1200,900 1207,893 1214,900 1207,907" />
+        <polygon points="1500,900 1507,893 1514,900 1507,907" />
+        <polygon points="1800,900 1807,893 1814,900 1807,907" />
+        <polygon points="2100,900 2107,893 2114,900 2107,907" />
+      </g>
+      <g font-size="12" font-weight="700" fill="#224229" text-anchor="middle">
+        <text x="307" y="930">Prehistoric World</text>
+        <text x="607" y="930">Ancient World</text>
+        <text x="907" y="930">Classical World</text>
+        <text x="1207" y="930">Medieval World</text>
+        <text x="1507" y="930">Early Modern World</text>
+        <text x="1807" y="930">World of Empires</text>
+        <text x="2107" y="930">Modern World</text>
+      </g>
+
+      <!-- Upper Wheel Geometry (Science, Philosophy, Religion) -->
+      <!-- Center Connecting Spine -->
+      <line x1="1200" y1="900" x2="1200" y2="480" stroke="#3e6b48" stroke-width="2" stroke-dasharray="4,4"/>
+
+      <!-- Upper Semi-Circle Outer Arc -->
+      <path d="M 850 540 A 380 380 0 0 1 1550 540" fill="none" stroke="#224229" stroke-width="36" opacity="0.9" />
+      <!-- Upper Inner Arc -->
+      <path d="M 980 540 A 240 240 0 0 1 1420 540" fill="none" stroke="#e8efe9" stroke-width="12" />
+
+      <!-- Upper Labels -->
+      <text x="1000" y="320" font-size="20" font-weight="800" fill="#224229" text-anchor="middle">SCIENCE</text>
+      <text x="1400" y="320" font-size="20" font-weight="800" fill="#224229" text-anchor="middle">PHILOSOPHY</text>
+      <text x="1200" y="580" font-size="16" font-weight="800" fill="#3e6b48" text-anchor="middle">RELIGION & CONSCIOUSNESS</text>
+
+      <!-- Sector Dividers & Connectors -->
+      <!-- Biology/Chem connector -->
+      <line x1="900" y1="360" x2="750" y2="280" stroke="#3e6b48" stroke-width="1.5" />
+      <text x="740" y="275" font-size="13" font-weight="700" fill="#3e6b48" text-anchor="end">Biology & Chemistry Sector</text>
+
+      <!-- Physics connector -->
+      <line x1="860" y1="460" x2="720" y2="440" stroke="#3e6b48" stroke-width="1.5" />
+      <text x="710" y="445" font-size="13" font-weight="700" fill="#3e6b48" text-anchor="end">Physics Sector</text>
+
+      <!-- Mathematics operator hub -->
+      <circle cx="780" cy="560" r="28" fill="#e8efe9" stroke="#3e6b48" stroke-width="2"/>
+      <text x="780" y="565" font-size="16" font-weight="800" fill="#224229" text-anchor="middle">± × ÷</text>
+      <line x1="810" y1="560" x2="880" y2="540" stroke="#3e6b48" stroke-width="1.5"/>
+      <text x="780" y="605" font-size="13" font-weight="700" fill="#3e6b48" text-anchor="middle">Mathematics</text>
+
+      <!-- Anthropology / Psychology / Sociology Branch -->
+      <line x1="1480" y1="360" x2="1620" y2="280" stroke="#3e6b48" stroke-width="1.5" />
+      <text x="1630" y="275" font-size="13" font-weight="700" fill="#3e6b48">Anthropology • Psychology • Sociology</text>
+
+      <!-- Lower Wheel Geometry (Technology, Politics, Economics) -->
+      <!-- Technology directly beneath Science -->
+      <line x1="1200" y1="900" x2="1200" y2="1250" stroke="#3e6b48" stroke-width="2" stroke-dasharray="4,4"/>
+
+      <!-- Lower Arc -->
+      <path d="M 880 1250 A 340 340 0 0 0 1520 1250" fill="none" stroke="#224229" stroke-width="34" opacity="0.9"/>
+
+      <!-- Lower Labels -->
+      <text x="960" y="1420" font-size="18" font-weight="800" fill="#224229" text-anchor="middle">POLITICS</text>
+      <text x="1200" y="1235" font-size="19" font-weight="800" fill="#224229" text-anchor="middle">TECHNOLOGY</text>
+      <text x="1440" y="1420" font-size="18" font-weight="800" fill="#224229" text-anchor="middle">ECONOMICS</text>
+
+      <!-- AI Extension beneath Technology -->
+      <line x1="1200" y1="1260" x2="1200" y2="1370" stroke="#3e6b48" stroke-width="2"/>
+      <rect x="1140" y="1370" width="120" height="30" rx="6" fill="#e8efe9" stroke="#3e6b48" stroke-width="2"/>
+      <text x="1200" y="1391" font-size="14" font-weight="800" fill="#224229" text-anchor="middle">⚡ ARTIFICIAL INTEL</text>
+
+      <!-- Economics Extensions (Finance & Sustainable Economics) -->
+      <line x1="1500" y1="1300" x2="1640" y2="1280" stroke="#3e6b48" stroke-width="1.5"/>
+      <text x="1650" y="1285" font-size="13" font-weight="700" fill="#3e6b48">Sustainable Economics & Ecology</text>
+      <line x1="1500" y1="1320" x2="1640" y2="1380" stroke="#3e6b48" stroke-width="1.5"/>
+      <text x="1650" y="1385" font-size="13" font-weight="700" fill="#3e6b48">Finance & Monetary Systems</text>
+    </svg>
+
+    <!-- Dynamic Clusters of Book Cards -->
+    <!-- 1. Central Timeline / History Cluster -->
+    <div class="cluster-zone" id="zone-history" style="top: 960px; left: 180px; max-width: 2040px; justify-content: space-around;"></div>
+
+    <!-- 2. Biology & Chemistry Sector -->
+    <div class="cluster-zone" id="zone-biology-chemistry" style="top: 100px; left: 520px; max-width: 440px;"></div>
+
+    <!-- 3. Physics Sector -->
+    <div class="cluster-zone" id="zone-physics" style="top: 370px; left: 260px; max-width: 440px;"></div>
+
+    <!-- 4. Mathematics Sector -->
+    <div class="cluster-zone" id="zone-mathematics" style="top: 640px; left: 340px; max-width: 440px;"></div>
+
+    <!-- 5. Religion, Neuroscience & Consciousness Hub -->
+    <div class="cluster-zone" id="zone-consciousness-religion" style="top: 610px; left: 950px; max-width: 500px; justify-content: center;"></div>
+
+    <!-- 6. Philosophy & Epistemology Sector -->
+    <div class="cluster-zone" id="zone-philosophy" style="top: 80px; left: 1100px; max-width: 480px;"></div>
+
+    <!-- 7. Anthropology, Psychology & Sociology Extension -->
+    <div class="cluster-zone" id="zone-social-sciences" style="top: 140px; left: 1650px; max-width: 580px;"></div>
+
+    <!-- 8. Politics & Statecraft Sector -->
+    <div class="cluster-zone" id="zone-politics" style="top: 1380px; left: 480px; max-width: 480px;"></div>
+
+    <!-- 9. Technology & Artificial Intelligence Hub -->
+    <div class="cluster-zone" id="zone-technology-ai" style="top: 1430px; left: 980px; max-width: 460px; justify-content: center;"></div>
+
+    <!-- 10. Economics, Finance & Sustainable Ecology -->
+    <div class="cluster-zone" id="zone-economics" style="top: 1360px; left: 1540px; max-width: 620px;"></div>
+  </div>
+</div>
+
+<!-- Modal Dialog for Edit / Add -->
+<div class="modal-backdrop" id="bookModal">
+  <div class="modal-dialog">
+    <div class="modal-header">
+      <h3 id="modalTitle">Edit Title Details</h3>
+      <button class="icon-btn" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="editBookId">
+      <div class="form-group">
+        <label>Reading Order (#Number)</label>
+        <input type="number" id="inputNum" class="form-control" placeholder="1-60">
+      </div>
+      <div class="form-group">
+        <label>Book Title</label>
+        <input type="text" id="inputTitle" class="form-control" placeholder="Full title">
+      </div>
+      <div class="form-group">
+        <label>Author(s)</label>
+        <input type="text" id="inputAuthor" class="form-control" placeholder="Author name(s)">
+      </div>
+      <div class="form-group">
+        <label>Placement Sector / Cluster</label>
+        <select id="inputZone" class="form-control">
+          <option value="zone-history">History Timeline (Prehistoric to Modern)</option>
+          <option value="zone-biology-chemistry">Biology & Chemistry Sector</option>
+          <option value="zone-physics">Physics Sector</option>
+          <option value="zone-mathematics">Mathematics Sector</option>
+          <option value="zone-consciousness-religion">Religion, Neuroscience & Consciousness</option>
+          <option value="zone-philosophy">Philosophy & Epistemology</option>
+          <option value="zone-social-sciences">Anthropology, Psychology & Sociology</option>
+          <option value="zone-politics">Politics & Statecraft</option>
+          <option value="zone-technology-ai">Technology & Artificial Intelligence</option>
+          <option value="zone-economics">Economics, Finance & Ecology</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Cognitive Muscle Group</label>
+        <select id="inputMuscle" class="form-control">
+          <option value="Posterior Chain">Posterior Chain & Legs (History)</option>
+          <option value="Back & Core">Back & Core (Politics & Statecraft)</option>
+          <option value="Chest & Delts">Chest & Delts (Economics & Ecology)</option>
+          <option value="Arms">Arms (Neuroscience & Mind)</option>
+          <option value="Hard Compound Pulls">Hard Compound Pulls (Physics & Math)</option>
+          <option value="Cardio & Agility">Cardio & Agility (Tech & AI)</option>
+          <option value="Mobility & Flexibility">Mobility & Flexibility (Literature/Fiction)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Type / Role</label>
+        <select id="inputIsFiction" class="form-control">
+          <option value="false">Core Nonfiction Work</option>
+          <option value="true">Accessory Novel / Fiction</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Core Focus & Regimen Logic</label>
+        <textarea id="inputBlurb" rows="3" class="form-control" placeholder="Why this book belongs in the regimen..."></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveBookForm()">Save Title</button>
+    </div>
+  </div>
+</div>
+
+<!-- Hidden image uploader for clicking card covers -->
+<input type="file" id="coverFileInput" class="hidden-file-input" accept="image/*" onchange="handleCoverFileSelected(event)">
+
+<script>
+// Initial Master Database of 60 Books
+const DEFAULT_BOOKS = [
+  // 1. History Timeline
+  { id: 1, num: 1, title: "The History of the Ancient World", author: "Susan Wise Bauer", zone: "zone-history", muscle: "Posterior Chain", isFiction: false, blurb: "Deep chronologic scaffolding from human origin to classical antiquity." },
+  { id: 2, num: 2, title: "1177 B.C.", author: "Eric H. Cline", zone: "zone-history", muscle: "Posterior Chain", isFiction: false, blurb: "Systemic Mediterranean network collapse across the late Bronze Age." },
+  { id: 3, num: 3, title: "Persians", author: "Lloyd Llewellyn-Jones", zone: "zone-history", muscle: "Posterior Chain", isFiction: false, blurb: "Non-Hellenocentric imperial history of the Achaemenid Persian empire." },
+  { id: 4, num: 4, title: "The Romans", author: "Edward J. Watts", zone: "zone-history", muscle: "Posterior Chain", isFiction: false, blurb: "Foundational socio-political evolution of the Roman Republic and Empire." },
+  { id: 5, num: 5, title: "The Fall of the Roman Empire", author: "Peter Heather", zone: "zone-history", muscle: "Posterior Chain", isFiction: false, blurb: "Military, migratory, and institutional decomposition of classical empire." },
+  { id: 6, num: 6, title: "Austerlitz", author: "W.G. Sebald", zone: "zone-history", muscle: "Mobility & Flexibility", isFiction: true, blurb: "Accessory to #4–5. Memory as reconstruction; ruins of European order rendered in architecture." },
+  { id: 7, num: 7, title: "The Golden Road", author: "William Dalrymple", zone: "zone-history", muscle: "Posterior Chain", isFiction: false, blurb: "Ancient trade routes, Indian mathematical diffusion, and civilizational reach." },
+  { id: 8, num: 8, title: "An African History of Africa", author: "Zeinab Badawi", zone: "zone-history", muscle: "Posterior Chain", isFiction: false, blurb: "Comprehensive continental history from human origin to modern independence." },
+  { id: 9, num: 9, title: "Christendom", author: "Peter Heather", zone: "zone-history", muscle: "Posterior Chain", isFiction: false, blurb: "Institutional establishment and consolidation of the medieval European mind." },
+  { id: 10, num: 10, title: "Inventing the Individual", author: "Larry Siedentop", zone: "zone-history", muscle: "Posterior Chain", isFiction: false, blurb: "Ideological origins of Western individualism and secular rights out of Christianity." },
+  { id: 11, num: 11, title: "Wolf Hall", author: "Hilary Mantel", zone: "zone-history", muscle: "Mobility & Flexibility", isFiction: true, blurb: "Accessory to #9–10. State-building as paperwork, patronage, and proximity to power." },
+  { id: 12, num: 12, title: "The Silk Roads", author: "Peter Frankopan", zone: "zone-history", muscle: "Posterior Chain", isFiction: false, blurb: "Global historical pivot centered on Eurasian trade corridors." },
+  { id: 13, num: 13, title: "One Hundred Years of Solitude", author: "Gabriel García Márquez", zone: "zone-history", muscle: "Mobility & Flexibility", isFiction: true, blurb: "Accessory to #1 & #12. Cyclical time versus linear progress in civilizational evolution." },
+  { id: 22, num: 22, title: "The Sleepwalkers", author: "Christopher Clark", zone: "zone-history", muscle: "Back & Core", isFiction: false, blurb: "Multi-polar diplomatic paralysis and the cascade to World War I." },
+  { id: 58, num: 58, title: "The African Trilogy", author: "Chinua Achebe", zone: "zone-history", muscle: "Mobility & Flexibility", isFiction: true, blurb: "Narrative anatomy of cultural collision, colonial change, and social disintegration." },
+
+  // 2. Biology & Chemistry Sector
+  { id: 32, num: 32, title: "Consilience", author: "Edward O. Wilson", zone: "zone-biology-chemistry", muscle: "Arms", isFiction: false, blurb: "Unifying natural sciences, biological evolution, and humanities into single whole." },
+  { id: 34, num: 34, title: "The Blind Watchmaker", author: "Richard Dawkins", zone: "zone-biology-chemistry", muscle: "Arms", isFiction: false, blurb: "Mechanics of cumulative natural selection without foresight or divine design." },
+  { id: 35, num: 35, title: "The Periodic Table", author: "Primo Levi", zone: "zone-biology-chemistry", muscle: "Mobility & Flexibility", isFiction: true, blurb: "Accessory to #32 & #34. A chemist's way of knowing; holding matter, ethics, and truth in one frame." },
+
+  // 3. Physics Sector
+  { id: 44, num: 44, title: "Quantum Mechanics", author: "Leonard Susskind, Art Friedman", zone: "zone-physics", muscle: "Hard Compound Pulls", isFiction: false, blurb: "Theoretical Minimum: formal mathematical formulation of quantum mechanics." },
+  { id: 45, num: 45, title: "The Fabric of Reality", author: "David Deutsch", zone: "zone-physics", muscle: "Hard Compound Pulls", isFiction: false, blurb: "Unified epistemology uniting quantum physics, evolution, and universal computation." },
+  { id: 51, num: 51, title: "What Is Real?", author: "Adam Becker", zone: "zone-physics", muscle: "Hard Compound Pulls", isFiction: false, blurb: "Interpretational foundations and the fierce unresolved quantum measurement debate." },
+
+  // 4. Mathematics Sector
+  { id: 48, num: 48, title: "The Book of Why", author: "Judea Pearl, Dana Mackenzie", zone: "zone-mathematics", muscle: "Hard Compound Pulls", isFiction: false, blurb: "Causal diagrams and structural reasoning beyond passive statistical correlation." },
+  { id: 50, num: 50, title: "The Art of Uncertainty", author: "David Spiegelhalter", zone: "zone-mathematics", muscle: "Hard Compound Pulls", isFiction: false, blurb: "Rigorous navigation of statistical risk, empirical error, and randomness." },
+
+  // 5. Religion, Neuroscience & Consciousness
+  { id: 36, num: 36, title: "The Origin of Consciousness", author: "Julian Jaynes", zone: "zone-consciousness-religion", muscle: "Arms", isFiction: false, blurb: "Neuro-linguistic breakdown of the bicameral mind into modern selfhood." },
+  { id: 37, num: 37, title: "Solaris", author: "Stanisław Lem", zone: "zone-consciousness-religion", muscle: "Mobility & Flexibility", isFiction: true, blurb: "Accessory to #36 & #41. Encounter with a consciousness genuinely not ours." },
+  { id: 41, num: 41, title: "A Universe of Consciousness", author: "Gerald M. Edelman, Giulio Tononi", zone: "zone-consciousness-religion", muscle: "Arms", isFiction: false, blurb: "Information integration theory and dynamic core neural frameworks." },
+  { id: 42, num: 42, title: "Why We Remember", author: "Charan Ranganath", zone: "zone-consciousness-religion", muscle: "Arms", isFiction: false, blurb: "The predictive, reconstructive, and adaptive machinery of human memory." },
+
+  // 6. Philosophy & Epistemology
+  { id: 17, num: 17, title: "The Muqaddimah", author: "Ibn Khaldun", zone: "zone-philosophy", muscle: "Back & Core", isFiction: false, blurb: "Foundational philosophy of history: asabiyya, dynastic turnover, and decline cycles." },
+  { id: 20, num: 20, title: "Confronting Leviathan", author: "David Runciman", zone: "zone-philosophy", muscle: "Back & Core", isFiction: false, blurb: "Evolution, survival stakes, and modern philosophical crisis of the state." },
+  { id: 39, num: 39, title: "Free Agents", author: "Kevin J. Mitchell", zone: "zone-philosophy", muscle: "Arms", isFiction: false, blurb: "Neurobiological origins and natural evolution of causal agency and free will." },
+  { id: 40, num: 40, title: "Never Let Me Go", author: "Kazuo Ishiguro", zone: "zone-philosophy", muscle: "Mobility & Flexibility", isFiction: true, blurb: "Accessory to #39. The ethical interior and psychological tragedy of designed agency." },
+  { id: 43, num: 43, title: "Metaphors We Live By", author: "George Lakoff, Mark Johnson", zone: "zone-philosophy", muscle: "Arms", isFiction: false, blurb: "Embodied conceptual metaphors directly underpinning daily thought and reason." },
+  { id: 46, num: 46, title: "The Structure of Scientific Revolutions", author: "Thomas S. Kuhn", zone: "zone-philosophy", muscle: "Hard Compound Pulls", isFiction: false, blurb: "Paradigms, incommensurability, and epistemology of scientific crisis." },
+  { id: 47, num: 47, title: "A Canticle for Leibowitz", author: "Walter M. Miller Jr.", zone: "zone-philosophy", muscle: "Mobility & Flexibility", isFiction: true, blurb: "Accessory to #46. Cycles of civilizational collapse, with a monastery preserving knowledge." },
+
+  // 7. Anthropology, Psychology & Sociology
+  { id: 33, num: 33, title: "The Secret of Our Success", author: "Joseph Henrich", zone: "zone-social-sciences", muscle: "Arms", isFiction: false, blurb: "Dual-inheritance mechanisms and cumulative cultural evolution." },
+  { id: 38, num: 38, title: "Noise", author: "Daniel Kahneman et al.", zone: "zone-social-sciences", muscle: "Arms", isFiction: false, blurb: "Flaw in human judgment: systemic variance and decision noise across systems." },
+  { id: 57, num: 57, title: "The Trial", author: "Franz Kafka", zone: "zone-social-sciences", muscle: "Mobility & Flexibility", isFiction: true, blurb: "Existential absurdity, unaccountable law, and bureaucratic alienation." },
+  { id: 60, num: 60, title: "Your Brain on Art", author: "Susan Magsamen, Ivy Ross", zone: "zone-social-sciences", muscle: "Mobility & Flexibility", isFiction: false, blurb: "Neuroaesthetics and the physiological impact of artistic creation on mind." },
+
+  // 8. Politics & Statecraft
+  { id: 14, num: 14, title: "The Origins of Totalitarianism", author: "Hannah Arendt", zone: "zone-politics", muscle: "Back & Core", isFiction: false, blurb: "Definitive anatomy of 20th-century ideological terror and bureaucratic isolation." },
+  { id: 15, num: 15, title: "Darkness at Noon", author: "Arthur Koestler", zone: "zone-politics", muscle: "Mobility & Flexibility", isFiction: true, blurb: "Accessory to #14. The purge trial from inside a loyalist's skull." },
+  { id: 16, num: 16, title: "Seeing Like a State", author: "James C. Scott", zone: "zone-politics", muscle: "Back & Core", isFiction: false, blurb: "High-modernist planning failures, legible simplification, and local mētis." },
+  { id: 18, num: 18, title: "The End of History and the Last Man", author: "Francis Fukuyama", zone: "zone-politics", muscle: "Back & Core", isFiction: false, blurb: "Apex thesis of liberal democratic governance against rival systemic claims." },
+  { id: 19, num: 19, title: "The Clash of Civilizations", author: "Samuel P. Huntington", zone: "zone-politics", muscle: "Back & Core", isFiction: false, blurb: "Cultural and civilizational fault lines superseding Cold War ideological states." },
+  { id: 21, num: 21, title: "The Dispossessed", author: "Ursula K. Le Guin", zone: "zone-politics", muscle: "Mobility & Flexibility", isFiction: true, blurb: "Accessory to #18–20. Political theory as thought experiment: anarchist scarcity vs state capitalism." },
+  { id: 23, num: 23, title: "The Great Experiment", author: "Yascha Mounk", zone: "zone-politics", muscle: "Back & Core", isFiction: false, blurb: "Structural conditions for maintaining diverse, multi-ethnic constitutional democracies." },
+
+  // 9. Technology & AI
+  { id: 49, num: 49, title: "Algorithms to Live By", author: "Brian Christian, Tom Griffiths", zone: "zone-technology-ai", muscle: "Hard Compound Pulls", isFiction: false, blurb: "Optimal stopping, sorting, and caching strategies applied to human agency." },
+  { id: 52, num: 52, title: "The Emperor's New Mind", author: "Roger Penrose", zone: "zone-technology-ai", muscle: "Cardio & Agility", isFiction: false, blurb: "Non-algorithmic limits of computation and physical foundations of consciousness." },
+  { id: 53, num: 53, title: "A Thousand Brains", author: "Jeff Hawkins", zone: "zone-technology-ai", muscle: "Cardio & Agility", isFiction: false, blurb: "Neocortical reference frames and true structural reverse-engineering of intelligence." },
+  { id: 54, num: 54, title: "AI Snake Oil", author: "Arvind Narayanan, Sayash Kapoor", zone: "zone-technology-ai", muscle: "Cardio & Agility", isFiction: false, blurb: "Distinguishing valid predictive capabilities from high-modernist generative hype." },
+  { id: 55, num: 55, title: "Chip War", author: "Chris Miller", zone: "zone-technology-ai", muscle: "Cardio & Agility", isFiction: false, blurb: "Semiconductor chokepoints, industrial lithography, and global geopolitics." },
+  { id: 56, num: 56, title: "Computer Power and Human Reason", author: "Joseph Weizenbaum", zone: "zone-technology-ai", muscle: "Cardio & Agility", isFiction: false, blurb: "The classic critique: ethical limits of computation and judgment versus calculation." },
+
+  // 10. Economics, Finance & Sustainable Ecology
+  { id: 24, num: 24, title: "Capitalism", author: "Jürgen Kocka", zone: "zone-economics", muscle: "Chest & Delts", isFiction: false, blurb: "Historical evolution of wage labor, commercial expansion, and modern market enterprise." },
+  { id: 25, num: 25, title: "The Value of Everything", author: "Mariana Mazzucato", zone: "zone-economics", muscle: "Chest & Delts", isFiction: false, blurb: "Distinction between productive value creation and speculative rent extraction." },
+  { id: 26, num: 26, title: "The Price of Time", author: "Edward Chancellor", zone: "zone-economics", muscle: "Chest & Delts", isFiction: false, blurb: "Macro distortions and capital misallocations caused by artificial interest rate regimes." },
+  { id: 27, num: 27, title: "The Economic Government of the World", author: "Martin Daunton", zone: "zone-economics", muscle: "Chest & Delts", isFiction: false, blurb: "Multilateral institutions, currency compacts, and global trade order." },
+  { id: 28, num: 28, title: "Growth", author: "Vaclav Smil", zone: "zone-economics", muscle: "Chest & Delts", isFiction: false, blurb: "Physical, metabolic, and ecological constraints on scaling natural and human systems." },
+  { id: 29, num: 29, title: "The Economics of Biodiversity", author: "Partha Dasgupta", zone: "zone-economics", muscle: "Chest & Delts", isFiction: false, blurb: "Formally embedding the natural biosphere directly into capital accounts." },
+  { id: 30, num: 30, title: "Half-Earth", author: "Edward O. Wilson", zone: "zone-economics", muscle: "Chest & Delts", isFiction: false, blurb: "Biosphere preservation imperatives and planetary spatial boundaries." },
+  { id: 31, num: 31, title: "The Overstory", author: "Richard Powers", zone: "zone-economics", muscle: "Mobility & Flexibility", isFiction: true, blurb: "Accessory to #28–30. Ecological time scales institutions cannot perceive." },
+  { id: 59, num: 59, title: "The Ministry for the Future", author: "Kim Stanley Robinson", zone: "zone-economics", muscle: "Mobility & Flexibility", isFiction: true, blurb: "Speculative institutional, carbon currency, and political scenarios for climate survival." }
+];
+
+let booksData = [];
+let activeTargetCardId = null;
+
+// Initialize from LocalStorage or Defaults
+function initApp() {
+  const saved = localStorage.getItem('regimen_books_2027');
+  if (saved) {
+    try {
+      booksData = JSON.parse(saved);
+    } catch(e) {
+      booksData = JSON.parse(JSON.stringify(DEFAULT_BOOKS));
+    }
+  } else {
+    booksData = JSON.parse(JSON.stringify(DEFAULT_BOOKS));
+  }
+  renderAllCards();
+}
+
+function saveToLocalStorage() {
+  localStorage.setItem('regimen_books_2027', JSON.stringify(booksData));
+  updateStats();
+}
+
+function updateStats() {
+  const count = booksData.length;
+  document.getElementById('statsCounter').innerText = `${count} Titles Placed`;
+}
+
+// Render Engine
+function renderAllCards() {
+  // Clear all zones
+  document.querySelectorAll('.cluster-zone').forEach(z => z.innerHTML = '');
+
+  booksData.sort((a,b) => (a.num || 99) - (b.num || 99));
+
+  booksData.forEach(book => {
+    const zoneEl = document.getElementById(book.zone);
+    if (!zoneEl) return;
+
+    const card = document.createElement('div');
+    card.className = `book-card ${book.isFiction ? 'is-fiction' : ''}`;
+    card.id = `book-card-${book.id}`;
+    card.dataset.muscle = book.muscle;
+
+    // Inner cover presentation
+    let coverContent = '';
+    if (book.coverImg) {
+      coverContent = `
+        <img src="${book.coverImg}" alt="${book.title}">
+        <button class="remove-cover-btn" onclick="removeCover(${book.id}, event)">✕ Remove Cover</button>
+      `;
+    } else {
+      coverContent = `
+        <div class="placeholder-text">${book.title}</div>
+        <div class="author-text">${book.author}</div>
+        <div class="drag-hint">Drop cover here</div>
+      `;
+    }
+
+    card.innerHTML = `
+      <div class="card-actions-overlay">
+        <button class="icon-btn" title="Edit details" onclick="openEditModal(${book.id}, event)">✎</button>
+        <button class="icon-btn delete" title="Delete book" onclick="deleteBook(${book.id}, event)">🗑</button>
+      </div>
+      <div class="card-cover" onclick="triggerCoverUpload(${book.id})">
+        ${coverContent}
+      </div>
+      <div class="card-meta">
+        <span class="card-num">#${book.num} ${book.isFiction ? '• Fiction Accessory' : ''}</span>
+        <span class="card-blurb">${book.blurb}</span>
+        <span class="card-tag">${book.muscle}</span>
+      </div>
+    `;
+
+    // Enable drag and drop of cover images
+    setupDragAndDrop(card, book.id);
+    zoneEl.appendChild(card);
+  });
+
+  updateStats();
+}
+
+// Drag & Drop Handling for Cover Images
+function setupDragAndDrop(cardElement, bookId) {
+  const coverArea = cardElement.querySelector('.card-cover');
+
+  coverArea.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    coverArea.style.background = '#cadcca';
+  });
+
+  coverArea.addEventListener('dragleave', (e) => {
+    e.preventDefault();
+    coverArea.style.background = '';
+  });
+
+  coverArea.addEventListener('drop', (e) => {
+    e.preventDefault();
+    coverArea.style.background = '';
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      const file = e.dataTransfer.files[0];
+      if (file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          setBookCoverImage(bookId, event.target.result);
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+  });
+}
+
+function triggerCoverUpload(bookId) {
+  activeTargetCardId = bookId;
+  document.getElementById('coverFileInput').click();
+}
+
+function handleCoverFileSelected(event) {
+  const file = event.target.files[0];
+  if (file && activeTargetCardId) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      setBookCoverImage(activeTargetCardId, e.target.result);
+      event.target.value = '';
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
+function setBookCoverImage(bookId, dataUrl) {
+  const book = booksData.find(b => b.id === bookId);
+  if (book) {
+    book.coverImg = dataUrl;
+    saveToLocalStorage();
+    renderAllCards();
+  }
+}
+
+function removeCover(bookId, event) {
+  event.stopPropagation();
+  const book = booksData.find(b => b.id === bookId);
+  if (book) {
+    delete book.coverImg;
+    saveToLocalStorage();
+    renderAllCards();
+  }
+}
+
+// Filter Engine
+function applyFilter(muscleFilter) {
+  document.querySelectorAll('.filter-chip').forEach(c => {
+    c.classList.toggle('active', c.dataset.filter === muscleFilter);
+  });
+
+  document.querySelectorAll('.book-card').forEach(card => {
+    if (muscleFilter === 'all') {
+      card.classList.remove('dimmed');
+    } else {
+      if (card.dataset.muscle === muscleFilter) {
+        card.classList.remove('dimmed');
+      } else {
+        card.classList.add('dimmed');
+      }
+    }
+  });
+}
+
+// Modal Form & CRUD Operations
+function openAddModal() {
+  document.getElementById('modalTitle').innerText = 'Add New Title';
+  document.getElementById('editBookId').value = '';
+  document.getElementById('inputNum').value = booksData.length + 1;
+  document.getElementById('inputTitle').value = '';
+  document.getElementById('inputAuthor').value = '';
+  document.getElementById('inputZone').value = 'zone-history';
+  document.getElementById('inputMuscle').value = 'Posterior Chain';
+  document.getElementById('inputIsFiction').value = 'false';
+  document.getElementById('inputBlurb').value = '';
+
+  document.getElementById('bookModal').classList.add('open');
+}
+
+function openEditModal(bookId, event) {
+  event.stopPropagation();
+  const book = booksData.find(b => b.id === bookId);
+  if (!book) return;
+
+  document.getElementById('modalTitle').innerText = 'Edit Title Details';
+  document.getElementById('editBookId').value = book.id;
+  document.getElementById('inputNum').value = book.num;
+  document.getElementById('inputTitle').value = book.title;
+  document.getElementById('inputAuthor').value = book.author;
+  document.getElementById('inputZone').value = book.zone;
+  document.getElementById('inputMuscle').value = book.muscle;
+  document.getElementById('inputIsFiction').value = book.isFiction ? 'true' : 'false';
+  document.getElementById('inputBlurb').value = book.blurb;
+
+  document.getElementById('bookModal').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('bookModal').classList.remove('open');
+}
+
+function saveBookForm() {
+  const idStr = document.getElementById('editBookId').value;
+  const num = parseInt(document.getElementById('inputNum').value) || 1;
+  const title = document.getElementById('inputTitle').value.trim();
+  const author = document.getElementById('inputAuthor').value.trim();
+  const zone = document.getElementById('inputZone').value;
+  const muscle = document.getElementById('inputMuscle').value;
+  const isFiction = document.getElementById('inputIsFiction').value === 'true';
+  const blurb = document.getElementById('inputBlurb').value.trim();
+
+  if (!title) {
+    alert('Please enter a title');
+    return;
+  }
+
+  if (idStr) {
+    // Edit existing
+    const book = booksData.find(b => b.id === parseInt(idStr));
+    if (book) {
+      book.num = num;
+      book.title = title;
+      book.author = author;
+      book.zone = zone;
+      book.muscle = muscle;
+      book.isFiction = isFiction;
+      book.blurb = blurb;
+    }
+  } else {
+    // Add new
+    const newId = Date.now();
+    booksData.push({
+      id: newId,
+      num,
+      title,
+      author,
+      zone,
+      muscle,
+      isFiction,
+      blurb
+    });
+  }
+
+  saveToLocalStorage();
+  renderAllCards();
+  closeModal();
+}
+
+function deleteBook(bookId, event) {
+  event.stopPropagation();
+  const book = booksData.find(b => b.id === bookId);
+  if (!book) return;
+
+  if (confirm(`Remove "${book.title}" from your reading regimen?`)) {
+    booksData = booksData.filter(b => b.id !== bookId);
+    saveToLocalStorage();
+    renderAllCards();
+  }
+}
+
+function resetDefaults() {
+  if (confirm("Reset the infographic back to the original 60 titles? Any uploaded covers will be cleared.")) {
+    booksData = JSON.parse(JSON.stringify(DEFAULT_BOOKS));
+    saveToLocalStorage();
+    renderAllCards();
+  }
+}
+
+// JSON Backup & Restore
+function exportDataJSON() {
+  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(booksData, null, 2));
+  const downloadAnchor = document.createElement('a');
+  downloadAnchor.setAttribute("href", dataStr);
+  downloadAnchor.setAttribute("download", "reading_regimen_2027.json");
+  document.body.appendChild(downloadAnchor);
+  downloadAnchor.click();
+  downloadAnchor.remove();
+}
+
+function importDataJSON(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const parsed = JSON.parse(e.target.result);
+      if (Array.isArray(parsed)) {
+        booksData = parsed;
+        saveToLocalStorage();
+        renderAllCards();
+        alert('Infographic successfully imported!');
+      } else {
+        alert('Invalid JSON structure.');
+      }
+    } catch(err) {
+      alert('Error parsing JSON file.');
+    }
+  };
+  reader.readAsText(file);
+}
+
+// Initialize on page load
+window.addEventListener('DOMContentLoaded', () => {
+  initApp();
+  // Center viewport scroll initially
+  const vp = document.getElementById('viewport');
+  vp.scrollLeft = 200;
+  vp.scrollTop = 300;
+});
+</script>
+</body>
+</html>

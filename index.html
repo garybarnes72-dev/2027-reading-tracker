@@ -1,0 +1,1690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2027 Cognitive Reading Regimen Tracker</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+    :root {
+      --forest-900: #0f2416;
+      --forest-800: #1a3323;
+      --sage-700: #2d5539;
+      --sage-500: #4a7c59;
+      --sage-400: #669975;
+      --sage-200: #b9d2be;
+      --sage-100: #e3ede4;
+      --sage-50: #f4f7f4;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #f5f8f5;
+      color: #1a2e20;
+    }
+
+    .font-serif-title {
+      font-family: 'Playfair Display', Georgia, serif;
+    }
+
+    .font-mono-code {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Custom Scrollbars */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #edf2eb;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #a3c2a6;
+      border-radius: 9999px;
+    }
+
+    .card-transition {
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .card-transition:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px -5px rgba(26, 51, 35, 0.1);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col text-slate-800 antialiased selection:bg-[#4a7c59] selection:text-white">
+
+  <!-- TOP APP BAR -->
+  <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-[#dce7dd] px-4 sm:px-8 py-3.5 shadow-xs">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
+      <div class="flex items-center space-x-3.5">
+        <div class="w-10 h-10 rounded-xl bg-[#1a3323] text-white flex items-center justify-center shadow-sm">
+          <i data-lucide="book-marked" class="w-5 h-5 text-[#88b088]"></i>
+        </div>
+        <div>
+          <div class="flex items-center space-x-2">
+            <h1 class="font-serif-title text-xl font-bold tracking-tight text-[#0f2416]">2027 Cognitive Reading Tracker</h1>
+            <span id="headerTotalBadge" class="text-[11px] font-mono-code font-bold uppercase bg-[#e5ede5] text-[#2d5539] px-2 py-0.5 rounded-full border border-[#cadcca]">60 Titles</span>
+          </div>
+          <p class="text-xs text-[#527658]">7 Functional Muscle Groups • Velocity Analysis & Pacing Engine</p>
+        </div>
+      </div>
+
+      <!-- Quick Action Utilities -->
+      <div class="flex items-center space-x-2 text-xs">
+        <button onclick="openAddBookModal()" class="px-3 py-1.5 rounded-lg bg-[#1a3323] hover:bg-[#122416] text-white font-semibold shadow-xs transition flex items-center space-x-1.5">
+          <i data-lucide="plus-circle" class="w-3.5 h-3.5 text-[#88b088]"></i>
+          <span>Add Title</span>
+        </button>
+        <button onclick="loadSampleProgress()" class="px-3 py-1.5 rounded-lg bg-[#eaf1ea] hover:bg-[#dbe7dc] text-[#1a3323] font-semibold border border-[#c6dac8] transition flex items-center space-x-1.5">
+          <i data-lucide="sparkles" class="w-3.5 h-3.5 text-[#4a7c59]"></i>
+          <span class="hidden sm:inline">Load Demo Data</span>
+        </button>
+        <button onclick="exportData()" class="px-3 py-1.5 rounded-lg bg-white hover:bg-[#f3f7f3] text-[#2d5539] font-semibold border border-[#cadcca] transition flex items-center space-x-1.5">
+          <i data-lucide="download" class="w-3.5 h-3.5"></i>
+          <span>Export</span>
+        </button>
+        <label class="px-3 py-1.5 rounded-lg bg-white hover:bg-[#f3f7f3] text-[#2d5539] font-semibold border border-[#cadcca] transition flex items-center space-x-1.5 cursor-pointer">
+          <i data-lucide="upload" class="w-3.5 h-3.5"></i>
+          <span>Import</span>
+          <input type="file" accept=".json" class="hidden" onchange="importData(event)" />
+        </label>
+        <button onclick="confirmResetToDefault()" class="p-1.5 rounded-lg text-rose-700 hover:bg-rose-50 border border-transparent hover:border-rose-200 transition" title="Reset to Canonical 60 Titles">
+          <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 space-y-8">
+
+    <!-- DASHBOARD: ANALYTICS & VELOCITY GAUGE -->
+    <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+      
+      <!-- 1. Books Progress Card -->
+      <div class="bg-white rounded-2xl p-5 border border-[#d6e3d7] shadow-xs flex flex-col justify-between">
+        <div class="flex items-center justify-between">
+          <span class="text-xs uppercase font-bold tracking-wider text-[#527859]">Titles Completed</span>
+          <div class="w-8 h-8 rounded-lg bg-[#f0f6f0] text-[#2d5539] flex items-center justify-center">
+            <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+          </div>
+        </div>
+        <div class="mt-4 flex items-baseline space-x-2">
+          <span id="statCompletedBooks" class="text-3xl font-extrabold text-[#0f2416]">0</span>
+          <span class="text-sm font-semibold text-[#5a7c5e]">/ <span id="statTargetBooks">60</span> books</span>
+        </div>
+        <div class="mt-3">
+          <div class="w-full bg-[#e8efe8] h-2.5 rounded-full overflow-hidden">
+            <div id="statBooksBar" class="bg-[#2d5539] h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+          </div>
+          <div class="mt-2 flex justify-between text-[11px] text-[#557758]">
+            <span id="statBooksPercent">0% finished</span>
+            <span id="statInProgressBooks">0 currently reading</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Pages Read Volume -->
+      <div class="bg-white rounded-2xl p-5 border border-[#d6e3d7] shadow-xs flex flex-col justify-between">
+        <div class="flex items-center justify-between">
+          <span class="text-xs uppercase font-bold tracking-wider text-[#527859]">Total Volume</span>
+          <div class="w-8 h-8 rounded-lg bg-[#f0f6f0] text-[#2d5539] flex items-center justify-center">
+            <i data-lucide="layers" class="w-4 h-4"></i>
+          </div>
+        </div>
+        <div class="mt-4 flex items-baseline space-x-2">
+          <span id="statPagesRead" class="text-3xl font-extrabold text-[#0f2416]">0</span>
+          <span class="text-sm font-semibold text-[#5a7c5e]">/ <span id="statTotalPages">26,161</span> pp.</span>
+        </div>
+        <div class="mt-3">
+          <div class="w-full bg-[#e8efe8] h-2.5 rounded-full overflow-hidden">
+            <div id="statPagesBar" class="bg-[#4a7c59] h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+          </div>
+          <div class="mt-2 flex justify-between text-[11px] text-[#557758]">
+            <span id="statPagesPercent">0.0% volume read</span>
+            <span id="statPagesRemaining">26,161 pages left</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. Velocity & Speedometer Gauge -->
+      <div class="bg-white rounded-2xl p-5 border border-[#d6e3d7] shadow-xs flex flex-col justify-between">
+        <div class="flex items-center justify-between">
+          <span class="text-xs uppercase font-bold tracking-wider text-[#527859]">Velocity & Pace</span>
+          <div class="w-8 h-8 rounded-lg bg-[#f0f6f0] text-[#2d5539] flex items-center justify-center">
+            <i data-lucide="gauge" class="w-4 h-4"></i>
+          </div>
+        </div>
+        <div class="mt-3 flex items-center justify-between">
+          <div>
+            <div id="statPaceBadge" class="inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-50 text-amber-800 border border-amber-200">
+              <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+              <span id="statPaceStatus">Not Started</span>
+            </div>
+            <div class="mt-2 text-xs text-[#527756]">
+              Actual: <strong id="statActualSpeed" class="text-[#0f2416]">0.0 pp/day</strong>
+            </div>
+          </div>
+          <div class="text-right">
+            <span class="text-[10px] font-mono-code uppercase text-[#6f9072]">2027 Required</span>
+            <div class="text-lg font-bold text-[#1b3422]"><span id="statRequiredPace">71.7</span> <span class="text-xs font-normal">pp/day</span></div>
+            <div class="text-[10px] text-[#597c5e]"><span id="statPaceWeekly">~1.15</span> books/wk</div>
+          </div>
+        </div>
+        <div class="mt-3 pt-2 border-t border-[#e8efe8] flex items-center justify-between text-[11px] text-[#4f7353]">
+          <span>Average Finish Time:</span>
+          <strong id="statAvgDays" class="text-[#102416]">-- days/book</strong>
+        </div>
+      </div>
+
+      <!-- 4. Projected Completion Outlook -->
+      <div class="bg-gradient-to-br from-[#1a3323] to-[#0f2416] text-white rounded-2xl p-5 shadow-sm flex flex-col justify-between">
+        <div class="flex items-center justify-between">
+          <span class="text-xs uppercase font-bold tracking-wider text-[#a0c2a4]">Projected Finish</span>
+          <div class="w-8 h-8 rounded-lg bg-white/10 text-[#a0c2a4] flex items-center justify-center">
+            <i data-lucide="calendar" class="w-4 h-4"></i>
+          </div>
+        </div>
+        <div class="mt-3">
+          <div id="statProjectedDate" class="text-2xl font-serif-title font-bold text-white tracking-wide">
+            Dec 31, 2027
+          </div>
+          <p id="statProjectedNote" class="text-xs text-[#b8d4bb] mt-1 leading-snug">
+            Finish all 60 titles on schedule by maintaining target pacing.
+          </p>
+        </div>
+        <div class="mt-3 pt-2 border-t border-white/15 flex items-center justify-between text-xs text-[#95b89a]">
+          <span>2027 Countdown:</span>
+          <span id="statCountdownDays" class="font-mono-code font-bold text-white">365 days</span>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- COGNITIVE MUSCLE GROUP PROGRESS BREAKDOWN -->
+    <section class="bg-white rounded-2xl p-6 border border-[#d6e3d7] shadow-xs">
+      <div class="flex flex-wrap items-center justify-between gap-2 pb-4 mb-5 border-b border-[#e5efe5]">
+        <div>
+          <h2 class="font-serif-title text-lg font-bold text-[#0f2416]">Cognitive Muscle Group Balance</h2>
+          <p class="text-xs text-[#527756]">Track progress through the 7 intellectual movement patterns</p>
+        </div>
+        <div class="text-xs text-[#527756] font-medium">
+          Target: Complete 47 Non-Fiction Lifts & 13 Accessory Works
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 gap-4" id="muscleGroupBarsContainer">
+        <!-- Rendered dynamically -->
+      </div>
+    </section>
+
+    <!-- CONTROLS, SEARCH, AND FILTERING BAR -->
+    <section class="bg-white rounded-2xl p-4 sm:p-5 border border-[#d6e3d7] shadow-xs space-y-4">
+      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+        
+        <!-- Search Bar -->
+        <div class="relative flex-1 max-w-md">
+          <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#648869]"></i>
+          <input 
+            type="text" 
+            id="searchInput" 
+            oninput="handleSearch(this.value)"
+            placeholder="Search by title, author, keyword, or #ID..." 
+            class="w-full pl-9 pr-4 py-2 text-xs sm:text-sm rounded-xl border border-[#c8d8c9] bg-[#fbfdfb] focus:outline-none focus:ring-2 focus:ring-[#375a3e] transition"
+          />
+        </div>
+
+        <!-- Layout View & Mode Switcher -->
+        <div class="flex flex-wrap items-center gap-2">
+          
+          <!-- Status Filter Pills -->
+          <div class="inline-flex bg-[#edf3ed] p-1 rounded-xl text-xs font-semibold border border-[#d3dfd3]">
+            <button onclick="setStatusFilter('ALL')" class="status-tab active px-3 py-1 rounded-lg text-[#132818] bg-white shadow-2xs transition" data-status="ALL">All</button>
+            <button onclick="setStatusFilter('READING')" class="status-tab px-3 py-1 rounded-lg text-[#507354] hover:text-[#132818] transition" data-status="READING">Reading</button>
+            <button onclick="setStatusFilter('COMPLETED')" class="status-tab px-3 py-1 rounded-lg text-[#507354] hover:text-[#132818] transition" data-status="COMPLETED">Completed</button>
+            <button onclick="setStatusFilter('UNREAD')" class="status-tab px-3 py-1 rounded-lg text-[#507354] hover:text-[#132818] transition" data-status="UNREAD">To Read</button>
+          </div>
+
+          <!-- Format Filter (All vs Accessory Fiction) -->
+          <select id="formatFilter" onchange="applyFilters()" class="text-xs font-semibold px-3 py-2 rounded-xl border border-[#c8d8c9] bg-[#fbfdfb] text-[#244229] focus:outline-none">
+            <option value="ALL">All Works (60)</option>
+            <option value="NONFICTION">Non-Fiction Lifts (47)</option>
+            <option value="FICTION">Accessory Fiction (13)</option>
+          </select>
+
+          <!-- Table vs Grid Toggle -->
+          <div class="inline-flex bg-[#edf3ed] p-1 rounded-xl text-xs border border-[#d3dfd3]">
+            <button onclick="setViewMode('table')" id="viewModeTable" title="Table View" class="p-1.5 rounded-lg bg-white text-[#132818] shadow-2xs transition">
+              <i data-lucide="list" class="w-4 h-4"></i>
+            </button>
+            <button onclick="setViewMode('grid')" id="viewModeGrid" title="Card Grid View" class="p-1.5 rounded-lg text-[#507354] hover:text-[#132818] transition">
+              <i data-lucide="layout-grid" class="w-4 h-4"></i>
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Muscle Group Filter Tag Cloud -->
+      <div class="flex items-center gap-1.5 overflow-x-auto pb-1 pt-1 text-xs">
+        <span class="text-[11px] font-bold text-[#577959] uppercase tracking-wider shrink-0 mr-1">Muscle Group:</span>
+        <button onclick="setMuscleFilter('ALL')" class="muscle-pill active shrink-0 px-2.5 py-1 rounded-lg bg-[#2d5539] text-white font-medium transition" data-muscle="ALL">
+          All Groups
+        </button>
+        <button onclick="setMuscleFilter('Posterior Chain & Legs')" class="muscle-pill shrink-0 px-2.5 py-1 rounded-lg bg-[#eaf1ea] text-[#34583b] hover:bg-[#dbe7dc] font-medium transition" data-muscle="Posterior Chain & Legs">
+          Posterior & Legs (13)
+        </button>
+        <button onclick="setMuscleFilter('Back & Core')" class="muscle-pill shrink-0 px-2.5 py-1 rounded-lg bg-[#eaf1ea] text-[#34583b] hover:bg-[#dbe7dc] font-medium transition" data-muscle="Back & Core">
+          Back & Core (10)
+        </button>
+        <button onclick="setMuscleFilter('Chest & Delts')" class="muscle-pill shrink-0 px-2.5 py-1 rounded-lg bg-[#eaf1ea] text-[#34583b] hover:bg-[#dbe7dc] font-medium transition" data-muscle="Chest & Delts">
+          Chest & Delts (8)
+        </button>
+        <button onclick="setMuscleFilter('Arms')" class="muscle-pill shrink-0 px-2.5 py-1 rounded-lg bg-[#eaf1ea] text-[#34583b] hover:bg-[#dbe7dc] font-medium transition" data-muscle="Arms">
+          Arms (12)
+        </button>
+        <button onclick="setMuscleFilter('Hard Compound Pulls')" class="muscle-pill shrink-0 px-2.5 py-1 rounded-lg bg-[#eaf1ea] text-[#34583b] hover:bg-[#dbe7dc] font-medium transition" data-muscle="Hard Compound Pulls">
+          Hard Pulls (8)
+        </button>
+        <button onclick="setMuscleFilter('Cardio & Agility')" class="muscle-pill shrink-0 px-2.5 py-1 rounded-lg bg-[#eaf1ea] text-[#34583b] hover:bg-[#dbe7dc] font-medium transition" data-muscle="Cardio & Agility">
+          Cardio & Agility (5)
+        </button>
+        <button onclick="setMuscleFilter('Mobility & Flexibility')" class="muscle-pill shrink-0 px-2.5 py-1 rounded-lg bg-[#eaf1ea] text-[#34583b] hover:bg-[#dbe7dc] font-medium transition" data-muscle="Mobility & Flexibility">
+          Mobility (4)
+        </button>
+      </div>
+    </section>
+
+    <!-- CONTENT DISPLAY: TABLE VIEW & GRID VIEW -->
+    <section>
+      
+      <!-- TABLE VIEW -->
+      <div id="tableViewWrapper" class="bg-white rounded-2xl border border-[#d6e3d7] shadow-xs overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs border-collapse">
+            <thead>
+              <tr class="bg-[#f2f6f2] text-[#315337] border-b border-[#dce6dc] uppercase text-[10px] font-bold tracking-wider">
+                <th class="py-3 px-4 w-12 text-center">#</th>
+                <th class="py-3 px-4">Title & Author</th>
+                <th class="py-3 px-4">Muscle Group & Domain</th>
+                <th class="py-3 px-3 text-center">Format</th>
+                <th class="py-3 px-3 text-right">Pages</th>
+                <th class="py-3 px-4">Status & Progress</th>
+                <th class="py-3 px-4">Reading Dates</th>
+                <th class="py-3 px-3 text-center">Speed</th>
+                <th class="py-3 px-3 text-center">Rating</th>
+                <th class="py-3 px-4 text-center">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="booksTableBody" class="divide-y divide-[#e9f0e9]">
+              <!-- Injected by JavaScript -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- GRID / CARD VIEW -->
+      <div id="gridViewWrapper" class="hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        <!-- Injected by JavaScript -->
+      </div>
+
+      <!-- EMPTY STATE -->
+      <div id="emptyState" class="hidden py-16 text-center bg-white rounded-2xl border border-dashed border-[#cadcca]">
+        <i data-lucide="book-x" class="w-10 h-10 mx-auto text-[#7e9e83] mb-3"></i>
+        <h3 class="font-serif-title text-base font-bold text-[#142818]">No books match your current filter</h3>
+        <p class="text-xs text-[#527756] mt-1">Try resetting the search bar or changing muscle group filters.</p>
+        <button onclick="resetFilters()" class="mt-4 px-4 py-1.5 rounded-lg bg-[#2d5539] text-white text-xs font-semibold">
+          Reset Filters
+        </button>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- EDIT / LOGGING MODAL -->
+  <div id="bookModal" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-xl w-full border border-[#cbdacb] shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-150">
+      
+      <!-- Modal Header -->
+      <div class="bg-[#f4f8f4] border-b border-[#dbe6dc] p-5 flex items-start justify-between">
+        <div class="flex items-start space-x-3">
+          <span id="modalBookIdBadge" class="w-8 h-8 rounded-xl bg-[#1a3323] text-white font-mono-code font-bold text-xs flex items-center justify-center shrink-0">
+            01
+          </span>
+          <div>
+            <h3 id="modalBookTitle" class="font-serif-title text-lg font-bold text-[#0f2416] leading-tight"></h3>
+            <p id="modalBookAuthor" class="text-xs text-[#486e4d] font-medium mt-0.5"></p>
+            <div class="flex items-center space-x-2 mt-2">
+              <span id="modalMuscleBadge" class="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-[#e2ede2] text-[#244229]"></span>
+              <span id="modalAccessoryBadge" class="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-amber-50 text-amber-900 border border-amber-200"></span>
+            </div>
+          </div>
+        </div>
+        <button onclick="closeModal()" class="text-[#557758] hover:text-[#122416] p-1.5 rounded-lg hover:bg-[#e4ede4] transition">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <form id="bookEditForm" onsubmit="handleSaveBook(event)" class="p-6 space-y-5 text-xs">
+        <input type="hidden" id="editBookId" />
+
+        <!-- Title & Author Row (Editable for any title) -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block font-bold text-[#1f3824] uppercase tracking-wider text-[10px] mb-1.5">Book Title *</label>
+            <input type="text" id="editTitleInput" required class="w-full px-3 py-2 rounded-xl border border-[#c6d7c7] bg-white text-[#152919] font-medium focus:outline-none focus:ring-2 focus:ring-[#385e3f]" />
+          </div>
+          <div>
+            <label class="block font-bold text-[#1f3824] uppercase tracking-wider text-[10px] mb-1.5">Author *</label>
+            <input type="text" id="editAuthorInput" required class="w-full px-3 py-2 rounded-xl border border-[#c6d7c7] bg-white text-[#152919] font-medium focus:outline-none focus:ring-2 focus:ring-[#385e3f]" />
+          </div>
+        </div>
+
+        <!-- Muscle Group & Domain Topic Row -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block font-bold text-[#1f3824] uppercase tracking-wider text-[10px] mb-1.5">Cognitive Muscle Group *</label>
+            <select id="editMuscleInput" class="w-full px-3 py-2 rounded-xl border border-[#c6d7c7] bg-white text-[#152919] font-semibold focus:outline-none focus:ring-2 focus:ring-[#385e3f]">
+              <option value="Posterior Chain & Legs">Posterior Chain & Legs (History/Foundations)</option>
+              <option value="Back & Core">Back & Core (Politics/Statecraft)</option>
+              <option value="Chest & Delts">Chest & Delts (Economics/Ecology)</option>
+              <option value="Arms">Arms (Mind/Bio/Consciousness)</option>
+              <option value="Hard Compound Pulls">Hard Compound Pulls (Physics/Math/Logic)</option>
+              <option value="Cardio & Agility">Cardio & Agility (Tech/AI/Computing)</option>
+              <option value="Mobility & Flexibility">Mobility & Flexibility (Literature/Fiction/Art)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-bold text-[#1f3824] uppercase tracking-wider text-[10px] mb-1.5">Topic / Subdiscipline *</label>
+            <input type="text" id="editTopicInput" placeholder="e.g. Totalitarianism, Quantum, Rome" required class="w-full px-3 py-2 rounded-xl border border-[#c6d7c7] bg-white text-[#152919] focus:outline-none focus:ring-2 focus:ring-[#385e3f]" />
+          </div>
+        </div>
+
+        <!-- Work Classification (Non-fiction vs Accessory Fiction) -->
+        <div class="p-3 bg-[#f5f9f5] rounded-xl border border-[#d6e3d7] grid grid-cols-1 sm:grid-cols-2 gap-3 items-center">
+          <label class="flex items-center space-x-2 cursor-pointer">
+            <input type="checkbox" id="editIsFiction" onchange="toggleAccessoryField(this.checked)" class="w-4 h-4 rounded text-[#2d5539] focus:ring-[#2d5539]" />
+            <span class="font-bold text-[#1d3522]">Accessory Fiction Title</span>
+          </label>
+          <div id="accessoryToFieldWrapper" class="hidden">
+            <input type="text" id="editAccessoryTo" placeholder="Accessory to which #ID (e.g. #9-10)" class="w-full px-2.5 py-1.5 text-xs rounded-lg border border-[#cadcca] bg-white focus:outline-none" />
+          </div>
+        </div>
+
+        <!-- Status & Pages Row -->
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block font-bold text-[#1f3824] uppercase tracking-wider text-[10px] mb-1.5">Reading Status</label>
+            <select id="editStatus" onchange="handleModalStatusChange(this.value)" class="w-full px-3 py-2 rounded-xl border border-[#c6d7c7] bg-white text-[#152919] font-semibold focus:outline-none focus:ring-2 focus:ring-[#385e3f]">
+              <option value="UNREAD">Want to Read</option>
+              <option value="READING">Currently Reading</option>
+              <option value="COMPLETED">Completed</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-bold text-[#1f3824] uppercase tracking-wider text-[10px] mb-1.5">Total Pages</label>
+            <input type="number" id="editTotalPages" min="1" required class="w-full px-3 py-2 rounded-xl border border-[#c6d7c7] bg-white text-[#152919] font-mono-code focus:outline-none focus:ring-2 focus:ring-[#385e3f]" />
+          </div>
+        </div>
+
+        <!-- Progress in Pages (If Reading) -->
+        <div id="progressPagesRow">
+          <label class="block font-bold text-[#1f3824] uppercase tracking-wider text-[10px] mb-1.5">Current Page Number</label>
+          <div class="flex items-center space-x-3">
+            <input type="number" id="editCurrentPage" min="0" class="w-full px-3 py-2 rounded-xl border border-[#c6d7c7] bg-white text-[#152919] font-mono-code focus:outline-none focus:ring-2 focus:ring-[#385e3f]" />
+            <button type="button" onclick="setCompletedPages()" class="shrink-0 px-3 py-2 bg-[#e8efe8] hover:bg-[#dbe7dc] text-[#1f3c24] rounded-xl font-semibold border border-[#cadbca]">
+              Set to Max
+            </button>
+          </div>
+        </div>
+
+        <!-- Core Focus / Rationale -->
+        <div>
+          <label class="block font-bold text-[#1f3824] uppercase tracking-wider text-[10px] mb-1.5">Core Focus / Rationale</label>
+          <input type="text" id="editFocusInput" placeholder="Thematic thesis, structural function, or argument..." class="w-full px-3 py-2 rounded-xl border border-[#c6d7c7] bg-white text-[#152919] focus:outline-none focus:ring-2 focus:ring-[#385e3f]" />
+        </div>
+
+        <!-- Reading Dates Row with Quick-Log Buttons -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <div class="flex items-center justify-between mb-1.5">
+              <label class="font-bold text-[#1f3824] uppercase tracking-wider text-[10px]">Start Date</label>
+              <button type="button" onclick="setStartDateToday()" class="text-[10px] text-[#345f3a] font-bold underline hover:text-[#102416]">Today</button>
+            </div>
+            <input type="date" id="editStartDate" class="w-full px-3 py-2 rounded-xl border border-[#c6d7c7] bg-white text-[#152919] focus:outline-none focus:ring-2 focus:ring-[#385e3f]" />
+          </div>
+          <div>
+            <div class="flex items-center justify-between mb-1.5">
+              <label class="font-bold text-[#1f3824] uppercase tracking-wider text-[10px]">Finish Date</label>
+              <button type="button" onclick="setFinishDateToday()" class="text-[10px] text-[#345f3a] font-bold underline hover:text-[#102416]">Today</button>
+            </div>
+            <input type="date" id="editFinishDate" class="w-full px-3 py-2 rounded-xl border border-[#c6d7c7] bg-white text-[#152919] focus:outline-none focus:ring-2 focus:ring-[#385e3f]" />
+          </div>
+        </div>
+
+        <!-- Rating Selection (1 - 5 Stars) -->
+        <div>
+          <label class="block font-bold text-[#1f3824] uppercase tracking-wider text-[10px] mb-1.5">Rating</label>
+          <div class="flex items-center space-x-2">
+            <div class="flex items-center space-x-1" id="starRatingContainer">
+              <!-- Rendered via script -->
+            </div>
+            <span id="starRatingLabel" class="text-xs font-semibold text-[#507353] ml-2">No rating</span>
+          </div>
+          <input type="hidden" id="editRating" value="0" />
+        </div>
+
+        <!-- Notes / Reflections -->
+        <div>
+          <label class="block font-bold text-[#1f3824] uppercase tracking-wider text-[10px] mb-1.5">Reflections & Focus Summary</label>
+          <textarea id="editNotes" rows="2" placeholder="Key arguments, intellectual hooks, quotes, or synthesis..." class="w-full px-3 py-2 rounded-xl border border-[#c6d7c7] bg-white text-[#152919] focus:outline-none focus:ring-2 focus:ring-[#385e3f]"></textarea>
+        </div>
+
+        <!-- Modal Footer Actions with Delete Option -->
+        <div class="flex items-center justify-between pt-3 border-t border-[#e2ede2]">
+          <div>
+            <button type="button" id="modalDeleteBtn" onclick="deleteCurrentModalBook()" class="text-rose-700 hover:text-rose-900 font-semibold text-xs px-2.5 py-1.5 rounded-lg hover:bg-rose-50 border border-transparent hover:border-rose-200 transition flex items-center space-x-1">
+              <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+              <span>Delete Book</span>
+            </button>
+          </div>
+          <div class="flex items-center space-x-3">
+            <button type="button" onclick="closeModal()" class="px-4 py-2 rounded-xl border border-[#cbd7cb] text-[#3b5d3f] font-semibold hover:bg-[#f3f7f3] transition">
+              Cancel
+            </button>
+            <button type="submit" class="px-5 py-2 rounded-xl bg-[#1a3323] text-white font-semibold shadow-xs hover:bg-[#122416] transition flex items-center space-x-1.5">
+              <i data-lucide="check" class="w-4 h-4 text-[#88b088]"></i>
+              <span id="modalSaveBtnText">Save Changes</span>
+            </button>
+          </div>
+        </div>
+      </form>
+
+    </div>
+  </div>
+
+  <!-- DELETE CONFIRMATION DIALOG MODAL -->
+  <div id="deleteConfirmModal" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-sm w-full p-6 border border-[#d6e3d7] shadow-xl text-center space-y-4">
+      <div class="w-12 h-12 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center mx-auto">
+        <i data-lucide="alert-triangle" class="w-6 h-6"></i>
+      </div>
+      <div>
+        <h4 class="font-serif-title font-bold text-base text-[#112316]">Delete this Book?</h4>
+        <p id="deleteBookTitlePrompt" class="text-xs text-[#527756] mt-1"></p>
+      </div>
+      <p class="text-[11px] text-slate-500">Your total regimen and daily pace metrics will automatically recalculate.</p>
+      <div class="flex justify-center space-x-3 pt-2">
+        <button onclick="closeDeleteConfirmModal()" class="px-4 py-1.5 text-xs font-semibold rounded-lg border border-[#cadcca] text-[#2c5237]">Cancel</button>
+        <button id="confirmDeleteButton" class="px-4 py-1.5 text-xs font-semibold rounded-lg bg-rose-700 text-white hover:bg-rose-800 transition">Yes, Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="mt-auto border-t border-[#dce6dc] bg-white py-6 px-4 text-center text-xs text-[#527756]">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
+      <span class="font-serif-title italic text-sm text-[#1b3421]">"47 Heavy Non-Fiction Lifts & 13 Dialectical Novel Accessories."</span>
+      <span class="font-mono-code text-[11px] text-[#698c6d]">2027 Cognitive Reading Architecture</span>
+    </div>
+  </footer>
+
+  <!-- SCRIPT LOGIC -->
+  <script>
+    // RAW CANONICAL 60 TITLES SPECIFICATION
+    const INITIAL_ROSTER = [
+      // 1. Posterior Chain & Legs (13 Titles)
+      { id: 1, muscle: "Posterior Chain & Legs", topic: "Ancient History", title: "The History of the Ancient World", author: "Susan Wise Bauer", pages: 896, isFiction: false, accessoryTo: null, focus: "Deep chronologic scaffolding from origin to antiquity." },
+      { id: 2, muscle: "Posterior Chain & Legs", topic: "Bronze Age", title: "1177 B.C.", author: "Eric H. Cline", pages: 264, isFiction: false, accessoryTo: null, focus: "Systemic network collapse across the late Bronze Age." },
+      { id: 3, muscle: "Posterior Chain & Legs", topic: "Near East", title: "Persians", author: "Lloyd Llewellyn-Jones", pages: 448, isFiction: false, accessoryTo: null, focus: "Non-Hellenocentric imperial history of the Achaemenid world." },
+      { id: 4, muscle: "Posterior Chain & Legs", topic: "Rome", title: "The Romans", author: "Edward J. Watts", pages: 400, isFiction: false, accessoryTo: null, focus: "Foundational socio-political evolution of the Roman state." },
+      { id: 5, muscle: "Posterior Chain & Legs", topic: "Rome", title: "The Fall of the Roman Empire", author: "Peter Heather", pages: 576, isFiction: false, accessoryTo: null, focus: "Military and structural decomposition of classical empire." },
+      { id: 6, muscle: "Posterior Chain & Legs", topic: "Fiction", title: "Austerlitz", author: "W.G. Sebald", pages: 415, isFiction: true, accessoryTo: "#4–5", focus: "Accessory to #4–5. Memory as reconstruction; ruins of European order." },
+      { id: 7, muscle: "Posterior Chain & Legs", topic: "India", title: "The Golden Road", author: "William Dalrymple", pages: 480, isFiction: false, accessoryTo: null, focus: "Trade routes, mathematical diffusion, and civilizational reach." },
+      { id: 8, muscle: "Posterior Chain & Legs", topic: "African History", title: "An African History of Africa", author: "Zeinab Badawi", pages: 528, isFiction: false, accessoryTo: null, focus: "Comprehensive continental history from human dawn to independence." },
+      { id: 9, muscle: "Posterior Chain & Legs", topic: "Christianity", title: "Christendom", author: "Peter Heather", pages: 736, isFiction: false, accessoryTo: null, focus: "Institutional establishment of the medieval European mind." },
+      { id: 10, muscle: "Posterior Chain & Legs", topic: "Liberalism", title: "Inventing the Individual", author: "Larry Siedentop", pages: 448, isFiction: false, accessoryTo: null, focus: "Ideological origins of Western individualism and secular rights." },
+      { id: 11, muscle: "Posterior Chain & Legs", topic: "Fiction", title: "Wolf Hall", author: "Hilary Mantel", pages: 672, isFiction: true, accessoryTo: "#9–10", focus: "Accessory to #9–10. State-building as paperwork, patronage and proximity." },
+      { id: 12, muscle: "Posterior Chain & Legs", topic: "Trade Routes", title: "The Silk Roads", author: "Peter Frankopan", pages: 656, isFiction: false, accessoryTo: null, focus: "Global historical pivot centered on Eurasian trade corridors." },
+      { id: 13, muscle: "Posterior Chain & Legs", topic: "Fiction", title: "One Hundred Years of Solitude", author: "Gabriel García Márquez", pages: 448, isFiction: true, accessoryTo: "#1, #12", focus: "Accessory to #1, #12. Cyclical time against linear progress." },
+
+      // 2. Back & Core (10 Titles)
+      { id: 14, muscle: "Back & Core", topic: "Totalitarianism", title: "The Origins of Totalitarianism", author: "Hannah Arendt", pages: 576, isFiction: false, accessoryTo: null, focus: "Definitive anatomy of 20th-century ideological coercion." },
+      { id: 15, muscle: "Back & Core", topic: "Fiction", title: "Darkness at Noon", author: "Arthur Koestler", pages: 272, isFiction: true, accessoryTo: "#14", focus: "Accessory to #14. The purge trial from inside a loyalist's skull." },
+      { id: 16, muscle: "Back & Core", topic: "Statecraft", title: "Seeing Like a State", author: "James C. Scott", pages: 464, isFiction: false, accessoryTo: null, focus: "High-modernist planning failures and social legibility." },
+      { id: 17, muscle: "Back & Core", topic: "Historiography", title: "The Muqaddimah", author: "Ibn Khaldun", pages: 496, isFiction: false, accessoryTo: null, focus: "Rise-and-decline cycle: asabiyya and dynastic turnover." },
+      { id: 18, muscle: "Back & Core", topic: "Political Theory", title: "The End of History and the Last Man", author: "Francis Fukuyama", pages: 448, isFiction: false, accessoryTo: null, focus: "Apex thesis of democratic liberal governance." },
+      { id: 19, muscle: "Back & Core", topic: "Geopolitics", title: "The Clash of Civilizations", author: "Samuel P. Huntington", pages: 368, isFiction: false, accessoryTo: null, focus: "Civilizational fault lines vs. ideological states." },
+      { id: 20, muscle: "Back & Core", topic: "Political Philosophy", title: "Confronting Leviathan", author: "David Runciman", pages: 288, isFiction: false, accessoryTo: null, focus: "Evolution and survival stakes of modern political thought." },
+      { id: 21, muscle: "Back & Core", topic: "Fiction", title: "The Dispossessed", author: "Ursula K. Le Guin", pages: 400, isFiction: true, accessoryTo: "#18–20", focus: "Accessory to #18–20. Anarchist scarcity vs. state-capitalist abundance." },
+      { id: 22, muscle: "Back & Core", topic: "Modern History", title: "The Sleepwalkers", author: "Christopher Clark", pages: 736, isFiction: false, accessoryTo: null, focus: "Multi-polar diplomatic paralysis and the cascade to world war." },
+      { id: 23, muscle: "Back & Core", topic: "Democracy", title: "The Great Experiment", author: "Yascha Mounk", pages: 384, isFiction: false, accessoryTo: null, focus: "Structural conditions for maintaining diverse democracies." },
+
+      // 3. Chest & Delts (8 Titles)
+      { id: 24, muscle: "Chest & Delts", topic: "Capitalism", title: "Capitalism", author: "Jürgen Kocka", pages: 208, isFiction: false, accessoryTo: null, focus: "Evolution of market economies, wage labor, and enterprise." },
+      { id: 25, muscle: "Chest & Delts", topic: "Economics", title: "The Value of Everything", author: "Mariana Mazzucato", pages: 384, isFiction: false, accessoryTo: null, focus: "Distinction between value creation and financial extraction." },
+      { id: 26, muscle: "Chest & Delts", topic: "Finance", title: "The Price of Time", author: "Edward Chancellor", pages: 432, isFiction: false, accessoryTo: null, focus: "Macro distortions and capital misallocations caused by interest rates." },
+      { id: 27, muscle: "Chest & Delts", topic: "Global Economy", title: "The Economic Government of the World", author: "Martin Daunton", pages: 1040, isFiction: false, accessoryTo: null, focus: "Multilateral institutions, currency compacts, and trade regimes." },
+      { id: 28, muscle: "Chest & Delts", topic: "Resource Systems", title: "Growth", author: "Vaclav Smil", pages: 672, isFiction: false, accessoryTo: null, focus: "Physical, metabolic, and ecological constraints on scaling systems." },
+      { id: 29, muscle: "Chest & Delts", topic: "Ecology", title: "The Economics of Biodiversity", author: "Partha Dasgupta", pages: 610, isFiction: false, accessoryTo: null, focus: "Embedding the natural biosphere directly into economic accounts." },
+      { id: 30, muscle: "Chest & Delts", topic: "Environment", title: "Half-Earth", author: "Edward O. Wilson", pages: 272, isFiction: false, accessoryTo: null, focus: "Biosphere preservation imperatives and planetary boundaries." },
+      { id: 31, muscle: "Chest & Delts", topic: "Fiction", title: "The Overstory", author: "Richard Powers", pages: 512, isFiction: true, accessoryTo: "#28–30", focus: "Accessory to #28–30. Ecological time scales institutions cannot perceive." },
+
+      // 4. Arms (12 Titles)
+      { id: 32, muscle: "Arms", topic: "Epistemology", title: "Consilience", author: "Edward O. Wilson", pages: 384, isFiction: false, accessoryTo: null, focus: "Unifying natural sciences, social systems, and humanities." },
+      { id: 33, muscle: "Arms", topic: "Evolutionary Anthropology", title: "The Secret of Our Success", author: "Joseph Henrich", pages: 464, isFiction: false, accessoryTo: null, focus: "Dual-inheritance mechanisms and cumulative cultural evolution." },
+      { id: 34, muscle: "Arms", topic: "Evolutionary Biology", title: "The Blind Watchmaker", author: "Richard Dawkins", pages: 496, isFiction: false, accessoryTo: null, focus: "Mechanics of natural selection without foresight." },
+      { id: 35, muscle: "Arms", topic: "Fiction", title: "The Periodic Table", author: "Primo Levi", pages: 240, isFiction: true, accessoryTo: "#32, #34", focus: "Accessory to #32, #34. A chemist's way of knowing; matter as ethics." },
+      { id: 36, muscle: "Arms", topic: "Consciousness", title: "The Origin of Consciousness in the Breakdown of the Bicameral Mind", author: "Julian Jaynes", pages: 496, isFiction: false, accessoryTo: null, focus: "Neuro-linguistic collapse of hallucinations into modern selfhood." },
+      { id: 37, muscle: "Arms", topic: "Fiction", title: "Solaris", author: "Stanisław Lem", pages: 224, isFiction: true, accessoryTo: "#36, #41", focus: "Accessory to #36, #41. Encounter with a mind genuinely not ours." },
+      { id: 38, muscle: "Arms", topic: "Behavioral Science", title: "Noise", author: "Kahneman, Sibony, Sunstein", pages: 464, isFiction: false, accessoryTo: null, focus: "Systemic variance and decision noise in human evaluation." },
+      { id: 39, muscle: "Arms", topic: "Free Will", title: "Free Agents", author: "Kevin J. Mitchell", pages: 352, isFiction: false, accessoryTo: null, focus: "Neurobiological origins and natural evolution of causal agency." },
+      { id: 40, muscle: "Arms", topic: "Fiction", title: "Never Let Me Go", author: "Kazuo Ishiguro", pages: 304, isFiction: true, accessoryTo: "#39", focus: "Accessory to #39. The interior ethical toll of designed human agency." },
+      { id: 41, muscle: "Arms", topic: "Neuroscience", title: "A Universe of Consciousness", author: "Gerald M. Edelman, Giulio Tononi", pages: 304, isFiction: false, accessoryTo: null, focus: "Information integration and dynamic core neural frameworks." },
+      { id: 42, muscle: "Arms", topic: "Memory", title: "Why We Remember", author: "Charan Ranganath", pages: 320, isFiction: false, accessoryTo: null, focus: "The predictive and adaptive machinery of human memory." },
+      { id: 43, muscle: "Arms", topic: "Linguistics", title: "Metaphors We Live By", author: "George Lakoff, Mark Johnson", pages: 256, isFiction: false, accessoryTo: null, focus: "Embodied conceptual metaphors underpinning daily human thought." },
+
+      // 5. Hard Compound Pulls (8 Titles)
+      { id: 44, muscle: "Hard Compound Pulls", topic: "Theoretical Physics", title: "Quantum Mechanics", author: "Leonard Susskind, Art Friedman", pages: 384, isFiction: false, accessoryTo: null, focus: "Formal theoretical physics formulation of quantum systems." },
+      { id: 45, muscle: "Hard Compound Pulls", topic: "Physics", title: "The Fabric of Reality", author: "David Deutsch", pages: 400, isFiction: false, accessoryTo: null, focus: "Epistemology uniting quantum physics, computation, and evolution." },
+      { id: 46, muscle: "Hard Compound Pulls", topic: "Philosophy of Science", title: "The Structure of Scientific Revolutions", author: "Thomas S. Kuhn", pages: 280, isFiction: false, accessoryTo: null, focus: "Paradigms, incommensurability, and scientific transitions." },
+      { id: 47, muscle: "Hard Compound Pulls", topic: "Fiction", title: "A Canticle for Leibowitz", author: "Walter M. Miller Jr.", pages: 336, isFiction: true, accessoryTo: "#46, #2", focus: "Accessory to #46, #2. Cyclical civilizational collapse and preservation." },
+      { id: 48, muscle: "Hard Compound Pulls", topic: "Causality", title: "The Book of Why", author: "Judea Pearl, Dana Mackenzie", pages: 432, isFiction: false, accessoryTo: null, focus: "Causal diagrams and structural reasoning beyond passive data correlation." },
+      { id: 49, muscle: "Hard Compound Pulls", topic: "Computer Science", title: "Algorithms to Live By", author: "Brian Christian, Tom Griffiths", pages: 368, isFiction: false, accessoryTo: null, focus: "Optimal stopping, sorting, and scheduling applied to human life." },
+      { id: 50, muscle: "Hard Compound Pulls", topic: "Probability", title: "The Art of Uncertainty", author: "David Spiegelhalter", pages: 464, isFiction: false, accessoryTo: null, focus: "Navigating statistical risk, empirical error, and randomness." },
+      { id: 51, muscle: "Hard Compound Pulls", topic: "Quantum Foundations", title: "What Is Real?", author: "Adam Becker", pages: 384, isFiction: false, accessoryTo: null, focus: "Interpretational foundations and the quantum measurement debate." },
+
+      // 6. Cardio & Agility (5 Titles)
+      { id: 52, muscle: "Cardio & Agility", topic: "Philosophy of Mind", title: "The Emperor's New Mind", author: "Roger Penrose", pages: 640, isFiction: false, accessoryTo: null, focus: "Non-algorithmic limits of computation and physical consciousness." },
+      { id: 53, muscle: "Cardio & Agility", topic: "Artificial Intelligence", title: "A Thousand Brains", author: "Jeff Hawkins", pages: 288, isFiction: false, accessoryTo: null, focus: "Neocortical reference frames and true structural intelligence." },
+      { id: 54, muscle: "Cardio & Agility", topic: "Machine Learning", title: "AI Snake Oil", author: "Arvind Narayanan, Sayash Kapoor", pages: 368, isFiction: false, accessoryTo: null, focus: "Distinguishing predictive capabilities from generative hype." },
+      { id: 55, muscle: "Cardio & Agility", topic: "Semiconductors", title: "Chip War", author: "Chris Miller", pages: 464, isFiction: false, accessoryTo: null, focus: "The semiconductor chokepoint as geopolitics and industrial policy." },
+      { id: 56, muscle: "Cardio & Agility", topic: "Computing", title: "Computer Power and Human Reason", author: "Joseph Weizenbaum", pages: 320, isFiction: false, accessoryTo: null, focus: "The definitive 1976 argument on what computers should never decide." },
+
+      // 7. Mobility & Flexibility Standalones (4 Titles)
+      { id: 57, muscle: "Mobility & Flexibility", topic: "Fiction", title: "The Trial", author: "Franz Kafka", pages: 256, isFiction: true, accessoryTo: "#Sociology", focus: "Sociological alienation, unaccountable bureaucracy, and absurdity." },
+      { id: 58, muscle: "Mobility & Flexibility", topic: "Literature", title: "The African Trilogy", author: "Chinua Achebe", pages: 576, isFiction: true, accessoryTo: "#8", focus: "Narrative anatomy of cultural collision, change, and disintegration." },
+      { id: 59, muscle: "Mobility & Flexibility", topic: "Speculative Fiction", title: "The Ministry for the Future", author: "Kim Stanley Robinson", pages: 576, isFiction: true, accessoryTo: "#28–30", focus: "Institutional, monetary, and technological scenarios for climate adaptation." },
+      { id: 60, muscle: "Mobility & Flexibility", topic: "Art", title: "Your Brain on Art", author: "Susan Magsamen, Ivy Ross", pages: 304, isFiction: false, accessoryTo: null, focus: "Neuroaesthetics and physiological impacts of artistic expression." }
+    ];
+
+    const MUSCLE_GROUPS = [
+      "Posterior Chain & Legs",
+      "Back & Core",
+      "Chest & Delts",
+      "Arms",
+      "Hard Compound Pulls",
+      "Cardio & Agility",
+      "Mobility & Flexibility"
+    ];
+
+    // APPLICATION STATE
+    let books = [];
+    let activeStatusFilter = 'ALL';
+    let activeMuscleFilter = 'ALL';
+    let activeFormatFilter = 'ALL';
+    let searchQuery = '';
+    let currentViewMode = 'table'; // 'table' or 'grid'
+
+    const STORAGE_KEY = 'reading_tracker_2027_data';
+
+    // INITIALIZATION
+    function init() {
+      loadStoredData();
+      renderAll();
+      renderStarInput(0);
+      lucide.createIcons();
+    }
+
+    function loadStoredData() {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (stored) {
+        try {
+          const parsed = JSON.parse(stored);
+          // Merge with initial roster to ensure data completeness
+          books = INITIAL_ROSTER.map(base => {
+            const match = parsed.find(b => b.id === base.id);
+            if (match) {
+              return {
+                ...base,
+                ...match,
+                pages: Number(match.pages) || base.pages
+              };
+            }
+            return {
+              ...base,
+              status: 'UNREAD',
+              currentPage: 0,
+              startDate: '',
+              finishDate: '',
+              rating: 0,
+              notes: ''
+            };
+          });
+        } catch(e) {
+          initDefaultBooks();
+        }
+      } else {
+        initDefaultBooks();
+      }
+    }
+
+    function initDefaultBooks() {
+      books = INITIAL_ROSTER.map(b => ({
+        ...b,
+        status: 'UNREAD',
+        currentPage: 0,
+        startDate: '',
+        finishDate: '',
+        rating: 0,
+        notes: ''
+      }));
+      persistData();
+    }
+
+    function persistData() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(books));
+      } catch(e) {
+        console.warn("Storage quota warning");
+      }
+    }
+
+    // ANALYTICS & PACING CALCULATIONS
+    function calculateAnalytics() {
+      const totalBooksCount = books.length;
+      let completedBooksCount = 0;
+      let readingBooksCount = 0;
+      let totalPages = 0;
+      let readPages = 0;
+      let completedDurations = [];
+      let totalActiveDaysRead = 0;
+
+      books.forEach(b => {
+        totalPages += (Number(b.pages) || 0);
+        if (b.status === 'COMPLETED') {
+          completedBooksCount++;
+          readPages += (Number(b.pages) || 0);
+          if (b.startDate && b.finishDate) {
+            const start = new Date(b.startDate);
+            const finish = new Date(b.finishDate);
+            const days = Math.max(1, Math.round((finish - start) / (1000 * 60 * 60 * 24)));
+            completedDurations.push({ days, pages: b.pages });
+            totalActiveDaysRead += days;
+          }
+        } else if (b.status === 'READING') {
+          readingBooksCount++;
+          readPages += (Number(b.currentPage) || 0);
+        }
+      });
+
+      // Days and Velocity
+      const avgDays = completedDurations.length > 0 
+        ? (completedDurations.reduce((sum, c) => sum + c.days, 0) / completedDurations.length).toFixed(1)
+        : null;
+
+      const totalActiveReadingDays = Math.max(1, totalActiveDaysRead);
+      const actualPacePagesPerDay = completedDurations.length > 0
+        ? (completedDurations.reduce((acc, c) => acc + c.pages, 0) / totalActiveReadingDays).toFixed(1)
+        : 0;
+
+      // Dynamic pacing timeline based on totalPages in year
+      const daysInYear = 365;
+      const requiredDailyPace = totalPages > 0 ? (totalPages / daysInYear).toFixed(1) : 0;
+      const weeklyBooksPace = totalBooksCount > 0 ? ((totalBooksCount / daysInYear) * 7).toFixed(2) : 0;
+
+      return {
+        totalBooksCount,
+        completedBooksCount,
+        readingBooksCount,
+        totalPages,
+        readPages,
+        avgDays,
+        actualPacePagesPerDay,
+        requiredDailyPace,
+        weeklyBooksPace,
+        daysInYear
+      };
+    }
+
+    function updateDashboardUI() {
+      const stats = calculateAnalytics();
+
+      // Header and Total count updates
+      document.getElementById('headerTotalBadge').textContent = `${stats.totalBooksCount} Titles`;
+      document.getElementById('statTargetBooks').textContent = stats.totalBooksCount;
+      document.getElementById('statCompletedBooks').textContent = stats.completedBooksCount;
+      const booksPercent = stats.totalBooksCount > 0 ? Math.round((stats.completedBooksCount / stats.totalBooksCount) * 100) : 0;
+      document.getElementById('statBooksPercent').textContent = `${booksPercent}% finished`;
+      document.getElementById('statBooksBar').style.width = `${booksPercent}%`;
+      document.getElementById('statInProgressBooks').textContent = `${stats.readingBooksCount} in progress`;
+
+      // Pages Volume
+      document.getElementById('statPagesRead').textContent = stats.readPages.toLocaleString();
+      document.getElementById('statTotalPages').textContent = stats.totalPages.toLocaleString();
+      const pagesPercent = stats.totalPages > 0 ? ((stats.readPages / stats.totalPages) * 100).toFixed(1) : 0;
+      document.getElementById('statPagesPercent').textContent = `${pagesPercent}% volume read`;
+      document.getElementById('statPagesBar').style.width = `${pagesPercent}%`;
+      document.getElementById('statPagesRemaining').textContent = `${(stats.totalPages - stats.readPages).toLocaleString()} pages left`;
+
+      // Velocity Gauge & Status
+      document.getElementById('statActualSpeed').textContent = `${stats.actualPacePagesPerDay} pp/day`;
+      document.getElementById('statRequiredPace').textContent = stats.requiredDailyPace;
+      document.getElementById('statPaceWeekly').textContent = `~${stats.weeklyBooksPace}`;
+      document.getElementById('statAvgDays').textContent = stats.avgDays ? `${stats.avgDays} days/book` : '-- days/book';
+
+      const paceBadge = document.getElementById('statPaceBadge');
+      const paceStatus = document.getElementById('statPaceStatus');
+
+      if (stats.completedBooksCount === 0 && stats.readingBooksCount === 0) {
+        paceBadge.className = "inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-slate-100 text-slate-700 border border-slate-200";
+        paceStatus.textContent = "Not Started";
+        document.getElementById('statProjectedDate').textContent = "Dec 31, 2027";
+        document.getElementById('statProjectedNote').textContent = "Begin logging your first read to ignite velocity analysis.";
+      } else if (Number(stats.actualPacePagesPerDay) >= Number(stats.requiredDailyPace)) {
+        paceBadge.className = "inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-50 text-emerald-800 border border-emerald-200";
+        paceStatus.textContent = "Ahead of Pace ⚡";
+        
+        const remainingPages = stats.totalPages - stats.readPages;
+        const daysToFinish = Math.round(remainingPages / Math.max(1, Number(stats.actualPacePagesPerDay)));
+        const projectedFinish = new Date();
+        projectedFinish.setDate(projectedFinish.getDate() + daysToFinish);
+        document.getElementById('statProjectedDate').textContent = projectedFinish.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        document.getElementById('statProjectedNote').textContent = `Reading at ${stats.actualPacePagesPerDay} pp/day exceeds your required ${stats.requiredDailyPace} pp/day.`;
+      } else {
+        paceBadge.className = "inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-50 text-amber-900 border border-amber-200";
+        paceStatus.textContent = "Behind Velocity";
+        
+        const remainingPages = stats.totalPages - stats.readPages;
+        const speed = Math.max(1, Number(stats.actualPacePagesPerDay));
+        const daysToFinish = Math.round(remainingPages / speed);
+        const projectedFinish = new Date();
+        projectedFinish.setDate(projectedFinish.getDate() + daysToFinish);
+        document.getElementById('statProjectedDate').textContent = projectedFinish.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        document.getElementById('statProjectedNote').textContent = `Target acceleration: ramp up to ${stats.requiredDailyPace} pp/day to finish in 2027.`;
+      }
+
+      // Muscle Group Distribution Cards
+      renderMuscleGroupBreakdown();
+    }
+
+    function renderMuscleGroupBreakdown() {
+      const container = document.getElementById('muscleGroupBarsContainer');
+      container.innerHTML = '';
+
+      MUSCLE_GROUPS.forEach(group => {
+        const groupBooks = books.filter(b => b.muscle === group);
+        const total = groupBooks.length;
+        const completed = groupBooks.filter(b => b.status === 'COMPLETED').length;
+        const inProgress = groupBooks.filter(b => b.status === 'READING').length;
+        const percent = Math.round((completed / total) * 100);
+
+        const card = document.createElement('div');
+        card.className = "p-3 rounded-xl bg-[#f8faf8] border border-[#d8e5d8] flex flex-col justify-between";
+        card.innerHTML = `
+          <div>
+            <div class="flex items-center justify-between text-[11px] font-bold text-[#1a3323] leading-tight mb-1">
+              <span class="truncate" title="${group}">${group}</span>
+              <span class="text-[#3c6340] ml-1 shrink-0">${completed}/${total}</span>
+            </div>
+            <div class="w-full bg-[#e3ece3] h-1.5 rounded-full overflow-hidden mt-1.5">
+              <div class="bg-[#2d5539] h-full rounded-full transition-all duration-300" style="width: ${percent}%"></div>
+            </div>
+          </div>
+          <div class="mt-2 text-[10px] text-[#557858] flex justify-between">
+            <span>${percent}%</span>
+            <span>${inProgress > 0 ? `${inProgress} active` : ''}</span>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    // RENDERING DATA VIEWS (TABLE & GRID)
+    function renderAll() {
+      updateDashboardUI();
+      renderTableView();
+      renderGridView();
+      lucide.createIcons();
+    }
+
+    function getFilteredBooks() {
+      return books.filter(b => {
+        // Status filter
+        if (activeStatusFilter !== 'ALL' && b.status !== activeStatusFilter) return false;
+        // Muscle filter
+        if (activeMuscleFilter !== 'ALL' && b.muscle !== activeMuscleFilter) return false;
+        // Format filter
+        if (activeFormatFilter === 'NONFICTION' && b.isFiction) return false;
+        if (activeFormatFilter === 'FICTION' && !b.isFiction) return false;
+        // Search query
+        if (searchQuery) {
+          const q = searchQuery.toLowerCase();
+          const matchTitle = b.title.toLowerCase().includes(q);
+          const matchAuthor = b.author.toLowerCase().includes(q);
+          const matchTopic = b.topic.toLowerCase().includes(q);
+          const matchId = b.id.toString() === q;
+          if (!matchTitle && !matchAuthor && !matchTopic && !matchId) return false;
+        }
+        return true;
+      });
+    }
+
+    function renderTableView() {
+      const tbody = document.getElementById('booksTableBody');
+      const filtered = getFilteredBooks();
+      tbody.innerHTML = '';
+
+      if (filtered.length === 0) {
+        document.getElementById('emptyState').classList.remove('hidden');
+        document.getElementById('tableViewWrapper').classList.add('hidden');
+        return;
+      } else {
+        document.getElementById('emptyState').classList.add('hidden');
+        if (currentViewMode === 'table') document.getElementById('tableViewWrapper').classList.remove('hidden');
+      }
+
+      filtered.forEach(book => {
+        const tr = document.createElement('tr');
+        tr.className = "hover:bg-[#f7faf7] transition group";
+
+        // Reading speed calculation
+        let speedText = '--';
+        if (book.status === 'COMPLETED' && book.startDate && book.finishDate) {
+          const start = new Date(book.startDate);
+          const end = new Date(book.finishDate);
+          const days = Math.max(1, Math.round((end - start) / (1000 * 60 * 60 * 24)));
+          const speed = (book.pages / days).toFixed(0);
+          speedText = `<span class="font-mono-code font-bold text-[#1f3d23]">${days}d</span> <span class="text-[9px] text-[#557858]">(${speed} pp/d)</span>`;
+        }
+
+        tr.innerHTML = `
+          <td class="py-3 px-4 text-center font-mono-code font-bold text-[#345839]">${book.id}</td>
+          <td class="py-3 px-4">
+            <div class="font-serif-title font-bold text-sm text-[#0f2416] group-hover:text-[#2d5539] transition cursor-pointer" onclick="openEditModal(${book.id})">${book.title}</div>
+            <div class="text-[11px] text-[#527756] mt-0.5">${book.author}</div>
+            ${book.focus ? `<div class="text-[10px] text-[#6d8e70] italic mt-1 max-w-xs truncate" title="${book.focus}">${book.focus}</div>` : ''}
+          </td>
+          <td class="py-3 px-4">
+            <span class="inline-block px-2 py-0.5 rounded-md bg-[#edf4ed] text-[#244728] text-[10px] font-semibold border border-[#d0e0d1]">${book.muscle}</span>
+            <div class="text-[10px] text-[#587c5b] mt-0.5">${book.topic}</div>
+          </td>
+          <td class="py-3 px-3 text-center">
+            ${book.isFiction 
+              ? `<span class="inline-block px-1.5 py-0.5 rounded text-[9px] font-bold bg-[#f3efe6] text-[#715423] border border-[#e2d5bd]" title="${book.accessoryTo ? `Accessory to ${book.accessoryTo}` : 'Accessory Fiction'}">Accessory</span>` 
+              : `<span class="inline-block px-1.5 py-0.5 rounded text-[9px] font-medium bg-[#f0f6f0] text-[#345938]">Nonfiction</span>`}
+          </td>
+          <td class="py-3 px-3 text-right">
+            <input type="number" min="1" value="${book.pages || 0}" 
+              onchange="quickUpdateField(${book.id}, 'pages', this.value)" 
+              class="w-16 px-1.5 py-1 text-right font-mono-code font-semibold text-[#1a3321] rounded border border-transparent hover:border-[#cadcca] focus:border-[#385e3f] bg-transparent focus:bg-white text-xs outline-none transition" 
+              title="Click to edit pages" />
+          </td>
+          <td class="py-3 px-4">
+            <div class="flex items-center space-x-1.5">
+              <select onchange="quickUpdateField(${book.id}, 'status', this.value)" 
+                class="px-2 py-1 text-[10px] font-bold rounded-lg border border-[#cadcca] bg-[#fbfdfb] text-[#1c3922] focus:outline-none focus:ring-1 focus:ring-[#385e3f]">
+                <option value="UNREAD" ${book.status === 'UNREAD' ? 'selected' : ''}>To Read</option>
+                <option value="READING" ${book.status === 'READING' ? 'selected' : ''}>Reading</option>
+                <option value="COMPLETED" ${book.status === 'COMPLETED' ? 'selected' : ''}>Completed</option>
+              </select>
+              ${book.status === 'READING' ? `
+                <div class="flex items-center space-x-1">
+                  <span class="text-[10px] text-[#557858]">p.</span>
+                  <input type="number" min="0" max="${book.pages}" value="${book.currentPage || 0}" 
+                    onchange="quickUpdateField(${book.id}, 'currentPage', this.value)"
+                    class="w-14 px-1 py-0.5 text-center font-mono-code text-[11px] font-bold border border-[#cadcca] rounded bg-white" />
+                </div>
+              ` : ''}
+            </div>
+          </td>
+          <td class="py-3 px-4 text-[10px] text-[#4f7353]">
+            <div class="space-y-1">
+              <div class="flex items-center space-x-1">
+                <span class="text-[9px] font-semibold text-[#6d8e70] w-6">In:</span>
+                <input type="date" value="${book.startDate || ''}" 
+                  onchange="quickUpdateField(${book.id}, 'startDate', this.value)"
+                  class="px-1 py-0.5 text-[10px] border border-transparent hover:border-[#cadcca] focus:border-[#385e3f] rounded bg-transparent focus:bg-white outline-none" />
+              </div>
+              <div class="flex items-center space-x-1">
+                <span class="text-[9px] font-semibold text-[#6d8e70] w-6">Out:</span>
+                <input type="date" value="${book.finishDate || ''}" 
+                  onchange="quickUpdateField(${book.id}, 'finishDate', this.value)"
+                  class="px-1 py-0.5 text-[10px] border border-transparent hover:border-[#cadcca] focus:border-[#385e3f] rounded bg-transparent focus:bg-white outline-none" />
+              </div>
+            </div>
+          </td>
+          <td class="py-3 px-3 text-center text-xs">${speedText}</td>
+          <td class="py-3 px-3 text-center">
+            <select onchange="quickUpdateField(${book.id}, 'rating', this.value)" 
+              class="px-1 py-0.5 text-xs font-mono-code font-bold rounded border border-transparent hover:border-[#cadcca] focus:border-[#385e3f] bg-transparent focus:bg-white text-amber-500 cursor-pointer">
+              <option value="0" ${book.rating === 0 ? 'selected' : ''}>-</option>
+              <option value="1" ${book.rating === 1 ? 'selected' : ''}>★ 1</option>
+              <option value="2" ${book.rating === 2 ? 'selected' : ''}>★ 2</option>
+              <option value="3" ${book.rating === 3 ? 'selected' : ''}>★ 3</option>
+              <option value="4" ${book.rating === 4 ? 'selected' : ''}>★ 4</option>
+              <option value="5" ${book.rating === 5 ? 'selected' : ''}>★ 5</option>
+            </select>
+          </td>
+          <td class="py-3 px-4 text-center">
+            <div class="flex items-center justify-center space-x-1.5">
+              <button onclick="openEditModal(${book.id})" title="Edit Details (Full Modal)" class="px-2 py-1 rounded-lg bg-[#eef4ed] hover:bg-[#dce9dd] text-[#244b28] font-semibold text-[11px] border border-[#c4d8c5] transition flex items-center space-x-1">
+                <i data-lucide="edit-3" class="w-3 h-3 text-[#385e3f]"></i>
+                <span>Edit</span>
+              </button>
+              <button onclick="promptDeleteBook(${book.id}, event)" title="Delete Title" class="p-1 rounded-lg text-rose-600 hover:bg-rose-50 transition">
+                <i data-lucide="trash" class="w-3.5 h-3.5"></i>
+              </button>
+            </div>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderGridView() {
+      const grid = document.getElementById('gridViewWrapper');
+      const filtered = getFilteredBooks();
+      grid.innerHTML = '';
+
+      filtered.forEach(book => {
+        const card = document.createElement('div');
+        card.className = `card-transition bg-white rounded-2xl p-4 border flex flex-col justify-between ${
+          book.isFiction ? 'border-dashed border-[#8bb18d] bg-[#fafd Misc]' : 'border-[#d6e3d7]'
+        }`;
+
+        let statusClass = "bg-slate-100 text-slate-700";
+        let statusLabel = "Want to Read";
+        if (book.status === 'COMPLETED') {
+          statusClass = "bg-[#e2ede2] text-[#1a4420] border border-[#bed8bf]";
+          statusLabel = "Completed";
+        } else if (book.status === 'READING') {
+          statusClass = "bg-amber-100 text-amber-900 border border-amber-200";
+          statusLabel = `p. ${book.currentPage || 0} / ${book.pages}`;
+        }
+
+        // Card speed calculation
+        let cardSpeedBadge = '';
+        if (book.startDate) {
+          const start = new Date(book.startDate);
+          let end = book.finishDate ? new Date(book.finishDate) : new Date();
+          let days = Math.max(1, Math.round((end - start) / (1000 * 60 * 60 * 24)) + (book.finishDate ? 1 : 0));
+          let pagesRead = book.status === 'COMPLETED' ? book.pages : (book.currentPage || 0);
+          if (pagesRead > 0) {
+            let speed = Math.round(pagesRead / days);
+            cardSpeedBadge = `<span class="inline-flex items-center text-[10px] font-mono-code font-bold text-[#1f3d23] bg-[#eef4ed] px-2 py-0.5 rounded border border-[#c4d8c5]">⚡ ${speed} pp/d (${days}d)</span>`;
+          }
+        }
+
+        card.innerHTML = `
+          <div>
+            <div class="flex items-start justify-between gap-1 mb-2">
+              <span class="w-6 h-6 rounded-md bg-[#1a3323] text-white font-mono-code font-bold text-xs flex items-center justify-center shrink-0">
+                ${book.id}
+              </span>
+              <div class="flex items-center space-x-1">
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${statusClass}">
+                  ${statusLabel}
+                </span>
+                <button onclick="promptDeleteBook(${book.id}, event)" title="Delete" class="p-1 text-slate-400 hover:text-rose-600 rounded">
+                  <i data-lucide="trash-2" class="w-3 h-3"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="font-serif-title font-bold text-sm text-[#0f2416] leading-snug line-clamp-2 mt-2">
+              ${book.title}
+            </div>
+            <div class="text-xs text-[#486e4d] mt-1">${book.author}</div>
+
+            <div class="mt-3 flex items-center space-x-1.5 flex-wrap gap-y-1">
+              <span class="text-[9px] font-semibold px-2 py-0.5 rounded-md bg-[#f0f6f0] text-[#294c2d] border border-[#d2e2d3]">
+                ${book.topic}
+              </span>
+              ${book.isFiction ? `<span class="text-[9px] font-bold px-2 py-0.5 rounded-md bg-[#faf4ea] text-[#6d511f] border border-[#eedec0]">${book.accessoryTo ? `Accessory ${book.accessoryTo}` : 'Fiction'}</span>` : ''}
+              ${cardSpeedBadge}
+            </div>
+
+            ${book.focus ? `<p class="mt-2 text-[10px] text-[#557858] leading-snug line-clamp-2">${book.focus}</p>` : ''}
+          </div>
+
+          <div class="mt-4 pt-3 border-t border-[#ebf2eb] flex items-center justify-between text-xs text-[#527756]">
+            <span class="font-mono-code font-semibold text-[#17311d]">${book.pages} pp.</span>
+            <div class="flex items-center space-x-1.5">
+              ${book.rating > 0 ? `<span class="text-amber-500 font-bold">★ ${book.rating}</span>` : ''}
+              <button onclick="openEditModal(${book.id})" class="px-2 py-1 rounded bg-[#eef4ed] hover:bg-[#dce9dd] text-[#244b28] font-semibold text-[10px] border border-[#c4d8c5] transition flex items-center space-x-1">
+                <i data-lucide="edit-3" class="w-3 h-3"></i>
+                <span>Edit</span>
+              </button>
+            </div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    // INLINE QUICK FIELD UPDATE
+    function quickUpdateField(bookId, field, value) {
+      const bookIndex = books.findIndex(b => b.id === bookId);
+      if (bookIndex === -1) return;
+
+      const book = books[bookIndex];
+      const today = new Date().toISOString().split('T')[0];
+
+      if (field === 'pages') {
+        const pages = Math.max(1, Number(value) || 1);
+        book.pages = pages;
+        if (book.status === 'COMPLETED') {
+          book.currentPage = pages;
+        } else if (book.currentPage > pages) {
+          book.currentPage = pages;
+        }
+      } else if (field === 'currentPage') {
+        const current = Math.max(0, Math.min(book.pages, Number(value) || 0));
+        book.currentPage = current;
+        if (current >= book.pages) {
+          book.status = 'COMPLETED';
+          if (!book.finishDate) book.finishDate = today;
+          if (!book.startDate) book.startDate = today;
+        } else if (current > 0 && book.status === 'UNREAD') {
+          book.status = 'READING';
+          if (!book.startDate) book.startDate = today;
+        }
+      } else if (field === 'status') {
+        book.status = value;
+        if (value === 'COMPLETED') {
+          book.currentPage = book.pages;
+          if (!book.finishDate) book.finishDate = today;
+          if (!book.startDate) book.startDate = today;
+        } else if (value === 'UNREAD') {
+          book.currentPage = 0;
+          book.startDate = '';
+          book.finishDate = '';
+        } else if (value === 'READING') {
+          if (!book.startDate) book.startDate = today;
+          book.finishDate = '';
+          if (book.currentPage >= book.pages) book.currentPage = 0;
+        }
+      } else if (field === 'startDate') {
+        book.startDate = value;
+        if (value && book.status === 'UNREAD') {
+          book.status = 'READING';
+        }
+      } else if (field === 'finishDate') {
+        book.finishDate = value;
+        if (value) {
+          book.status = 'COMPLETED';
+          book.currentPage = book.pages;
+          if (!book.startDate) book.startDate = value;
+        }
+      } else if (field === 'rating') {
+        book.rating = Number(value) || 0;
+      } else {
+        book[field] = value;
+      }
+
+      persistData();
+      renderAll();
+      showToast(`Updated "${book.title}"`);
+    }
+
+    // TOAST NOTIFICATION
+    function showToast(message) {
+      const existing = document.getElementById('toast-notification');
+      if (existing) existing.remove();
+
+      const toast = document.createElement('div');
+      toast.id = 'toast-notification';
+      toast.className = 'fixed bottom-5 right-5 z-50 bg-[#1a3323] text-white px-4 py-2.5 rounded-xl text-xs font-semibold shadow-lg border border-[#3b6343] flex items-center space-x-2 transition-all transform duration-200';
+      toast.innerHTML = `<i data-lucide="check-circle" class="w-4 h-4 text-[#88b088]"></i><span>${message}</span>`;
+      document.body.appendChild(toast);
+      lucide.createIcons();
+
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        setTimeout(() => toast.remove(), 300);
+      }, 2500);
+    }
+
+    // INLINE QUICK FIELD UPDATE
+    function quickUpdateField(bookId, field, value) {
+      const bookIndex = books.findIndex(b => b.id === bookId);
+      if (bookIndex === -1) return;
+
+      if (field === 'pages') {
+        const pages = Math.max(1, Number(value) || 1);
+        books[bookIndex].pages = pages;
+        if (books[bookIndex].status === 'COMPLETED') {
+          books[bookIndex].currentPage = pages;
+        } else if (books[bookIndex].currentPage > pages) {
+          books[bookIndex].currentPage = pages;
+        }
+      } else if (field === 'currentPage') {
+        const current = Math.max(0, Math.min(books[bookIndex].pages, Number(value) || 0));
+        books[bookIndex].currentPage = current;
+      } else if (field === 'status') {
+        books[bookIndex].status = value;
+        const today = new Date().toISOString().split('T')[0];
+        if (value === 'COMPLETED') {
+          books[bookIndex].currentPage = books[bookIndex].pages;
+          if (!books[bookIndex].finishDate) books[bookIndex].finishDate = today;
+          if (!books[bookIndex].startDate) books[bookIndex].startDate = today;
+        } else if (value === 'UNREAD') {
+          books[bookIndex].currentPage = 0;
+          books[bookIndex].startDate = '';
+          books[bookIndex].finishDate = '';
+        } else if (value === 'READING') {
+          if (!books[bookIndex].startDate) books[bookIndex].startDate = today;
+          books[bookIndex].finishDate = '';
+        }
+      } else if (field === 'rating') {
+        books[bookIndex].rating = Number(value) || 0;
+      } else {
+        books[bookIndex][field] = value;
+      }
+
+      persistData();
+      renderAll();
+    }
+
+    // MODAL EDITING & ADDING LOGIC
+    let isAddingNewBook = false;
+
+    function openAddBookModal() {
+      isAddingNewBook = true;
+      const nextId = books.length > 0 ? Math.max(...books.map(b => b.id)) + 1 : 1;
+
+      document.getElementById('editBookId').value = nextId;
+      document.getElementById('modalBookIdBadge').textContent = nextId < 10 ? `0${nextId}` : nextId;
+      document.getElementById('modalBookTitle').textContent = "Add New Title to 2027 Regimen";
+      document.getElementById('modalBookAuthor').textContent = "Configure intellectual domain, page count, and status";
+      document.getElementById('modalMuscleBadge').textContent = "Custom Addition";
+      document.getElementById('modalAccessoryBadge').classList.add('hidden');
+      document.getElementById('modalDeleteBtn').classList.add('hidden');
+      document.getElementById('modalSaveBtnText').textContent = "Add Title";
+
+      document.getElementById('editTitleInput').value = '';
+      document.getElementById('editAuthorInput').value = '';
+      document.getElementById('editMuscleInput').value = 'Posterior Chain & Legs';
+      document.getElementById('editTopicInput').value = '';
+      document.getElementById('editFocusInput').value = '';
+      document.getElementById('editIsFiction').checked = false;
+      document.getElementById('editAccessoryTo').value = '';
+      document.getElementById('accessoryToFieldWrapper').classList.add('hidden');
+
+      document.getElementById('editStatus').value = 'UNREAD';
+      document.getElementById('editTotalPages').value = 350;
+      document.getElementById('editCurrentPage').value = 0;
+      document.getElementById('editStartDate').value = '';
+      document.getElementById('editFinishDate').value = '';
+      document.getElementById('editRating').value = 0;
+      document.getElementById('editNotes').value = '';
+
+      handleModalStatusChange('UNREAD');
+      renderStarInput(0);
+
+      document.getElementById('bookModal').classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function openEditModal(bookId) {
+      isAddingNewBook = false;
+      const book = books.find(b => b.id === bookId);
+      if (!book) return;
+
+      document.getElementById('editBookId').value = book.id;
+      document.getElementById('modalBookIdBadge').textContent = book.id < 10 ? `0${book.id}` : book.id;
+      document.getElementById('modalBookTitle').textContent = book.title;
+      document.getElementById('modalBookAuthor').textContent = book.author;
+      document.getElementById('modalMuscleBadge').textContent = book.muscle;
+      document.getElementById('modalDeleteBtn').classList.remove('hidden');
+      document.getElementById('modalSaveBtnText').textContent = "Save Changes";
+      
+      const accBadge = document.getElementById('modalAccessoryBadge');
+      if (book.isFiction) {
+        accBadge.textContent = book.accessoryTo ? `Accessory to ${book.accessoryTo}` : `Fiction Accessory`;
+        accBadge.classList.remove('hidden');
+      } else {
+        accBadge.classList.add('hidden');
+      }
+
+      document.getElementById('editTitleInput').value = book.title;
+      document.getElementById('editAuthorInput').value = book.author;
+      document.getElementById('editMuscleInput').value = book.muscle;
+      document.getElementById('editTopicInput').value = book.topic;
+      document.getElementById('editFocusInput').value = book.focus || '';
+      document.getElementById('editIsFiction').checked = !!book.isFiction;
+      document.getElementById('editAccessoryTo').value = book.accessoryTo || '';
+      toggleAccessoryField(!!book.isFiction);
+
+      document.getElementById('editStatus').value = book.status || 'UNREAD';
+      document.getElementById('editTotalPages').value = book.pages;
+      document.getElementById('editCurrentPage').value = book.currentPage || 0;
+      document.getElementById('editStartDate').value = book.startDate || '';
+      document.getElementById('editFinishDate').value = book.finishDate || '';
+      document.getElementById('editRating').value = book.rating || 0;
+      document.getElementById('editNotes').value = book.notes || '';
+
+      handleModalStatusChange(book.status);
+      renderStarInput(book.rating || 0);
+
+      document.getElementById('bookModal').classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function toggleAccessoryField(checked) {
+      const wrapper = document.getElementById('accessoryToFieldWrapper');
+      if (checked) {
+        wrapper.classList.remove('hidden');
+      } else {
+        wrapper.classList.add('hidden');
+      }
+    }
+
+    function closeModal() {
+      document.getElementById('bookModal').classList.add('hidden');
+    }
+
+    function handleModalStatusChange(status) {
+      const progressRow = document.getElementById('progressPagesRow');
+      if (status === 'READING') {
+        progressRow.classList.remove('hidden');
+      } else {
+        progressRow.classList.add('hidden');
+      }
+    }
+
+    function handleSaveBook(e) {
+      e.preventDefault();
+      const id = Number(document.getElementById('editBookId').value);
+      const title = document.getElementById('editTitleInput').value.trim();
+      const author = document.getElementById('editAuthorInput').value.trim();
+      const muscle = document.getElementById('editMuscleInput').value;
+      const topic = document.getElementById('editTopicInput').value.trim();
+      const focus = document.getElementById('editFocusInput').value.trim();
+      const isFiction = document.getElementById('editIsFiction').checked;
+      const accessoryTo = isFiction ? document.getElementById('editAccessoryTo').value.trim() : null;
+
+      const newStatus = document.getElementById('editStatus').value;
+      const newPages = Number(document.getElementById('editTotalPages').value) || 300;
+      let newCurrentPage = Number(document.getElementById('editCurrentPage').value) || 0;
+
+      if (newStatus === 'COMPLETED') {
+        newCurrentPage = newPages;
+      } else if (newStatus === 'UNREAD') {
+        newCurrentPage = 0;
+      }
+
+      const bookRecord = {
+        id,
+        title,
+        author,
+        muscle,
+        topic,
+        focus,
+        pages: newPages,
+        isFiction,
+        accessoryTo,
+        status: newStatus,
+        currentPage: newCurrentPage,
+        startDate: document.getElementById('editStartDate').value,
+        finishDate: document.getElementById('editFinishDate').value,
+        rating: Number(document.getElementById('editRating').value) || 0,
+        notes: document.getElementById('editNotes').value
+      };
+
+      if (isAddingNewBook) {
+        books.push(bookRecord);
+      } else {
+        const bookIndex = books.findIndex(b => b.id === id);
+        if (bookIndex !== -1) {
+          books[bookIndex] = bookRecord;
+        }
+      }
+
+      persistData();
+      closeModal();
+      renderAll();
+    }
+
+    // DELETE TITLE LOGIC
+    let targetBookToDelete = null;
+
+    function promptDeleteBook(bookId, e) {
+      if (e) e.stopPropagation();
+      const book = books.find(b => b.id === bookId);
+      if (!book) return;
+
+      targetBookToDelete = book;
+      document.getElementById('deleteBookTitlePrompt').textContent = `"${book.title}" by ${book.author}`;
+      document.getElementById('confirmDeleteButton').onclick = executeDelete;
+      document.getElementById('deleteConfirmModal').classList.remove('hidden');
+    }
+
+    function deleteCurrentModalBook() {
+      const id = Number(document.getElementById('editBookId').value);
+      closeModal();
+      promptDeleteBook(id);
+    }
+
+    function closeDeleteConfirmModal() {
+      document.getElementById('deleteConfirmModal').classList.add('hidden');
+      targetBookToDelete = null;
+    }
+
+    function executeDelete() {
+      if (!targetBookToDelete) return;
+      books = books.filter(b => b.id !== targetBookToDelete.id);
+      persistData();
+      closeDeleteConfirmModal();
+      renderAll();
+    }
+
+    function confirmResetToDefault() {
+      if (confirm("Restore the canonical 60-title reading regimen? Any custom added titles will be replaced with the original 60 books.")) {
+        initDefaultBooks();
+        renderAll();
+      }
+    }
+
+    function setCompletedPages() {
+      const total = document.getElementById('editTotalPages').value;
+      document.getElementById('editCurrentPage').value = total;
+    }
+
+    function setStartDateToday() {
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('editStartDate').value = today;
+      if (document.getElementById('editStatus').value === 'UNREAD') {
+        document.getElementById('editStatus').value = 'READING';
+        handleModalStatusChange('READING');
+      }
+    }
+
+    function setFinishDateToday() {
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('editFinishDate').value = today;
+      document.getElementById('editStatus').value = 'COMPLETED';
+      document.getElementById('editCurrentPage').value = document.getElementById('editTotalPages').value;
+      handleModalStatusChange('COMPLETED');
+    }
+
+    function renderStarInput(rating) {
+      const container = document.getElementById('starRatingContainer');
+      container.innerHTML = '';
+      for (let i = 1; i <= 5; i++) {
+        const star = document.createElement('button');
+        star.type = 'button';
+        star.className = `p-1 text-lg transition ${i <= rating ? 'text-amber-500' : 'text-slate-300 hover:text-amber-300'}`;
+        star.innerHTML = '★';
+        star.onclick = () => {
+          document.getElementById('editRating').value = i;
+          renderStarInput(i);
+        };
+        container.appendChild(star);
+      }
+      const label = document.getElementById('starRatingLabel');
+      label.textContent = rating > 0 ? `${rating} / 5 Stars` : 'No rating';
+    }
+
+    function handleSaveBook(e) {
+      e.preventDefault();
+      const id = Number(document.getElementById('editBookId').value);
+      const title = document.getElementById('editTitleInput').value.trim();
+      const author = document.getElementById('editAuthorInput').value.trim();
+      const muscle = document.getElementById('editMuscleInput').value;
+      const topic = document.getElementById('editTopicInput').value.trim();
+      const focus = document.getElementById('editFocusInput').value.trim();
+      const isFiction = document.getElementById('editIsFiction').checked;
+      const accessoryTo = isFiction ? document.getElementById('editAccessoryTo').value.trim() : null;
+
+      const newStatus = document.getElementById('editStatus').value;
+      const newPages = Number(document.getElementById('editTotalPages').value) || 300;
+      let newCurrentPage = Number(document.getElementById('editCurrentPage').value) || 0;
+      let startDate = document.getElementById('editStartDate').value;
+      let finishDate = document.getElementById('editFinishDate').value;
+      const rating = Number(document.getElementById('editRating').value) || 0;
+      const notes = document.getElementById('editNotes').value;
+
+      if (newStatus === 'COMPLETED') {
+        newCurrentPage = newPages;
+        if (!finishDate) finishDate = new Date().toISOString().split('T')[0];
+        if (!startDate) startDate = finishDate;
+      } else if (newStatus === 'UNREAD') {
+        newCurrentPage = 0;
+        startDate = '';
+        finishDate = '';
+      } else if (newStatus === 'READING') {
+        if (!startDate) startDate = new Date().toISOString().split('T')[0];
+        finishDate = '';
+      }
+
+      const bookRecord = {
+        id,
+        title,
+        author,
+        muscle,
+        topic,
+        focus,
+        pages: newPages,
+        isFiction,
+        accessoryTo,
+        status: newStatus,
+        currentPage: newCurrentPage,
+        startDate,
+        finishDate,
+        rating,
+        notes
+      };
+
+      if (isAddingNewBook) {
+        books.push(bookRecord);
+        showToast(`Added "${title}"`);
+      } else {
+        const bookIndex = books.findIndex(b => b.id === id);
+        if (bookIndex !== -1) {
+          books[bookIndex] = bookRecord;
+          showToast(`Saved changes to "${title}"`);
+        }
+      }
+
+      persistData();
+      closeModal();
+      renderAll();
+    }
+
+    function quickToggleStatus(bookId, e) {
+      if (e) e.stopPropagation();
+      const index = books.findIndex(b => b.id === bookId);
+      if (index === -1) return;
+
+      const b = books[index];
+      const today = new Date().toISOString().split('T')[0];
+
+      if (b.status === 'UNREAD') {
+        b.status = 'READING';
+        b.startDate = b.startDate || today;
+      } else if (b.status === 'READING') {
+        b.status = 'COMPLETED';
+        b.finishDate = today;
+        b.currentPage = b.pages;
+      } else {
+        b.status = 'UNREAD';
+        b.currentPage = 0;
+        b.startDate = '';
+        b.finishDate = '';
+      }
+
+      persistData();
+      renderAll();
+    }
+
+    // FILTER HANDLERS
+    function setStatusFilter(status) {
+      activeStatusFilter = status;
+      document.querySelectorAll('.status-tab').forEach(tab => {
+        if (tab.getAttribute('data-status') === status) {
+          tab.classList.add('bg-white', 'text-[#132818]', 'shadow-2xs');
+          tab.classList.remove('text-[#507354]');
+        } else {
+          tab.classList.remove('bg-white', 'text-[#132818]', 'shadow-2xs');
+          tab.classList.add('text-[#507354]');
+        }
+      });
+      renderAll();
+    }
+
+    function setMuscleFilter(muscle) {
+      activeMuscleFilter = muscle;
+      document.querySelectorAll('.muscle-pill').forEach(pill => {
+        if (pill.getAttribute('data-muscle') === muscle) {
+          pill.className = "muscle-pill active shrink-0 px-2.5 py-1 rounded-lg bg-[#2d5539] text-white font-medium transition";
+        } else {
+          pill.className = "muscle-pill shrink-0 px-2.5 py-1 rounded-lg bg-[#eaf1ea] text-[#34583b] hover:bg-[#dbe7dc] font-medium transition";
+        }
+      });
+      renderAll();
+    }
+
+    function handleSearch(val) {
+      searchQuery = val.trim();
+      renderAll();
+    }
+
+    function applyFilters() {
+      activeFormatFilter = document.getElementById('formatFilter').value;
+      renderAll();
+    }
+
+    function resetFilters() {
+      activeStatusFilter = 'ALL';
+      activeMuscleFilter = 'ALL';
+      activeFormatFilter = 'ALL';
+      searchQuery = '';
+      document.getElementById('searchInput').value = '';
+      document.getElementById('formatFilter').value = 'ALL';
+      setStatusFilter('ALL');
+      setMuscleFilter('ALL');
+    }
+
+    function setViewMode(mode) {
+      currentViewMode = mode;
+      const tableBtn = document.getElementById('viewModeTable');
+      const gridBtn = document.getElementById('viewModeGrid');
+      const tableWrapper = document.getElementById('tableViewWrapper');
+      const gridWrapper = document.getElementById('gridViewWrapper');
+
+      if (mode === 'table') {
+        tableBtn.classList.add('bg-white', 'text-[#132818]', 'shadow-2xs');
+        tableBtn.classList.remove('text-[#507354]');
+        gridBtn.classList.remove('bg-white', 'text-[#132818]', 'shadow-2xs');
+        gridBtn.classList.add('text-[#507354]');
+        tableWrapper.classList.remove('hidden');
+        gridWrapper.classList.add('hidden');
+      } else {
+        gridBtn.classList.add('bg-white', 'text-[#132818]', 'shadow-2xs');
+        gridBtn.classList.remove('text-[#507354]');
+        tableBtn.classList.remove('bg-white', 'text-[#132818]', 'shadow-2xs');
+        tableBtn.classList.add('text-[#507354]');
+        tableWrapper.classList.add('hidden');
+        gridWrapper.classList.remove('hidden');
+      }
+      renderAll();
+    }
+
+    // EXPORT / IMPORT / SAMPLE DATA
+    function exportData() {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(books, null, 2));
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", `2027_Reading_Regimen_${new Date().toISOString().split('T')[0]}.json`);
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+    }
+
+    function importData(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const imported = JSON.parse(e.target.result);
+          if (Array.isArray(imported)) {
+            books = imported;
+            persistData();
+            renderAll();
+          }
+        } catch(err) {
+          console.error("Invalid JSON file:", err);
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    function loadSampleProgress() {
+      // Simulate Q1 2027 reading progress: 7 completed, 3 in progress
+      books = books.map(b => {
+        if (b.id <= 6) {
+          return {
+            ...b,
+            status: 'COMPLETED',
+            currentPage: b.pages,
+            startDate: '2027-01-05',
+            finishDate: '2027-01-20',
+            rating: b.id % 2 === 0 ? 5 : 4,
+            notes: "Foundational mastery established for this lift."
+          };
+        } else if (b.id === 7) {
+          return {
+            ...b,
+            status: 'COMPLETED',
+            currentPage: b.pages,
+            startDate: '2027-01-21',
+            finishDate: '2027-02-05',
+            rating: 5,
+            notes: "Outstanding analysis of Indian mathematical diffusion."
+          };
+        } else if (b.id === 8 || b.id === 14) {
+          return {
+            ...b,
+            status: 'READING',
+            currentPage: Math.round(b.pages * 0.45),
+            startDate: '2027-02-06',
+            finishDate: '',
+            rating: 0,
+            notes: "Active deep dive."
+          };
+        } else {
+          return {
+            ...b,
+            status: 'UNREAD',
+            currentPage: 0,
+            startDate: '',
+            finishDate: '',
+            rating: 0,
+            notes: ''
+          };
+        }
+      });
+
+      persistData();
+      renderAll();
+    }
+
+    function resetDataPrompt() {
+      initDefaultBooks();
+      renderAll();
+    }
+
+    // INITIAL LAUNCH
+    window.onload = init;
+  </script>
+</body>
+</html>

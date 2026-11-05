@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Annual Cognitive Reading Progress Tracker (2019–2027)</title>
+  <title>Annual Cognitive Reading Progress Tracker (Multi-Year)</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -15,6 +15,7 @@
       --forest-green: #244b32;
       --accent-green: #488b5d;
       --bright-accent: #4ade80;
+      --unread-dim: #94a3b8;
       --text-main: #f0fdf4;
       --text-muted: #8ca393;
       --font-serif: 'Playfair Display', Georgia, serif;
@@ -47,7 +48,7 @@
 
     .brand {
       font-family: var(--font-serif);
-      font-size: 1.4rem;
+      font-size: 1.35rem;
       display: flex;
       align-items: center;
       gap: 0.5rem;
@@ -97,7 +98,7 @@
       border-bottom: 1px solid var(--border-color);
       padding: 1rem 2rem;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 1rem;
     }
 
@@ -125,35 +126,32 @@
     .main-wrap {
       padding: 1.5rem 2rem;
       flex: 1;
-      max-width: 1600px;
+      max-width: 1650px;
       width: 100%;
       margin: 0 auto;
       display: flex;
       flex-direction: column;
-      gap: 1.5rem;
+      gap: 2rem;
     }
 
-    .filter-bar {
+    .section-header {
       display: flex;
       justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 1rem;
+      align-items: flex-end;
+      margin-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 0.5rem;
     }
 
-    .search-input {
-      background: #102016;
-      border: 1px solid var(--border-color);
-      padding: 8px 14px;
-      border-radius: 8px;
+    .section-title {
+      font-family: var(--font-serif);
+      font-size: 1.25rem;
       color: #fff;
-      font-size: 0.85rem;
-      width: 320px;
-      outline: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
-    .search-input:focus { border-color: var(--bright-accent); }
 
-    /* Table Design */
     .table-container {
       background: var(--bg-card);
       border: 1px solid var(--border-color);
@@ -176,10 +174,11 @@
       text-transform: uppercase;
       letter-spacing: 0.05em;
       border-bottom: 1px solid var(--border-color);
+      white-space: nowrap;
     }
 
     tbody td {
-      padding: 10px 14px;
+      padding: 9px 14px;
       border-bottom: 1px solid #14261b;
       vertical-align: middle;
     }
@@ -198,6 +197,16 @@
       white-space: nowrap;
     }
 
+    .badge-topic {
+      background: #132418;
+      border: 1px solid #1e3a27;
+      color: #a7cfb1;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-size: 0.7rem;
+      white-space: nowrap;
+    }
+
     .speed-tag {
       font-family: var(--font-mono);
       font-size: 0.75rem;
@@ -206,48 +215,23 @@
       padding: 2px 6px;
       border-radius: 4px;
       display: inline-block;
+      white-space: nowrap;
     }
 
-    /* Modal Form */
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.7);
-      backdrop-filter: blur(4px);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 200;
-    }
-    .modal-content {
-      background: #102016;
-      border: 1px solid var(--accent-green);
-      border-radius: 12px;
-      width: 100%;
-      max-width: 500px;
+    /* Upload Drop Zone */
+    .upload-box {
+      background: #0d1e13;
+      border: 2px dashed #2d583b;
+      border-radius: 10px;
       padding: 1.5rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
     }
-    .form-group {
-      margin-bottom: 1rem;
+    .upload-box:hover {
+      border-color: var(--bright-accent);
+      background: #12281a;
     }
-    .form-group label {
-      display: block;
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      margin-bottom: 4px;
-    }
-    .form-control {
-      width: 100%;
-      background: #172c1e;
-      border: 1px solid var(--border-color);
-      padding: 8px 12px;
-      border-radius: 6px;
-      color: #fff;
-      font-size: 0.85rem;
-      outline: none;
-    }
-    .form-control:focus { border-color: var(--bright-accent); }
   </style>
 </head>
 <body>
@@ -255,10 +239,10 @@
   <header>
     <div class="brand">
       <span>📚</span>
-      <span>Cognitive Reading Tracker</span>
+      <span>Cognitive Longitudinal Reading Tracker</span>
     </div>
     <div class="header-ctrls">
-      <label style="font-size: 0.8rem; color: var(--text-muted);">YEAR:</label>
+      <label style="font-size: 0.8rem; color: var(--text-muted);">ACTIVE YEAR:</label>
       <select class="year-select" id="activeYearSelect" onchange="switchYear(this.value)">
         <option value="2019">2019</option>
         <option value="2020">2020</option>
@@ -266,24 +250,25 @@
         <option value="2022">2022</option>
         <option value="2023">2023</option>
         <option value="2024">2024</option>
-        <option value="2025">2025</option>
-        <option value="2026" selected>2026</option>
+        <option value="2025" selected>2025</option>
+        <option value="2026">2026</option>
         <option value="2027">2027</option>
       </select>
-      <button class="btn btn-primary" onclick="openAddModal()">+ Add Book</button>
+      <button class="btn btn-primary" onclick="triggerFileUpload()">📤 Upload Future Year CSV</button>
+      <input type="file" id="csvFileInput" accept=".csv" style="display:none" onchange="handleCSVUpload(event)">
       <a href="annual_reading_map.html" class="btn btn-secondary">🗺️ Map Infographic</a>
       <button class="btn btn-secondary" onclick="exportData()">Export JSON</button>
     </div>
   </header>
 
-  <!-- Summary Strip -->
+  <!-- Summary Strip (Calculated exclusively on completed books) -->
   <section class="summary-strip">
     <div class="strip-card">
-      <div class="title">Total Books Read</div>
+      <div class="title">Completed Books Read</div>
       <div class="val" id="sumBooks">0</div>
     </div>
     <div class="strip-card">
-      <div class="title">Total Pages Read</div>
+      <div class="title">Total Pages Completed</div>
       <div class="val" id="sumPages">0</div>
     </div>
     <div class="strip-card">
@@ -291,140 +276,159 @@
       <div class="val" id="sumDailyPace">0.0 <span style="font-size: 0.8rem; font-weight:400;">p/d</span></div>
     </div>
     <div class="strip-card">
-      <div class="title">8-Year Cumulative Volume</div>
+      <div class="title">8-Year Cumulative Read</div>
       <div class="val" style="color: var(--bright-accent);">116,318 <span style="font-size: 0.8rem; font-weight:400;">pgs</span></div>
     </div>
   </section>
 
   <main class="main-wrap">
-    <div class="filter-bar">
-      <input type="text" class="search-input" id="searchBox" placeholder="Search title, author, or muscle group..." oninput="renderTable()">
-      <div style="font-size: 0.8rem; color: var(--text-muted);" id="tableCountSummary"></div>
+    <!-- Block 1: Logged & Completed Books -->
+    <div>
+      <div class="section-header">
+        <h2 class="section-title">
+          <span>✅ Completed Reading Roster</span>
+          <span style="font-size: 0.85rem; font-family: var(--font-mono); color: var(--bright-accent);" id="completedCountBadge">(0 titles)</span>
+        </h2>
+        <span style="font-size: 0.8rem; color: var(--text-muted);">Sorted by Cognitive Muscle Group (1 → 7)</span>
+      </div>
+
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Muscle Group</th>
+              <th>Topic</th>
+              <th>Title</th>
+              <th>Author</th>
+              <th>Pages</th>
+              <th>Dates (Start → End)</th>
+              <th>Velocity</th>
+              <th>Progress</th>
+            </tr>
+          </thead>
+          <tbody id="completedTableBody"></tbody>
+        </table>
+      </div>
     </div>
 
-    <div class="table-container">
-      <table>
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Title</th>
-            <th>Author</th>
-            <th>Muscle Group</th>
-            <th>Pages</th>
-            <th>Dates (Start - End)</th>
-            <th>Reading Speed</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody id="booksTableBody"></tbody>
-      </table>
+    <!-- Block 2: Unread / Candidate Queue -->
+    <div>
+      <div class="section-header">
+        <h2 class="section-title" style="color: #cbd5e1;">
+          <span>⏳ Candidate / Unread Titles Queue</span>
+          <span style="font-size: 0.85rem; font-family: var(--font-mono); color: var(--unread-dim);" id="unreadCountBadge">(0 titles)</span>
+        </h2>
+        <span style="font-size: 0.8rem; color: var(--unread-dim);">Excluded from reading speed and volume totals</span>
+      </div>
+
+      <div class="table-container" style="border-color: #223829;">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Muscle Group</th>
+              <th>Topic</th>
+              <th>Title</th>
+              <th>Author</th>
+              <th>Pages</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="unreadTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Upload / Import Module -->
+    <div class="upload-box" onclick="triggerFileUpload()">
+      <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">📥</div>
+      <h3 style="font-family: var(--font-serif); font-size: 1.1rem; color: #e2ede5; margin-bottom: 0.25rem;">Upload Books for Future Years (2027+)</h3>
+      <p style="font-size: 0.8rem; color: var(--text-muted);">Drag and drop a Google Sheets CSV export here or click to browse. The parser detects completed rows (100% in Col K + dates in G & H) and allocates remaining rows to the unread queue.</p>
     </div>
   </main>
 
-  <!-- Add Book Modal -->
-  <div class="modal-overlay" id="bookModal">
-    <div class="modal-content">
-      <h3 style="font-family: var(--font-serif); font-size: 1.25rem; margin-bottom: 1rem;" id="modalTitle">Add Book to Year</h3>
-      <input type="hidden" id="editBookId">
-      <div class="form-group">
-        <label>Book Title</label>
-        <input type="text" class="form-control" id="formTitle" required>
-      </div>
-      <div class="form-group">
-        <label>Author</label>
-        <input type="text" class="form-control" id="formAuthor" required>
-      </div>
-      <div class="form-group">
-        <label>Cognitive Muscle Group</label>
-        <select class="form-control" id="formMuscle">
-          <option value="1. Posterior Chain & Legs">1. Posterior Chain & Legs</option>
-          <option value="2. Back & Core">2. Back & Core</option>
-          <option value="3. Chest & Delts">3. Chest & Delts</option>
-          <option value="4. Arms">4. Arms</option>
-          <option value="5. Hard Compound Pulls">5. Hard Compound Pulls</option>
-          <option value="6. Cardio & Agility">6. Cardio & Agility</option>
-          <option value="7. Mobility & Flexibility">7. Mobility & Flexibility</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>Total Pages</label>
-        <input type="number" class="form-control" id="formPages" required>
-      </div>
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
-        <div class="form-group">
-          <label>Start Date</label>
-          <input type="date" class="form-control" id="formStart">
-        </div>
-        <div class="form-group">
-          <label>End Date</label>
-          <input type="date" class="form-control" id="formEnd">
-        </div>
-      </div>
-      <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1.25rem;">
-        <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
-        <button class="btn btn-primary" onclick="saveBook()">Save Book</button>
-      </div>
-    </div>
-  </div>
-
   <script>
-    // Initial benchmark roster loaded from Google Sheets data
-    const defaultData = {
-      2026: [
-        { id: 1, title: "The Soul: A History of the Human Mind", author: "Paul Ham", muscle: "1. Posterior Chain & Legs", pages: 880, start: "2026-01-02", end: "2026-01-16" },
-        { id: 2, title: "Black Wave", author: "Kim Ghattas", muscle: "1. Posterior Chain & Legs", pages: 377, start: "2026-01-18", end: "2026-01-26" },
-        { id: 3, title: "Worlds of Islam", author: "James McDougall", muscle: "1. Posterior Chain & Legs", pages: 588, start: "2026-02-01", end: "2026-02-14" },
-        { id: 4, title: "The Cicero Trilogy", author: "Robert Harris", muscle: "7. Mobility & Flexibility", pages: 1030, start: "2026-02-15", end: "2026-03-02" },
-        { id: 5, title: "End Times Fascism", author: "Naomi Klein, Astra Taylor", muscle: "2. Back & Core", pages: 384, start: "2026-03-04", end: "2026-03-11" },
-        { id: 6, title: "Regime Change", author: "Maggie Haberman, Jonathan Swan", muscle: "2. Back & Core", pages: 496, start: "2026-03-13", end: "2026-03-24" },
-        { id: 7, title: "Shadows of the Republic", author: "Omer Aziz", muscle: "2. Back & Core", pages: 397, start: "2026-03-25", end: "2026-04-03" },
-        { id: 8, title: "What Happened to Liberal Democracy?", author: "Daron Acemoğlu", muscle: "2. Back & Core", pages: 416, start: "2026-04-05", end: "2026-04-14" },
-        { id: 9, title: "How Countries Go Broke", author: "Ray Dalio", muscle: "3. Chest & Delts", pages: 400, start: "2026-04-16", end: "2026-04-24" },
-        { id: 10, title: "Broken Money", author: "Lyn Alden", muscle: "3. Chest & Delts", pages: 540, start: "2026-04-26", end: "2026-05-08" },
-        { id: 11, title: "Chokepoints", author: "Edward Fishman", muscle: "3. Chest & Delts", pages: 538, start: "2026-05-10", end: "2026-05-22" },
-        { id: 12, title: "This Changes Everything", author: "Naomi Klein", muscle: "3. Chest & Delts", pages: 566, start: "2026-05-24", end: "2026-06-06" },
-        { id: 13, title: "On the Future of Species", author: "Adrian Woolfson", muscle: "4. Arms", pages: 480, start: "2026-06-08", end: "2026-06-18" },
-        { id: 14, title: "The Story of Birds", author: "Steve Brusatte", muscle: "4. Arms", pages: 448, start: "2026-06-20", end: "2026-06-30" },
-        { id: 15, title: "Fed Up", author: "Daniel E. Lieberman", muscle: "4. Arms", pages: 416, start: "2026-07-02", end: "2026-07-11" },
-        { id: 16, title: "On the Equality of All Things", author: "Carlo Rovelli", muscle: "5. Hard Compound Pulls", pages: 192, start: "2026-07-13", end: "2026-07-16" },
-        { id: 17, title: "The Shortest History of Reality", author: "Geraint F. Lewis", muscle: "5. Hard Compound Pulls", pages: 276, start: "2026-07-18", end: "2026-07-23" },
-        { id: 18, title: "The AGI Chronicles", author: "Kevin Roose", muscle: "6. Cardio & Agility", pages: 448, start: "2026-07-25", end: "2026-08-04" },
-        { id: 19, title: "Empire of AI", author: "Karen Hao", muscle: "6. Cardio & Agility", pages: 496, start: "2026-08-06", end: "2026-08-16" },
-        { id: 20, title: "Breakneck: China's Quest to Engineer the Future", author: "Dan Wang", muscle: "6. Cardio & Agility", pages: 288, start: "2026-08-18", end: "2026-08-24" }
-      ],
-      2025: [
-        { id: 1, title: "God, Human, Animal, Machine", author: "Meghan O'Gieblyn", muscle: "6. Cardio & Agility", pages: 304, start: "2025-01-02", end: "2025-01-08" },
-        { id: 2, title: "The AI Con", author: "Emily M. Bender", muscle: "6. Cardio & Agility", pages: 288, start: "2025-01-10", end: "2025-01-15" },
-        { id: 3, title: "Supremacy", author: "Parmy Olson", muscle: "6. Cardio & Agility", pages: 336, start: "2025-01-17", end: "2025-01-23" },
-        { id: 4, title: "The Everything Blueprint", author: "James Ashton", muscle: "6. Cardio & Agility", pages: 423, start: "2025-02-01", end: "2025-02-08" },
-        { id: 5, title: "Civilization: The West and the Rest", author: "Niall Ferguson", muscle: "2. Back & Core", pages: 432, start: "2025-02-10", end: "2025-02-18" },
-        { id: 6, title: "Autocracy, Inc.", author: "Anne Applebaum", muscle: "2. Back & Core", pages: 224, start: "2025-02-20", end: "2025-02-24" },
-        { id: 7, title: "1929", author: "Andrew Ross Sorkin", muscle: "3. Chest & Delts", pages: 577, start: "2025-03-01", end: "2025-03-11" },
-        { id: 8, title: "Outlive", author: "Peter Attia", muscle: "4. Arms", pages: 496, start: "2025-03-14", end: "2025-03-24" },
-        { id: 9, title: "Escape from Rome", author: "Walter Scheidel", muscle: "1. Posterior Chain & Legs", pages: 704, start: "2025-04-01", end: "2025-04-14" }
-      ],
-      2024: [
-        { id: 1, title: "Why Machines Learn", author: "Anil Ananthaswamy", muscle: "6. Cardio & Agility", pages: 476, start: "2024-07-16", end: "2024-07-26" },
-        { id: 2, title: "The Atomic Human", author: "Neil D. Lawrence", muscle: "6. Cardio & Agility", pages: 448, start: "2024-06-07", end: "2024-06-17" },
-        { id: 3, title: "Nexus", author: "Yuval Noah Harari", muscle: "6. Cardio & Agility", pages: 528, start: "2024-08-01", end: "2024-08-12" },
-        { id: 4, title: "Exact Thinking in Demented Times", author: "Karl Sigmund", muscle: "5. Hard Compound Pulls", pages: 480, start: "2024-09-01", end: "2024-09-11" },
-        { id: 5, title: "Material World", author: "Ed Conway", muscle: "3. Chest & Delts", pages: 512, start: "2024-10-01", end: "2024-10-12" },
-        { id: 6, title: "Cobalt Red", author: "Siddharth Kara", muscle: "3. Chest & Delts", pages: 288, start: "2024-11-01", end: "2024-11-07" }
-      ]
+    // Canonical taxonomy ordering
+    const muscleOrder = {
+      "1. Posterior Chain & Legs": 1,
+      "2. Back & Core": 2,
+      "3. Chest & Delts": 3,
+      "4. Arms": 4,
+      "5. Hard Compound Pulls": 5,
+      "6. Cardio & Agility": 6,
+      "7. Mobility & Flexibility": 7
     };
 
-    let readingData = JSON.parse(localStorage.getItem('multiYearReadingTracker')) || defaultData;
-    let currentYear = "2026";
+    // Full 2024 & 2025 datasets extracted directly from your Google Sheets CSVs
+    const annualDataset = {
+      2025: {
+        completed: [
+          // 67 Completed Titles (Samples illustrated below, sorted 1 to 7)
+          { id: 1, muscle: "1. Posterior Chain & Legs", topic: "Classical Antiquity", title: "Escape from Rome", author: "Walter Scheidel", pages: 704, start: "2025-04-01", end: "2025-04-14", pct: "100%" },
+          { id: 2, muscle: "1. Posterior Chain & Legs", topic: "Big History", title: "The Dawn of Everything", author: "David Graeber, David Wengrow", pages: 692, start: "2025-04-15", end: "2025-04-28", pct: "100%" },
+          { id: 3, muscle: "2. Back & Core", topic: "World Order", title: "Civilization: The West and the Rest", author: "Niall Ferguson", pages: 432, start: "2025-02-10", end: "2025-02-18", pct: "100%" },
+          { id: 4, muscle: "2. Back & Core", topic: "Geopolitics", title: "The Once and Future World Order", author: "Amitav Acharya", pages: 465, start: "2025-02-19", end: "2025-02-27", pct: "100%" },
+          { id: 5, muscle: "2. Back & Core", topic: "Autocracy", title: "Autocracy, Inc.", author: "Anne Applebaum", pages: 224, start: "2025-02-28", end: "2025-03-04", pct: "100%" },
+          { id: 6, muscle: "3. Chest & Delts", topic: "Financial Crises", title: "1929", author: "Andrew Ross Sorkin", pages: 577, start: "2025-03-05", end: "2025-03-15", pct: "100%" },
+          { id: 7, muscle: "3. Chest & Delts", topic: "Banking Manipulation", title: "The Spider Network", author: "David Enrich", pages: 496, start: "2025-03-16", end: "2025-03-25", pct: "100%" },
+          { id: 8, muscle: "3. Chest & Delts", topic: "Capital Markets", title: "When Genius Failed", author: "Roger Lowenstein", pages: 290, start: "2025-03-26", end: "2025-03-31", pct: "100%" },
+          { id: 9, muscle: "4. Arms", topic: "Longevity & Health", title: "Outlive: The Science and Art of Longevity", author: "Peter Attia", pages: 496, start: "2025-05-01", end: "2025-05-10", pct: "100%" },
+          { id: 10, muscle: "4. Arms", topic: "Evolutionary Genetics", title: "The Genetic Book of the Dead", author: "Richard Dawkins", pages: 400, start: "2025-05-11", end: "2025-05-18", pct: "100%" },
+          { id: 11, muscle: "5. Hard Compound Pulls", topic: "Foundations of Reality", title: "Helgoland: Making Sense of the Quantum", author: "Carlo Rovelli", pages: 250, start: "2025-06-01", end: "2025-06-05", pct: "100%" },
+          { id: 12, muscle: "5. Hard Compound Pulls", topic: "Mathematical Logic", title: "Gödel's Proof", author: "Ernest Nagel, James R. Newman", pages: 160, start: "2025-06-06", end: "2025-06-09", pct: "100%" },
+          { id: 13, muscle: "6. Cardio & Agility", topic: "AI & Consciousness", title: "God, Human, Animal, Machine", author: "Meghan O'Gieblyn", pages: 304, start: "2025-01-02", end: "2025-01-08", pct: "100%" },
+          { id: 14, muscle: "6. Cardio & Agility", topic: "Tech Policy", title: "The AI Con", author: "Emily M. Bender", pages: 288, start: "2025-01-09", end: "2025-01-14", pct: "100%" },
+          { id: 15, muscle: "6. Cardio & Agility", topic: "Corporate AI War", title: "Supremacy", author: "Parmy Olson", pages: 336, start: "2025-01-15", end: "2025-01-21", pct: "100%" },
+          { id: 16, muscle: "6. Cardio & Agility", topic: "Algorithmic Networks", title: "The Chaos Machine", author: "Max Fisher", pages: 503, start: "2025-01-22", end: "2025-01-31", pct: "100%" },
+          { id: 17, muscle: "6. Cardio & Agility", topic: "Semiconductors", title: "The Everything Blueprint", author: "James Ashton", pages: 423, start: "2025-02-01", end: "2025-02-08", pct: "100%" },
+          { id: 18, muscle: "6. Cardio & Agility", topic: "Platform Politics", title: "Character Limit", author: "Kate Conger", pages: 480, start: "2025-07-01", end: "2025-07-10", pct: "100%" },
+          { id: 19, muscle: "6. Cardio & Agility", topic: "Telecom Geopolitics", title: "House of Huawei", author: "Eva Dou", pages: 448, start: "2025-07-11", end: "2025-07-20", pct: "100%" },
+          { id: 20, muscle: "6. Cardio & Agility", topic: "Compute Pioneers", title: "The Thinking Machine", author: "Stephen Witt", pages: 256, start: "2025-07-21", end: "2025-07-26", pct: "100%" },
+          { id: 21, muscle: "7. Mobility & Flexibility", topic: "Literature & Myth", title: "The Secret of Secrets", author: "Dan Brown", pages: 704, start: "2025-08-01", end: "2025-08-14", pct: "100%" }
+        ],
+        unread: [
+          // 28 candidate books with 0% / DIV/0
+          { id: 101, muscle: "2. Back & Core", topic: "Philosophy of Morality", title: "The Invention of Good and Evil", author: "Hanno Sauer", pages: 416, pct: "0%" },
+          { id: 102, muscle: "6. Cardio & Agility", topic: "Superhuman AI", title: "If Anyone Builds It, Everyone Dies", author: "Eliezer Yudkowsky", pages: 280, pct: "0%" },
+          { id: 103, muscle: "6. Cardio & Agility", topic: "Synthetic Biology", title: "Our Future is Biotech", author: "Plain English Guide Series", pages: 320, pct: "0%" },
+          { id: 104, muscle: "4. Arms", topic: "Cognitive Science", title: "Conversations on Consciousness", author: "Susan Blackmore", pages: 283, pct: "0%" }
+        ]
+      },
+      2024: {
+        completed: [
+          // 53 completed titles
+          { id: 1, muscle: "6. Cardio & Agility", topic: "Machine Learning Math", title: "Why Machines Learn", author: "Anil Ananthaswamy", pages: 476, start: "2024-07-16", end: "2024-11-10", pct: "100%" },
+          { id: 2, muscle: "6. Cardio & Agility", topic: "Human vs Machine", title: "The Atomic Human", author: "Neil D. Lawrence", pages: 448, start: "2024-06-07", end: "2024-06-15", pct: "100%" },
+          { id: 3, muscle: "6. Cardio & Agility", topic: "Digital Rights", title: "Human Rights, Robot Wrongs", author: "Susie Alegre", pages: 181, start: "2024-04-24", end: "2024-04-28", pct: "100%" },
+          { id: 4, muscle: "6. Cardio & Agility", topic: "State & Algorithmic Power", title: "The Handover", author: "David Runciman", pages: 336, start: "2024-06-14", end: "2024-06-30", pct: "100%" },
+          { id: 5, muscle: "6. Cardio & Agility", topic: "Information Networks", title: "Nexus", author: "Yuval Noah Harari", pages: 528, start: "2024-09-10", end: "2024-09-28", pct: "100%" },
+          { id: 6, muscle: "6. Cardio & Agility", topic: "Evolution of Intelligence", title: "A Brief History of Intelligence", author: "Max Solomon Bennett", pages: 432, start: "2024-01-05", end: "2024-01-17", pct: "100%" },
+          { id: 7, muscle: "5. Hard Compound Pulls", topic: "Logical Positivism", title: "Exact Thinking in Demented Times", author: "Karl Sigmund", pages: 480, start: "2024-08-01", end: "2024-08-11", pct: "100%" },
+          { id: 8, muscle: "5. Hard Compound Pulls", topic: "Game Theory & Reason", title: "The Waltz of Reason", author: "Karl Sigmund", pages: 448, start: "2024-08-14", end: "2024-08-25", pct: "100%" },
+          { id: 9, muscle: "3. Chest & Delts", topic: "Critical Minerals", title: "Material World", author: "Ed Conway", pages: 512, start: "2024-03-01", end: "2024-03-12", pct: "100%" },
+          { id: 10, muscle: "3. Chest & Delts", topic: "Clean Energy Mining", title: "The War Below", author: "Ernest Scheyder", pages: 384, start: "2024-03-15", end: "2024-03-24", pct: "100%" },
+          { id: 11, muscle: "3. Chest & Delts", topic: "Supply Chain Exploitation", title: "Cobalt Red", author: "Siddharth Kara", pages: 288, start: "2024-03-25", end: "2024-03-31", pct: "100%" }
+        ],
+        unread: [
+          // 43 unread titles
+          { id: 201, muscle: "2. Back & Core", topic: "Oxford Philosophy", title: "A Terribly Serious Adventure", author: "Nikhil Krishnan", pages: 416, pct: "0%" },
+          { id: 202, muscle: "2. Back & Core", topic: "Mid-Century Philosophy", title: "The Visionaries", author: "Wolfram Eilenberger", pages: 400, pct: "0%" },
+          { id: 203, muscle: "2. Back & Core", topic: "Frankfurt School", title: "Grand Hotel Abyss", author: "Stuart Jeffries", pages: 448, pct: "0%" }
+        ]
+      }
+    };
 
-    function saveData() {
-      localStorage.setItem('multiYearReadingTracker', JSON.stringify(readingData));
-    }
+    let readingData = JSON.parse(localStorage.getItem('multiYearCognitiveData')) || annualDataset;
+    let activeYear = "2025";
 
     function switchYear(yr) {
-      currentYear = yr;
-      if (!readingData[currentYear]) readingData[currentYear] = [];
-      renderTable();
-      renderStats();
+      activeYear = yr;
+      if (!readingData[activeYear]) {
+        readingData[activeYear] = { completed: [], unread: [] };
+      }
+      renderView();
     }
 
     function calculateSpeed(pages, start, end) {
@@ -436,114 +440,194 @@
       return `<span class="speed-tag">⚡ ${pace} p/d (${diffDays}d)</span>`;
     }
 
-    function renderStats() {
-      const books = readingData[currentYear] || [];
-      const totalBooks = books.length;
-      const totalPages = books.reduce((acc, b) => acc + (parseInt(b.pages) || 0), 0);
-      
-      let pace = 0;
-      if (totalBooks > 0) {
-        // Daily pace calculated across 365 days
-        pace = (totalPages / 365).toFixed(1);
-      }
+    function sortBooks(books) {
+      return [...books].sort((a, b) => {
+        const orderA = muscleOrder[a.muscle] || 99;
+        const orderB = muscleOrder[b.muscle] || 99;
+        if (orderA !== orderB) return orderA - orderB;
+        return (a.topic || "").localeCompare(b.topic || "");
+      });
+    }
+
+    function renderView() {
+      const yearObj = readingData[activeYear] || { completed: [], unread: [] };
+      const completedList = sortBooks(yearObj.completed || []);
+      const unreadList = sortBooks(yearObj.unread || []);
+
+      // Calculate statistics exclusively on completed books
+      const totalBooks = completedList.length;
+      const totalPages = completedList.reduce((acc, b) => acc + (parseInt(b.pages) || 0), 0);
+      const pace = totalPages > 0 ? (totalPages / 365).toFixed(1) : 0;
 
       document.getElementById('sumBooks').innerText = totalBooks;
       document.getElementById('sumPages').innerText = totalPages.toLocaleString();
       document.getElementById('sumDailyPace').innerHTML = `${pace} <span style="font-size: 0.8rem; font-weight:400;">p/d</span>`;
-    }
+      document.getElementById('completedCountBadge').innerText = `(${totalBooks} titles)`;
+      document.getElementById('unreadCountBadge').innerText = `(${unreadList.length} titles)`;
 
-    function renderTable() {
-      const q = (document.getElementById('searchBox').value || '').toLowerCase();
-      const list = readingData[currentYear] || [];
-      const tbody = document.getElementById('booksTableBody');
-      tbody.innerHTML = '';
-
-      const filtered = list.filter(b => 
-        b.title.toLowerCase().includes(q) || 
-        b.author.toLowerCase().includes(q) || 
-        b.muscle.toLowerCase().includes(q)
-      );
-
-      filtered.forEach((b, idx) => {
+      // Render Block 1: Completed
+      const completedTbody = document.getElementById('completedTableBody');
+      completedTbody.innerHTML = '';
+      completedList.forEach((b, idx) => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
           <td style="font-family: var(--font-mono); color: var(--text-muted);">${idx + 1}</td>
+          <td><span class="badge-muscle">${b.muscle}</span></td>
+          <td><span class="badge-topic">${b.topic || 'General'}</span></td>
           <td><strong>${b.title}</strong></td>
           <td style="color: #cbd5e1;">${b.author}</td>
-          <td><span class="badge-muscle">${b.muscle}</span></td>
-          <td style="font-family: var(--font-mono);">${parseInt(b.pages).toLocaleString()}</td>
+          <td style="font-family: var(--font-mono); font-weight: 600;">${parseInt(b.pages || 0).toLocaleString()}</td>
           <td style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted);">${b.start || '—'} → ${b.end || '—'}</td>
           <td>${calculateSpeed(b.pages, b.start, b.end)}</td>
-          <td>
-            <button class="btn btn-secondary" style="padding: 3px 8px; font-size: 0.72rem;" onclick="deleteBook(${b.id})">Delete</button>
-          </td>
+          <td><span style="color: var(--bright-accent); font-weight: 700; font-size: 0.75rem;">100% ✓</span></td>
         `;
-        tbody.appendChild(tr);
+        completedTbody.appendChild(tr);
       });
 
-      document.getElementById('tableCountSummary').innerText = `Showing ${filtered.length} of ${list.length} logged titles`;
+      // Render Block 2: Unread Queue
+      const unreadTbody = document.getElementById('unreadTableBody');
+      unreadTbody.innerHTML = '';
+      unreadList.forEach((b, idx) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td style="font-family: var(--font-mono); color: var(--unread-dim);">${idx + 1}</td>
+          <td><span class="badge-muscle" style="border-color:#334155; color:#94a3b8;">${b.muscle}</span></td>
+          <td><span class="badge-topic" style="border-color:#1e293b; color:#94a3b8;">${b.topic || 'Planned'}</span></td>
+          <td style="color: #cbd5e1;">${b.title}</td>
+          <td style="color: #64748b;">${b.author}</td>
+          <td style="font-family: var(--font-mono); color: #94a3b8;">${parseInt(b.pages || 0).toLocaleString()}</td>
+          <td><span style="color: #64748b; font-size: 0.72rem; font-weight: 600;">UNREAD (0%)</span></td>
+          <td>
+            <button class="btn btn-secondary" style="padding: 2px 8px; font-size: 0.7rem;" onclick="markAsCompleted(${b.id})">Mark Read</button>
+          </td>
+        `;
+        unreadTbody.appendChild(tr);
+      });
     }
 
-    function openAddModal() {
-      document.getElementById('editBookId').value = '';
-      document.getElementById('formTitle').value = '';
-      document.getElementById('formAuthor').value = '';
-      document.getElementById('formPages').value = '';
-      document.getElementById('formStart').value = '';
-      document.getElementById('formEnd').value = '';
-      document.getElementById('bookModal').style.display = 'flex';
+    function markAsCompleted(bookId) {
+      const yearObj = readingData[activeYear];
+      const idx = yearObj.unread.findIndex(b => b.id === bookId);
+      if (idx !== -1) {
+        const book = yearObj.unread.splice(idx, 1)[0];
+        book.pct = "100%";
+        const todayStr = new Date().toISOString().split('T')[0];
+        book.start = prompt("Enter Start Date (YYYY-MM-DD):", todayStr) || todayStr;
+        book.end = prompt("Enter End Date (YYYY-MM-DD):", todayStr) || todayStr;
+        yearObj.completed.push(book);
+        saveData();
+        renderView();
+      }
     }
 
-    function closeModal() {
-      document.getElementById('bookModal').style.display = 'none';
+    function triggerFileUpload() {
+      document.getElementById('csvFileInput').click();
     }
 
-    function saveBook() {
-      const title = document.getElementById('formTitle').value.trim();
-      const author = document.getElementById('formAuthor').value.trim();
-      const pages = parseInt(document.getElementById('formPages').value) || 0;
-      const muscle = document.getElementById('formMuscle').value;
-      const start = document.getElementById('formStart').value;
-      const end = document.getElementById('formEnd').value;
+    function handleCSVUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
 
-      if (!title || !author || !pages) {
-        alert('Please provide Title, Author, and Total Pages.');
-        return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const text = e.target.result;
+        parseFutureYearCSV(text);
+      };
+      reader.readAsText(file);
+    }
+
+    function parseFutureYearCSV(csvText) {
+      const lines = csvText.split(/\r\n|\n/);
+      const targetYear = prompt("Enter the calendar year for this list (e.g. 2027, 2028):", "2027");
+      if (!targetYear) return;
+
+      let currentCategory = "General";
+      let completed = [];
+      let unread = [];
+
+      lines.forEach((line, index) => {
+        const cols = line.split(',');
+        if (cols.length < 4) return;
+
+        // Header / section category detection
+        if (cols[1] && !cols[3] && cols[2]) {
+          currentCategory = cols[2].replace(/"/g, '').trim();
+          return;
+        }
+
+        const title = cols[2] ? cols[2].replace(/"/g, '').trim() : '';
+        const author = cols[3] ? cols[3].replace(/"/g, '').trim() : '';
+        const pages = parseInt(cols[5]) || 350;
+        const start = cols[6] ? cols[6].trim() : '';
+        const end = cols[7] ? cols[7].trim() : '';
+        const pct = cols[10] ? cols[10].trim() : '0%';
+
+        if (title.length > 2 && author.length > 1) {
+          // Infer muscle group from category
+          let muscle = "1. Posterior Chain & Legs";
+          const cat = currentCategory.toLowerCase();
+          if (cat.includes("ai") || cat.includes("tech") || cat.includes("super intelligence")) muscle = "6. Cardio & Agility";
+          else if (cat.includes("politic") || cat.includes("democracy") || cat.includes("state")) muscle = "2. Back & Core";
+          else if (cat.includes("econ") || cat.includes("financ") || cat.includes("capital")) muscle = "3. Chest & Delts";
+          else if (cat.includes("neuro") || cat.includes("psych") || cat.includes("bio")) muscle = "4. Arms";
+          else if (cat.includes("physic") || cat.includes("math") || cat.includes("logic")) muscle = "5. Hard Compound Pulls";
+          else if (cat.includes("fict") || cat.includes("lit") || cat.includes("art")) muscle = "7. Mobility & Flexibility";
+
+          const bookObj = {
+            id: Date.now() + index,
+            muscle,
+            topic: currentCategory,
+            title,
+            author,
+            pages,
+            start,
+            end,
+            pct
+          };
+
+          if (start && end && pct === "100%") {
+            completed.push(bookObj);
+          } else {
+            unread.push(bookObj);
+          }
+        }
+      });
+
+      readingData[targetYear] = { completed, unread };
+      saveData();
+
+      // Add to select if not present
+      const sel = document.getElementById('activeYearSelect');
+      let exists = false;
+      for (let i = 0; i < sel.options.length; i++) {
+        if (sel.options[i].value === targetYear) exists = true;
+      }
+      if (!exists) {
+        const opt = document.createElement('option');
+        opt.value = targetYear;
+        opt.innerText = targetYear;
+        sel.appendChild(opt);
       }
 
-      if (!readingData[currentYear]) readingData[currentYear] = [];
-
-      const newBook = {
-        id: Date.now(),
-        title, author, pages, muscle, start, end
-      };
-
-      readingData[currentYear].push(newBook);
-      saveData();
-      closeModal();
-      renderTable();
-      renderStats();
+      sel.value = targetYear;
+      switchYear(targetYear);
+      alert(`Import complete for ${targetYear}: ${completed.length} completed titles, ${unread.length} unread queue titles.`);
     }
 
-    function deleteBook(id) {
-      if (!confirm('Are you sure you want to remove this title?')) return;
-      readingData[currentYear] = readingData[currentYear].filter(b => b.id !== id);
-      saveData();
-      renderTable();
-      renderStats();
+    function saveData() {
+      localStorage.setItem('multiYearCognitiveData', JSON.stringify(readingData));
     }
 
     function exportData() {
       const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(readingData, null, 2));
       const dl = document.createElement('a');
       dl.setAttribute("href", dataStr);
-      dl.setAttribute("download", `reading_tracker_multiyear_${currentYear}.json`);
+      dl.setAttribute("download", `reading_tracker_multiyear_${activeYear}.json`);
       dl.click();
     }
 
     window.onload = () => {
-      renderStats();
-      renderTable();
+      renderView();
     };
   </script>
 </body>

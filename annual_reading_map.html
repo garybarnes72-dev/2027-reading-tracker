@@ -3,22 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Annual Cognitive Reading Map (2019–2026)</title>
+  <title>Annual Cognitive Reading Map & Infographic</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-dark: #09150e;
-      --bg-panel: #112217;
-      --border-panel: #1e3a29;
-      --accent-green: #529468;
+      --bg-dark: #08140c;
+      --bg-panel: #102016;
+      --border-panel: #1a3524;
+      --accent-green: #488b5d;
       --light-green: #88b088;
       --bright-green: #4ade80;
-      --glow-green: rgba(74, 222, 128, 0.25);
-      --atrophy-dim: rgba(255, 255, 255, 0.25);
-      --text-main: #f1f5f2;
-      --text-muted: #9bb3a2;
+      --target-dark: #092612;
+      --text-main: #f0fdf4;
+      --text-muted: #8ca393;
       --font-serif: 'Playfair Display', Georgia, serif;
       --font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
       --font-mono: 'JetBrains Mono', monospace;
@@ -36,8 +35,8 @@
     }
 
     header {
-      padding: 1.25rem 2rem;
-      background: rgba(17, 34, 23, 0.85);
+      padding: 1rem 2rem;
+      background: rgba(16, 32, 22, 0.9);
       backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border-panel);
       display: flex;
@@ -50,7 +49,7 @@
 
     .brand-title {
       font-family: var(--font-serif);
-      font-size: 1.45rem;
+      font-size: 1.35rem;
       color: #e2ede5;
       display: flex;
       align-items: center;
@@ -60,21 +59,21 @@
     .nav-actions {
       display: flex;
       align-items: center;
-      gap: 1rem;
+      gap: 0.75rem;
     }
 
     .btn {
       font-family: var(--font-sans);
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       font-weight: 600;
-      padding: 0.5rem 1rem;
-      border-radius: 8px;
+      padding: 0.45rem 0.9rem;
+      border-radius: 6px;
       cursor: pointer;
       text-decoration: none;
       transition: all 0.2s ease;
       display: inline-flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.4rem;
     }
 
     .btn-outline {
@@ -88,24 +87,25 @@
       color: #fff;
     }
 
-    /* Timeline Controller */
     .timeline-bar {
-      background: #0d1e13;
-      padding: 1rem 2rem;
+      background: #0b1c11;
+      padding: 0.75rem 2rem;
       border-bottom: 1px solid var(--border-panel);
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 1.5rem;
+      flex-wrap: wrap;
+      gap: 1rem;
     }
 
     .year-btn-group {
       display: flex;
-      background: #142a1c;
-      padding: 4px;
-      border-radius: 10px;
+      background: #14281b;
+      padding: 3px;
+      border-radius: 8px;
       border: 1px solid var(--border-panel);
-      gap: 4px;
+      gap: 2px;
+      flex-wrap: wrap;
     }
 
     .year-btn {
@@ -113,9 +113,9 @@
       border: none;
       color: var(--text-muted);
       font-family: var(--font-mono);
-      font-size: 0.85rem;
-      padding: 6px 14px;
-      border-radius: 6px;
+      font-size: 0.8rem;
+      padding: 5px 11px;
+      border-radius: 5px;
       cursor: pointer;
       transition: all 0.2s;
     }
@@ -125,78 +125,94 @@
       background: var(--accent-green);
       color: #ffffff;
       font-weight: 600;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
     }
 
     .main-canvas {
       flex: 1;
       display: grid;
-      grid-template-columns: 360px 1fr;
+      grid-template-columns: 390px 1fr;
       padding: 1.5rem;
       gap: 1.5rem;
-      max-width: 1600px;
+      max-width: 1700px;
       margin: 0 auto;
       width: 100%;
     }
 
-    /* Diagnostic Sidebar */
     .diagnostic-panel {
       background: var(--bg-panel);
       border: 1px solid var(--border-panel);
       border-radius: 12px;
-      padding: 1.5rem;
+      padding: 1.25rem;
       display: flex;
       flex-direction: column;
-      gap: 1.25rem;
+      gap: 1rem;
     }
 
     .stat-badge-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 0.75rem;
+      gap: 0.6rem;
     }
 
     .stat-box {
-      background: #172d1f;
+      background: #15291c;
       border: 1px solid var(--border-panel);
-      padding: 0.75rem;
+      padding: 0.65rem 0.8rem;
       border-radius: 8px;
     }
     .stat-box .label {
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       color: var(--text-muted);
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
     .stat-box .val {
       font-family: var(--font-mono);
-      font-size: 1.35rem;
+      font-size: 1.2rem;
       font-weight: 700;
       color: #fff;
+      margin-top: 2px;
+    }
+
+    .dominant-list {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
       margin-top: 4px;
+    }
+    .dominant-item {
+      font-size: 0.76rem;
+      color: var(--bright-green);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .dominant-item::before {
+      content: "•";
+      color: var(--accent-green);
     }
 
     .status-tag {
       display: inline-block;
-      font-size: 0.72rem;
+      font-size: 0.68rem;
       font-weight: 700;
-      padding: 3px 8px;
+      padding: 2px 6px;
       border-radius: 4px;
       text-transform: uppercase;
       margin-right: 4px;
     }
-    .tag-hyper { background: rgba(74, 222, 128, 0.2); color: #4ade80; border: 1px solid #4ade80; }
-    .tag-atrophy { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid #f87171; }
+    .tag-hyper { background: rgba(74, 222, 128, 0.15); color: #4ade80; border: 1px solid #4ade80; }
+    .tag-atrophy { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid #f87171; }
 
     .muscle-meter-list {
       display: flex;
       flex-direction: column;
-      gap: 0.65rem;
-      margin-top: 0.5rem;
+      gap: 0.6rem;
+      margin-top: 0.4rem;
     }
 
     .meter-item {
-      font-size: 0.8rem;
+      font-size: 0.75rem;
     }
     .meter-header {
       display: flex;
@@ -204,22 +220,32 @@
       margin-bottom: 3px;
       color: #d1ded5;
     }
-    .progress-track {
-      background: #1c3625;
-      height: 6px;
-      border-radius: 3px;
-      overflow: hidden;
+    .progress-track-wrapper {
+      position: relative;
+      background: #193121;
+      height: 10px;
+      border-radius: 5px;
+      overflow: visible;
     }
     .progress-fill {
       height: 100%;
       background: var(--light-green);
-      border-radius: 3px;
+      border-radius: 5px;
       transition: width 0.4s ease;
     }
+    .target-marker-line {
+      position: absolute;
+      top: -3px;
+      bottom: -3px;
+      width: 3px;
+      background: #061a0c;
+      border: 1px solid #4ade80;
+      border-radius: 2px;
+      z-index: 5;
+    }
 
-    /* Visual Infographic Area */
     .infographic-wrapper {
-      background: #0d1e13;
+      background: #0b1a10;
       border: 1px solid var(--border-panel);
       border-radius: 12px;
       position: relative;
@@ -227,57 +253,71 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 2rem;
+      padding: 1.5rem;
       overflow: hidden;
     }
 
     svg.infographic-svg {
       width: 100%;
-      max-width: 900px;
+      max-width: 920px;
       height: auto;
-      filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5));
+      filter: drop-shadow(0 8px 16px rgba(0,0,0,0.5));
     }
 
-    .sector-arc {
-      transition: all 0.3s ease;
+    .clickable-node {
       cursor: pointer;
+      transition: all 0.25s ease;
     }
-    .sector-arc:hover {
-      filter: brightness(1.25);
+    .clickable-node:hover {
+      filter: brightness(1.3) drop-shadow(0 0 6px rgba(74, 222, 128, 0.6));
+    }
+    .clickable-node.node-active {
+      stroke: #4ade80 !important;
+      stroke-width: 2.5px !important;
+      filter: brightness(1.35);
     }
 
     .reading-roster-shelf {
-      margin-top: 1.5rem;
+      margin-top: 1.25rem;
       width: 100%;
-      background: rgba(17, 34, 23, 0.7);
+      background: rgba(16, 32, 22, 0.85);
       border: 1px solid var(--border-panel);
       border-radius: 10px;
       padding: 1rem 1.25rem;
     }
+    .roster-header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.6rem;
+    }
     .roster-title {
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       font-weight: 700;
       color: var(--light-green);
       text-transform: uppercase;
       letter-spacing: 0.05em;
-      margin-bottom: 0.6rem;
     }
     .books-pill-container {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.5rem;
+      gap: 0.45rem;
+      max-height: 220px;
+      overflow-y: auto;
     }
     .book-pill {
-      background: #162c1e;
-      border: 1px solid #2d5539;
+      background: #14281b;
+      border: 1px solid #284e34;
       font-size: 0.75rem;
-      padding: 4px 10px;
+      padding: 5px 10px;
       border-radius: 6px;
       color: #e2ede5;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
     }
     .book-pill span.author {
       color: var(--text-muted);
-      margin-left: 4px;
     }
   </style>
 </head>
@@ -289,22 +329,24 @@
       <span>Annual Cognitive Reading Map & Infographic</span>
     </div>
     <div class="nav-actions">
-      <a href="annual_tracker.html" class="btn btn-outline">📊 Open Multi-Year Tracker</a>
+      <button class="btn btn-outline" onclick="triggerMapUpload()">📤 Upload CSV (Any Year)</button>
+      <input type="file" id="mapCsvInput" accept=".csv" style="display:none" onchange="handleMapCsvUpload(event)">
+      <a href="annual_tracker.html" class="btn btn-outline">📊 Multi-Year Tracker</a>
     </div>
   </header>
 
   <div class="timeline-bar">
-    <span style="font-size: 0.85rem; font-weight: 600; color: var(--light-green);">SELECT YEAR:</span>
+    <span style="font-size: 0.8rem; font-weight: 600; color: var(--light-green);">SELECT YEAR:</span>
     <div class="year-btn-group" id="yearSelector">
-      <button class="year-btn" onclick="loadYear(2019)">2019</button>
-      <button class="year-btn" onclick="loadYear(2020)">2020</button>
-      <button class="year-btn" onclick="loadYear(2021)">2021</button>
-      <button class="year-btn" onclick="loadYear(2022)">2022</button>
-      <button class="year-btn" onclick="loadYear(2023)">2023</button>
-      <button class="year-btn" onclick="loadYear(2024)">2024</button>
-      <button class="year-btn" onclick="loadYear(2025)">2025</button>
-      <button class="year-btn active" onclick="loadYear(2026)">2026</button>
-      <button class="year-btn" style="border-left: 1px solid var(--border-panel); color: var(--bright-green);" onclick="loadYear(2027)">2027 (Plan)</button>
+      <button class="year-btn" onclick="loadYear(2019)">2019 (42)</button>
+      <button class="year-btn" onclick="loadYear(2020)">2020 (60)</button>
+      <button class="year-btn" onclick="loadYear(2021)">2021 (57)</button>
+      <button class="year-btn" onclick="loadYear(2022)">2022 (57)</button>
+      <button class="year-btn" onclick="loadYear(2023)">2023 (52)</button>
+      <button class="year-btn" onclick="loadYear(2024)">2024 (53)</button>
+      <button class="year-btn" onclick="loadYear(2025)">2025 (67)</button>
+      <button class="year-btn active" onclick="loadYear(2026)">2026 (51)</button>
+      <button class="year-btn" style="border-left: 1px solid var(--border-panel); color: var(--bright-green);" onclick="loadYear(2027)">2027 (60 Plan)</button>
     </div>
   </div>
 
@@ -312,352 +354,375 @@
     <!-- Left Diagnostic Panel -->
     <aside class="diagnostic-panel">
       <div>
-        <h2 id="diagYearTitle" style="font-family: var(--font-serif); font-size: 1.6rem; color: #fff;">2026 Reading Map</h2>
-        <p id="diagYearSubtitle" style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">Longitudinal Cognitive Muscle Analysis</p>
+        <h2 id="diagYearTitle" style="font-family: var(--font-serif); font-size: 1.45rem; color: #fff;">2026 Reading Map</h2>
+        <p id="diagYearSubtitle" style="font-size: 0.75rem; color: var(--text-muted); margin-top: 2px;">Cognitive Anatomy & Topic Load Distribution</p>
       </div>
 
       <div class="stat-badge-grid">
         <div class="stat-box">
-          <div class="label">Total Books</div>
+          <div class="label">Completed Books</div>
           <div class="val" id="diagTotalBooks">51</div>
         </div>
         <div class="stat-box">
           <div class="label">Total Pages</div>
-          <div class="val" id="diagTotalPages">19,553</div>
+          <div class="val" id="diagTotalPages">19,836</div>
         </div>
         <div class="stat-box">
           <div class="label">Daily Velocity</div>
-          <div class="val" id="diagDailyPace">53.6 <span style="font-size:0.75rem; font-weight:400;">p/d</span></div>
+          <div class="val" id="diagDailyPace">54.3 <span style="font-size:0.75rem; font-weight:400;">p/d</span></div>
         </div>
         <div class="stat-box">
-          <div class="label">Dominant State</div>
-          <div class="val" id="diagDominance" style="font-size: 1rem; color: var(--bright-green); padding-top:4px;">Macro / Power</div>
+          <div class="label">Three Dominant States</div>
+          <div class="dominant-list" id="diagDominantList"></div>
         </div>
       </div>
 
       <div>
-        <div class="label" style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 6px;">COGNITIVE HYPERTROPHY / ATROPHY</div>
-        <div style="margin-bottom: 4px;"><span class="status-tag tag-hyper">Hypertrophy</span> <span id="diagHyperText" style="font-size: 0.8rem;">Back & Core, Chest & Delts</span></div>
-        <div><span class="status-tag tag-atrophy">Atrophy</span> <span id="diagAtrophyText" style="font-size: 0.8rem;">Hard Compound Pulls, Mobility</span></div>
+        <div class="label" style="font-size: 0.7rem; color: var(--text-muted); margin-bottom: 4px;">TOPICAL HYPERTROPHY & ATROPHY</div>
+        <div style="margin-bottom: 4px;"><span class="status-tag tag-hyper">Hypertrophy</span> <span id="diagHyperTopics" style="font-size: 0.78rem;">Sovereign Debt Cycles, Economic Warfare</span></div>
+        <div><span class="status-tag tag-atrophy">Atrophy</span> <span id="diagAtrophyTopics" style="font-size: 0.78rem;">Quantum Epistemology, Formal Logic</span></div>
       </div>
 
       <div>
-        <div class="label" style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 6px;">MUSCLE VOLUME DISTRIBUTION</div>
+        <div class="meter-header" style="margin-bottom: 4px;">
+          <span class="label" style="font-size: 0.7rem; color: var(--text-muted);">VOLUME VS ADVISED DISTRIBUTION</span>
+          <span style="font-size: 0.68rem; color: var(--bright-green); font-family: var(--font-mono);">Dark Line = Benchmark</span>
+        </div>
         <div class="muscle-meter-list" id="muscleMeters"></div>
       </div>
 
-      <div style="margin-top: auto; padding-top: 1rem; border-top: 1px solid var(--border-panel);">
-        <div class="label" style="font-size: 0.75rem; color: var(--light-green); margin-bottom: 4px;">PRESCRIPTIVE DIAGNOSIS</div>
-        <p id="diagPrescription" style="font-size: 0.78rem; line-height: 1.45; color: #d5e2d8;"></p>
+      <div style="margin-top: auto; padding-top: 0.75rem; border-top: 1px solid var(--border-panel);">
+        <div class="label" style="font-size: 0.72rem; color: var(--light-green); margin-bottom: 3px;">PRESCRIPTIVE DIAGNOSIS (3-SENTENCE ANALYSIS)</div>
+        <p id="diagPrescription" style="font-size: 0.76rem; line-height: 1.45; color: #d5e2d8;"></p>
       </div>
     </aside>
 
-    <!-- Visual Infographic Graphic View -->
+    <!-- Visual Infographic Area -->
     <section class="infographic-wrapper">
-      <svg class="infographic-svg" viewBox="0 0 960 700" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <radialGradient id="hubGlow" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stop-color="#4ade80" stop-opacity="0.15"/>
-            <stop offset="100%" stop-color="#09150e" stop-opacity="0"/>
-          </radialGradient>
-          <filter id="glowFilter" x="-20%" y="-20%" width="140%" height="140%">
-            <feGaussianBlur stdDeviation="6" result="blur" />
-            <feComposite in="SourceGraphic" in2="blur" operator="over" />
-          </filter>
-        </defs>
+      <svg class="infographic-svg" viewBox="0 0 960 690" xmlns="http://www.w3.org/2000/svg">
+        <!-- UPPER WHEEL -->
+        <!-- Biology & Chemistry Sector -->
+        <path id="nodeBio" class="clickable-node" onclick="filterByTopic('Biology & Chemistry')" d="M 480 240 L 330 140 A 180 180 0 0 1 480 60 Z" fill="#2d5539" stroke="#529468" stroke-width="2"/>
+        <text x="410" y="130" fill="#f1f5f2" font-size="12" font-weight="600" text-anchor="middle" pointer-events="none">Bio & Chem</text>
 
-        <!-- Background glow -->
-        <circle cx="480" cy="240" r="220" fill="url(#hubGlow)" />
-        <circle cx="480" cy="530" r="180" fill="url(#hubGlow)" />
+        <!-- Physics Sector -->
+        <path id="nodePhysics" class="clickable-node" onclick="filterByTopic('Physics')" d="M 480 240 L 305 240 A 180 180 0 0 1 330 140 Z" fill="#254a32" stroke="#529468" stroke-width="2"/>
+        <text x="350" y="200" fill="#f1f5f2" font-size="12" font-weight="600" text-anchor="middle" pointer-events="none">Physics</text>
 
-        <!-- UPPER WHEEL (Philosophy, Science, Religion) -->
-        <!-- Sector: Science / Biology & Chemistry -->
-        <path id="sectorScienceBio" class="sector-arc" d="M 480 240 L 330 140 A 180 180 0 0 1 480 60 Z" fill="#2d5539" stroke="#529468" stroke-width="2"/>
-        <text x="410" y="130" fill="#f1f5f2" font-size="12" font-weight="600" text-anchor="middle">Bio & Chem</text>
+        <!-- Mathematics Anchor -->
+        <circle id="nodeMath" class="clickable-node" onclick="filterByTopic('Mathematics')" cx="290" cy="295" r="30" fill="#1b3b26" stroke="#4ade80" stroke-width="2"/>
+        <text x="290" y="291" fill="#88b088" font-size="11" text-anchor="middle" font-family="'JetBrains Mono', monospace" pointer-events="none">± × ÷</text>
+        <text x="290" y="307" fill="#fff" font-size="9" font-weight="700" text-anchor="middle" pointer-events="none">Math</text>
 
-        <!-- Sector: Science / Physics -->
-        <path id="sectorSciencePhysics" class="sector-arc" d="M 480 240 L 305 240 A 180 180 0 0 1 330 140 Z" fill="#254a32" stroke="#529468" stroke-width="2"/>
-        <text x="350" y="200" fill="#f1f5f2" font-size="12" font-weight="600" text-anchor="middle">Physics</text>
+        <!-- Philosophy Sector -->
+        <path id="nodePhilosophy" class="clickable-node" onclick="filterByTopic('Philosophy')" d="M 480 240 L 480 60 A 180 180 0 0 1 650 200 Z" fill="#326040" stroke="#529468" stroke-width="2"/>
+        <text x="550" y="150" fill="#f1f5f2" font-size="13" font-weight="600" text-anchor="middle" pointer-events="none">Philosophy</text>
 
-        <!-- Sector: Mathematics circle anchor -->
-        <circle id="nodeMath" cx="290" cy="300" r="32" fill="#1b3b26" stroke="#4ade80" stroke-width="2"/>
-        <text x="290" y="296" fill="#88b088" font-size="11" text-anchor="middle" font-family="'JetBrains Mono', monospace">± × ÷</text>
-        <text x="290" y="312" fill="#fff" font-size="10" font-weight="700" text-anchor="middle">Math</text>
-
-        <!-- Sector: Philosophy -->
-        <path id="sectorPhilosophy" class="sector-arc" d="M 480 240 L 480 60 A 180 180 0 0 1 650 200 Z" fill="#326040" stroke="#529468" stroke-width="2"/>
-        <text x="550" y="150" fill="#f1f5f2" font-size="13" font-weight="600" text-anchor="middle">Philosophy</text>
-
-        <!-- Inner Hub: Neuroscience & Consciousness / Religion -->
+        <!-- Inner Hub: Neuroscience & Religion -->
         <circle cx="480" cy="240" r="68" fill="#112217" stroke="#4a7c59" stroke-width="2"/>
-        <path d="M 412 240 A 68 68 0 0 0 548 240 Z" fill="#162e1f"/>
-        <text x="480" y="225" fill="#c8e6c9" font-size="11" font-weight="600" text-anchor="middle">Neuroscience & Mind</text>
+        <path class="clickable-node" onclick="filterByTopic('Neuroscience & Mind')" d="M 412 240 A 68 68 0 0 0 548 240 Z" fill="#162e1f"/>
+        <text x="480" y="225" fill="#c8e6c9" font-size="11" font-weight="600" text-anchor="middle" pointer-events="none">Neuroscience & Mind</text>
         <line x1="412" y1="240" x2="548" y2="240" stroke="#2d5539" stroke-width="1.5"/>
-        <text x="480" y="265" fill="#9bb3a2" font-size="11" font-weight="600" text-anchor="middle">Religion & Myth</text>
+        <text class="clickable-node" onclick="filterByTopic('Religion & Myth')" x="480" y="265" fill="#9bb3a2" font-size="11" font-weight="600" text-anchor="middle">Religion & Myth</text>
 
-        <!-- Upper Right Stack: Anthrop / Psych / Sociology -->
+        <!-- Right Stack: Anthropology, Psychology, Sociology -->
         <g transform="translate(680, 80)">
           <line x1="-30" y1="60" x2="0" y2="20" stroke="#4a7c59" stroke-width="1.5"/>
           <line x1="-30" y1="60" x2="0" y2="60" stroke="#4a7c59" stroke-width="1.5"/>
           <line x1="-30" y1="60" x2="0" y2="100" stroke="#4a7c59" stroke-width="1.5"/>
           
-          <rect x="0" y="5" width="130" height="28" rx="6" fill="#172d1f" stroke="#3b694b"/>
-          <text x="65" y="23" fill="#e2ede5" font-size="11" text-anchor="middle">Anthropology</text>
+          <rect id="nodeAnthro" class="clickable-node" onclick="filterByTopic('Anthropology')" x="0" y="5" width="130" height="28" rx="6" fill="#172d1f" stroke="#3b694b"/>
+          <text x="65" y="23" fill="#e2ede5" font-size="11" text-anchor="middle" pointer-events="none">Anthropology</text>
           
-          <rect x="0" y="45" width="130" height="28" rx="6" fill="#172d1f" stroke="#3b694b"/>
-          <text x="65" y="63" fill="#e2ede5" font-size="11" text-anchor="middle">Psychology</text>
+          <rect id="nodePsych" class="clickable-node" onclick="filterByTopic('Psychology')" x="0" y="45" width="130" height="28" rx="6" fill="#172d1f" stroke="#3b694b"/>
+          <text x="65" y="63" fill="#e2ede5" font-size="11" text-anchor="middle" pointer-events="none">Psychology</text>
           
-          <rect x="0" y="85" width="130" height="28" rx="6" fill="#172d1f" stroke="#3b694b"/>
-          <text x="65" y="103" fill="#e2ede5" font-size="11" text-anchor="middle">Sociology</text>
+          <rect id="nodeSocio" class="clickable-node" onclick="filterByTopic('Sociology')" x="0" y="85" width="130" height="28" rx="6" fill="#172d1f" stroke="#3b694b"/>
+          <text x="65" y="103" fill="#e2ede5" font-size="11" text-anchor="middle" pointer-events="none">Sociology</text>
         </g>
 
-        <!-- CENTRAL HORIZONTAL TIMELINE AXIS (Posterior Chain & History) -->
-        <g transform="translate(0, 380)">
+        <!-- TIMELINE AXIS (Posterior Chain & History) -->
+        <g transform="translate(0, 375)">
           <line x1="60" y1="0" x2="890" y2="0" stroke="#3b694b" stroke-width="3"/>
-          <!-- Diamond Markers -->
-          <polygon points="120,-8 128,0 120,8 112,0" fill="#4ade80"/>
+          <polygon class="clickable-node" onclick="filterByTopic('Ancient & Classical History')" points="120,-8 128,0 120,8 112,0" fill="#4ade80"/>
           <text x="120" y="24" fill="#9bb3a2" font-size="10" text-anchor="middle">Prehistoric</text>
 
-          <polygon points="250,-8 258,0 250,8 242,0" fill="#4ade80"/>
-          <text x="250" y="24" fill="#9bb3a2" font-size="10" text-anchor="middle">Ancient World</text>
+          <polygon class="clickable-node" onclick="filterByTopic('Ancient & Classical History')" points="250,-8 258,0 250,8 242,0" fill="#4ade80"/>
+          <text x="250" y="24" fill="#9bb3a2" font-size="10" text-anchor="middle">Ancient</text>
 
-          <polygon points="380,-8 388,0 380,8 372,0" fill="#4ade80"/>
-          <text x="380" y="24" fill="#9bb3a2" font-size="10" text-anchor="middle">Classical Era</text>
+          <polygon class="clickable-node" onclick="filterByTopic('Ancient & Classical History')" points="380,-8 388,0 380,8 372,0" fill="#4ade80"/>
+          <text x="380" y="24" fill="#9bb3a2" font-size="10" text-anchor="middle">Classical</text>
 
-          <polygon points="510,-8 518,0 510,8 502,0" fill="#4ade80"/>
-          <text x="510" y="24" fill="#9bb3a2" font-size="10" text-anchor="middle">Medieval Era</text>
+          <polygon class="clickable-node" onclick="filterByTopic('Medieval & World History')" points="510,-8 518,0 510,8 502,0" fill="#4ade80"/>
+          <text x="510" y="24" fill="#9bb3a2" font-size="10" text-anchor="middle">Medieval</text>
 
-          <polygon points="640,-8 648,0 640,8 632,0" fill="#4ade80"/>
+          <polygon class="clickable-node" onclick="filterByTopic('Early Modern History')" points="640,-8 648,0 640,8 632,0" fill="#4ade80"/>
           <text x="640" y="24" fill="#9bb3a2" font-size="10" text-anchor="middle">Early Modern</text>
 
-          <polygon points="760,-8 768,0 760,8 752,0" fill="#4ade80"/>
+          <polygon class="clickable-node" onclick="filterByTopic('Empires & Trade Routes')" points="760,-8 768,0 760,8 752,0" fill="#4ade80"/>
           <text x="760" y="24" fill="#9bb3a2" font-size="10" text-anchor="middle">Empires</text>
 
-          <polygon points="870,-8 878,0 870,8 862,0" fill="#4ade80"/>
-          <text x="870" y="24" fill="#4ade80" font-weight="700" font-size="10" text-anchor="middle">Modern World</text>
+          <polygon class="clickable-node" onclick="filterByTopic('Modern World & Geopolitics')" points="870,-8 878,0 870,8 862,0" fill="#4ade80"/>
+          <text x="870" y="24" fill="#4ade80" font-weight="700" font-size="10" text-anchor="middle">Modern</text>
         </g>
 
-        <!-- LOWER WHEEL (Politics, Technology, Economics) -->
-        <!-- Technology (Directly beneath Science) -->
-        <path id="sectorTech" class="sector-arc" d="M 480 500 L 420 630 A 150 150 0 0 0 540 630 Z" fill="#2d5539" stroke="#529468" stroke-width="2"/>
-        <text x="480" y="580" fill="#f1f5f2" font-size="12" font-weight="600" text-anchor="middle">Technology</text>
+        <!-- LOWER WHEEL -->
+        <!-- Technology -->
+        <path id="nodeTech" class="clickable-node" onclick="filterByTopic('Technology')" d="M 480 495 L 420 625 A 150 150 0 0 0 540 625 Z" fill="#2d5539" stroke="#529468" stroke-width="2"/>
+        <text x="480" y="575" fill="#f1f5f2" font-size="12" font-weight="600" text-anchor="middle" pointer-events="none">Technology</text>
 
-        <!-- AI Node (Connected directly below Technology) -->
-        <line x1="480" y1="630" x2="480" y2="665" stroke="#4ade80" stroke-width="2" stroke-dasharray="3 3"/>
-        <rect id="nodeAI" x="445" y="660" width="70" height="26" rx="6" fill="#142c1d" stroke="#4ade80" stroke-width="1.5"/>
-        <text x="480" y="677" fill="#4ade80" font-size="11" font-weight="700" text-anchor="middle">⚡ AI Core</text>
+        <!-- AI Core Node -->
+        <line x1="480" y1="625" x2="480" y2="655" stroke="#4ade80" stroke-width="2" stroke-dasharray="3 3"/>
+        <rect id="nodeAI" class="clickable-node" onclick="filterByTopic('AI Core')" x="445" y="650" width="70" height="26" rx="6" fill="#142c1d" stroke="#4ade80" stroke-width="1.5"/>
+        <text x="480" y="667" fill="#4ade80" font-size="11" font-weight="700" text-anchor="middle" pointer-events="none">⚡ AI Core</text>
 
-        <!-- Politics (Left side of lower wheel) -->
-        <path id="sectorPolitics" class="sector-arc" d="M 480 500 L 330 550 A 150 150 0 0 0 420 630 Z" fill="#254a32" stroke="#529468" stroke-width="2"/>
-        <text x="390" y="560" fill="#f1f5f2" font-size="12" font-weight="600" text-anchor="middle">Politics</text>
+        <!-- Politics -->
+        <path id="nodePolitics" class="clickable-node" onclick="filterByTopic('Politics')" d="M 480 495 L 330 545 A 150 150 0 0 0 420 625 Z" fill="#254a32" stroke="#529468" stroke-width="2"/>
+        <text x="390" y="555" fill="#f1f5f2" font-size="12" font-weight="600" text-anchor="middle" pointer-events="none">Politics</text>
 
-        <!-- Economics (Right side of lower wheel) -->
-        <path id="sectorEcon" class="sector-arc" d="M 480 500 L 540 630 A 150 150 0 0 0 630 550 Z" fill="#326040" stroke="#529468" stroke-width="2"/>
-        <text x="570" y="560" fill="#f1f5f2" font-size="12" font-weight="600" text-anchor="middle">Economics</text>
+        <!-- Economics -->
+        <path id="nodeEcon" class="clickable-node" onclick="filterByTopic('Economics')" d="M 480 495 L 540 625 A 150 150 0 0 0 630 545 Z" fill="#326040" stroke="#529468" stroke-width="2"/>
+        <text x="570" y="555" fill="#f1f5f2" font-size="12" font-weight="600" text-anchor="middle" pointer-events="none">Economics</text>
 
-        <!-- Economics Branches -->
-        <line x1="610" y1="570" x2="680" y2="540" stroke="#4a7c59" stroke-width="1.5"/>
-        <rect x="680" y="525" width="140" height="26" rx="5" fill="#172d1f" stroke="#3b694b"/>
-        <text x="750" y="542" fill="#e2ede5" font-size="10" font-weight="600" text-anchor="middle">Sustainable Econ</text>
+        <!-- Sustainable Economics Branch -->
+        <line x1="610" y1="565" x2="680" y2="535" stroke="#4a7c59" stroke-width="1.5"/>
+        <rect id="nodeSustEcon" class="clickable-node" onclick="filterByTopic('Sustainable Economics')" x="680" y="520" width="140" height="26" rx="5" fill="#172d1f" stroke="#3b694b"/>
+        <text x="750" y="537" fill="#e2ede5" font-size="10" font-weight="600" text-anchor="middle" pointer-events="none">Sustainable Econ</text>
 
-        <line x1="610" y1="570" x2="680" y2="590" stroke="#4a7c59" stroke-width="1.5"/>
-        <rect x="680" y="578" width="90" height="24" rx="5" fill="#172d1f" stroke="#3b694b"/>
-        <text x="725" y="594" fill="#e2ede5" font-size="10" text-anchor="middle">Finance</text>
+        <!-- Finance Branch -->
+        <line x1="610" y1="565" x2="680" y2="585" stroke="#4a7c59" stroke-width="1.5"/>
+        <rect id="nodeFinance" class="clickable-node" onclick="filterByTopic('Finance')" x="680" y="573" width="90" height="24" rx="5" fill="#172d1f" stroke="#3b694b"/>
+        <text x="725" y="589" fill="#e2ede5" font-size="10" text-anchor="middle" pointer-events="none">Finance</text>
       </svg>
 
-      <!-- Year Shelf / Featured Books -->
+      <!-- Interactive Roster Shelf (Updates on click) -->
       <div class="reading-roster-shelf">
-        <div class="roster-title" id="rosterTitle">2026 Core Syllabus Benchmark Titles</div>
+        <div class="roster-header-bar">
+          <div class="roster-title" id="rosterTitle">2026 Logged Titles (Click Any Map Node to Filter)</div>
+          <button class="btn btn-outline" style="font-size: 0.7rem; padding: 2px 8px;" onclick="resetFilter()">Show All Titles</button>
+        </div>
         <div class="books-pill-container" id="booksPillContainer"></div>
       </div>
     </section>
   </main>
 
   <script>
+    // Advised distribution benchmarks across the 7 Cognitive Muscle Groups
+    const recommendedDistribution = {
+      "Posterior Chain & Legs": 18.0,
+      "Back & Core": 16.0,
+      "Chest & Delts": 14.0,
+      "Arms": 15.0,
+      "Hard Compound Pulls": 12.0,
+      "Cardio & Agility": 13.0,
+      "Mobility & Flexibility": 12.0
+    };
+
+    // Longitudinal Dataset: Verified book counts, total pages, 3 dominant states, and topic-specific diagnostics
     const annualDataset = {
       2019: {
-        books: 18, pages: 6500, pace: 17.8,
-        dominance: "Foundational History",
-        hyper: "Posterior Chain & Legs (36.9%)",
-        atrophy: "Hard Compound Pulls (0.0%), AI & Tech (5.4%)",
-        prescription: "Introduce economic systems and general physical science to expand processing volume beyond narrative history.",
+        books: 42, pages: 19484, pace: 53.4,
+        dominants: ["Classical Antiquity", "Renaissance Biography", "Foundational Statecraft"],
+        hyper: "Baroque Sculpture, High Renaissance Art, Roman Imperial Architecture",
+        atrophy: "Quantum Mechanics Foundations, Algorithmic Decision Theory",
+        prescription: "The 2019 cycle successfully established an expansive historical narrative spine anchored in biography and Roman civilization. However, formal mathematical logic and frontier computing systems were entirely absent from the syllabus. The directive for 2020 was to introduce macroeconomic history and energy networks to broaden processing breadth beyond classical arts.",
         breakdown: [
-          { name: "Posterior Chain & Legs", pct: 36.9, pgs: 2400 },
-          { name: "Mobility & Flexibility", pct: 20.0, pgs: 1300 },
-          { name: "Back & Core", pct: 16.9, pgs: 1100 },
-          { name: "Chest & Delts", pct: 10.8, pgs: 700 },
-          { name: "Arms", pct: 10.0, pgs: 650 },
-          { name: "Cardio & Agility", pct: 5.4, pgs: 350 },
+          { name: "Posterior Chain & Legs", pct: 35.7, pgs: 6950 },
+          { name: "Mobility & Flexibility", pct: 23.8, pgs: 4640 },
+          { name: "Back & Core", pct: 16.7, pgs: 3250 },
+          { name: "Chest & Delts", pct: 9.5, pgs: 1850 },
+          { name: "Arms", pct: 9.5, pgs: 1850 },
+          { name: "Cardio & Agility", pct: 4.8, pgs: 944 },
           { name: "Hard Compound Pulls", pct: 0.0, pgs: 0 }
         ],
         roster: [
-          { t: "Bernini: His Life and His Rome", a: "Franco Mormando" },
-          { t: "Leonardo Da Vinci", a: "Walter Isaacson" },
-          { t: "The Roman Republic", a: "Ancient History Classical Series" }
+          { t: "Bernini: His Life and His Rome", a: "Franco Mormando", cat: "Art & Biography", node: "Mobility & Flexibility" },
+          { t: "Leonardo Da Vinci", a: "Walter Isaacson", cat: "Art & Biography", node: "Mobility & Flexibility" },
+          { t: "Caravaggio: A Life Sacred and Profane", a: "Andrew Graham-Dixon", cat: "Art & Biography", node: "Mobility & Flexibility" },
+          { t: "The Roman Republic", a: "Ancient Classical Series", cat: "Classical History", node: "Ancient & Classical History" },
+          { t: "The Fall of the Roman Empire", a: "Peter Heather", cat: "Classical History", node: "Ancient & Classical History" }
         ]
       },
       2020: {
-        books: 24, pages: 8900, pace: 24.4,
-        dominance: "History & Macro-Finance",
-        hyper: "Posterior Chain (32.6%), Chest & Delts (23.6%)",
-        atrophy: "Cardio & Agility (3.9%), Arms (8.4%)",
-        prescription: "Target mind-brain architecture (Arms) and foundational philosophy of mind to balance macroeconomic conditioning.",
+        books: 60, pages: 22669, pace: 62.1,
+        dominants: ["Financial Crises", "Macroeconomic Debt", "Medieval Civilizations"],
+        hyper: "Central Banking Panic, Monetary Infrastructure, European Feudal Order",
+        atrophy: "Machine Learning Architectures, Cognitive Neuroscience",
+        prescription: "Reading volume expanded to 60 books in 2020, solidifying institutional economic history and international banking crises. Conversely, modern computing paradigms and experimental philosophy of mind were noticeably marginalized. The diagnostic for 2021 recommended pivoting directly into cognitive neuroscience and brain plasticity.",
         breakdown: [
-          { name: "Posterior Chain & Legs", pct: 32.6, pgs: 2900 },
-          { name: "Chest & Delts", pct: 23.6, pgs: 2100 },
-          { name: "Back & Core", pct: 13.5, pgs: 1200 },
-          { name: "Mobility & Flexibility", pct: 13.5, pgs: 1200 },
-          { name: "Arms", pct: 8.4, pgs: 750 },
-          { name: "Hard Compound Pulls", pct: 4.5, pgs: 400 },
-          { name: "Cardio & Agility", pct: 3.9, pgs: 350 }
+          { name: "Posterior Chain & Legs", pct: 31.7, pgs: 7180 },
+          { name: "Chest & Delts", pct: 25.0, pgs: 5667 },
+          { name: "Back & Core", pct: 15.0, pgs: 3400 },
+          { name: "Mobility & Flexibility", pct: 13.3, pgs: 3015 },
+          { name: "Arms", pct: 8.3, pgs: 1880 },
+          { name: "Hard Compound Pulls", pct: 3.3, pgs: 750 },
+          { name: "Cardio & Agility", pct: 3.4, pgs: 777 }
         ],
         roster: [
-          { t: "Lords of Finance", a: "Liaquat Ahamed" },
-          { t: "The Ascent of Money", a: "Niall Ferguson" },
-          { t: "Civilization & Capitalism", a: "Fernand Braudel" }
+          { t: "Novacene", a: "James Lovelock", cat: "Ecology & Climate", node: "Sustainable Economics" },
+          { t: "T-Minus AI", a: "Michael Kanaan", cat: "AI & Warfare", node: "AI Core" },
+          { t: "Deep Thinking", a: "Garry Kasparov", cat: "Cognition & Chess", node: "Psychology" },
+          { t: "Lords of Finance", a: "Liaquat Ahamed", cat: "Financial Crises", node: "Finance" },
+          { t: "The Ascent of Money", a: "Niall Ferguson", cat: "Monetary History", node: "Finance" }
         ]
       },
       2021: {
-        books: 30, pages: 11100, pace: 30.4,
-        dominance: "Neurobiology & Mind",
-        hyper: "Arms: Neuroscience & Psychology (27.9%)",
-        atrophy: "Hard Compound Pulls (6.8%), Cardio & Agility (6.3%)",
-        prescription: "Increase structural weight in political theory (Back & Core) and institutional failure modes.",
+        books: 57, pages: 19427, pace: 53.2,
+        dominants: ["Cognitive Neuroscience", "Perception & Brain Plasticity", "Near East History"],
+        hyper: "Neural Models of Mind, Moral Psychology, Silk Road Corridors",
+        atrophy: "Theoretical Physics, Formal Computational Systems",
+        prescription: "The 2021 regimen achieved concentrated analytical depth across mind-brain architecture and behavioral psychology. However, theoretical physics and formal mathematical frameworks remained heavily under-indexed throughout the year. The directive for 2022 was to strengthen institutional political theory and study totalitarian state failure modes.",
         breakdown: [
-          { name: "Arms", pct: 27.9, pgs: 3100 },
-          { name: "Posterior Chain & Legs", pct: 18.9, pgs: 2100 },
-          { name: "Mobility & Flexibility", pct: 15.3, pgs: 1700 },
-          { name: "Back & Core", pct: 14.4, pgs: 1600 },
-          { name: "Chest & Delts", pct: 10.4, pgs: 1150 },
-          { name: "Hard Compound Pulls", pct: 6.8, pgs: 750 },
-          { name: "Cardio & Agility", pct: 6.3, pgs: 700 }
+          { name: "Arms", pct: 28.1, pgs: 5460 },
+          { name: "Posterior Chain & Legs", pct: 19.3, pgs: 3750 },
+          { name: "Mobility & Flexibility", pct: 15.8, pgs: 3070 },
+          { name: "Back & Core", pct: 14.0, pgs: 2720 },
+          { name: "Chest & Delts", pct: 10.5, pgs: 2040 },
+          { name: "Cardio & Agility", pct: 7.0, pgs: 1360 },
+          { name: "Hard Compound Pulls", pct: 5.3, pgs: 1027 }
         ],
         roster: [
-          { t: "The Age of AI and Our Human Future", a: "Kissinger, Schmidt, Huttenlocher" },
-          { t: "The Tell-Tale Brain", a: "V.S. Ramachandran" },
-          { t: "Behave", a: "Robert Sapolsky" }
+          { t: "The Age of AI and Our Human Future", a: "Kissinger, Schmidt", cat: "AI & Governance", node: "AI Core" },
+          { t: "Runaway Technology", a: "Joshua A.T. Fairfield", cat: "Tech Law", node: "Technology" },
+          { t: "Weapons of Math Destruction", a: "Cathy O'Neil", cat: "Algorithmic Bias", node: "Mathematics" },
+          { t: "The Righteous Mind", a: "Jonathan Haidt", cat: "Moral Psychology", node: "Psychology" },
+          { t: "A Political History of the World", a: "Jonathan Holslag", cat: "Geopolitics", node: "Politics" }
         ]
       },
       2022: {
-        books: 36, pages: 13200, pace: 36.2,
-        dominance: "Totalitarianism & Power",
-        hyper: "Back & Core (27.3%), Arms (19.7%)",
-        atrophy: "Cardio & Agility (4.9%), Hard Compound Pulls (5.3%)",
-        prescription: "Deepen historical background (Posterior Chain) and political economy while preparing for frontier technology.",
+        books: 57, pages: 20319, pace: 55.7,
+        dominants: ["Totalitarian Ideology", "Propaganda Systems", "Byzantine Statecraft"],
+        hyper: "Totalitarian Coercion, Soviet Institutional Famine, Classical Monarchy",
+        atrophy: "Microchip Infrastructure, Formal Epistemology",
+        prescription: "In 2022, deep focus was maintained on ideological coercion, political philosophy, and historical autocracies. Technical immersion in machine intelligence and structural epistemology was neglected in favor of political histories. The strategic recommendation for 2023 was to consolidate global trade networks while preparing for applied AI paradigms.",
         breakdown: [
-          { name: "Back & Core", pct: 27.3, pgs: 3600 },
-          { name: "Arms", pct: 19.7, pgs: 2600 },
-          { name: "Posterior Chain & Legs", pct: 18.9, pgs: 2500 },
-          { name: "Mobility & Flexibility", pct: 12.5, pgs: 1650 },
-          { name: "Chest & Delts", pct: 11.4, pgs: 1500 },
-          { name: "Hard Compound Pulls", pct: 5.3, pgs: 700 },
-          { name: "Cardio & Agility", pct: 4.9, pgs: 650 }
+          { name: "Back & Core", pct: 28.1, pgs: 5710 },
+          { name: "Arms", pct: 19.3, pgs: 3920 },
+          { name: "Posterior Chain & Legs", pct: 17.5, pgs: 3560 },
+          { name: "Mobility & Flexibility", pct: 12.3, pgs: 2500 },
+          { name: "Chest & Delts", pct: 12.3, pgs: 2500 },
+          { name: "Hard Compound Pulls", pct: 5.3, pgs: 1077 },
+          { name: "Cardio & Agility", pct: 5.2, pgs: 1052 }
         ],
         roster: [
-          { t: "The Origins of Totalitarianism", a: "Hannah Arendt" },
-          { t: "Red Famine", a: "Anne Applebaum" },
-          { t: "The Master and His Emissary", a: "Iain McGilchrist" }
+          { t: "The Singularity is Near", a: "Ray Kurzweil", cat: "Exponential Tech", node: "Technology" },
+          { t: "The Origins of Totalitarianism", a: "Hannah Arendt", cat: "Totalitarianism", node: "Politics" },
+          { t: "Red Famine", a: "Anne Applebaum", cat: "Soviet History", node: "Politics" },
+          { t: "The Master and His Emissary", a: "Iain McGilchrist", cat: "Hemispheric Brain", node: "Neuroscience & Mind" }
         ]
       },
       2023: {
-        books: 42, pages: 15800, pace: 43.3,
-        dominance: "Global Imperial Order",
-        hyper: "Posterior Chain (29.1%), Back & Core (24.7%)",
-        atrophy: "Cardio & Agility (4.1%), Hard Compound Pulls (4.4%)",
-        prescription: "Pivot heavily into frontier AI (Cardio & Agility) and formal analytical systems (Hard Compound Pulls).",
+        books: 52, pages: 19600, pace: 53.7,
+        dominants: ["Global Trade Corridors", "Commodity Markets", "Post-Cold War Order"],
+        hyper: "Eurasian Silk Roads, Energy Infrastructure, Democratic Vulnerabilities",
+        atrophy: "Causal Inference Math, Superintelligence Alignment",
+        prescription: "The 2023 curriculum established a unified perspective on historical trade corridors and global energy supply systems. However, formal mathematical causality and cutting-edge artificial intelligence remained largely unaddressed. The diagnostic mandated a comprehensive pivot in 2024 toward machine learning math and critical minerals.",
         breakdown: [
-          { name: "Posterior Chain & Legs", pct: 29.1, pgs: 4600 },
-          { name: "Back & Core", pct: 24.7, pgs: 3900 },
-          { name: "Chest & Delts", pct: 13.9, pgs: 2200 },
-          { name: "Mobility & Flexibility", pct: 12.3, pgs: 1950 },
-          { name: "Arms", pct: 11.4, pgs: 1800 },
-          { name: "Hard Compound Pulls", pct: 4.4, pgs: 700 },
-          { name: "Cardio & Agility", pct: 4.1, pgs: 650 }
+          { name: "Posterior Chain & Legs", pct: 28.8, pgs: 5645 },
+          { name: "Back & Core", pct: 25.0, pgs: 4900 },
+          { name: "Chest & Delts", pct: 15.4, pgs: 3018 },
+          { name: "Arms", pct: 11.5, pgs: 2254 },
+          { name: "Mobility & Flexibility", pct: 11.5, pgs: 2254 },
+          { name: "Cardio & Agility", pct: 3.9, pgs: 765 },
+          { name: "Hard Compound Pulls", pct: 3.9, pgs: 764 }
         ],
         roster: [
-          { t: "The Silk Roads", a: "Peter Frankopan" },
-          { t: "The Earth Transformed", a: "Peter Frankopan" },
-          { t: "The Crisis of Democratic Capitalism", a: "Martin Wolf" }
+          { t: "The Coming Wave", a: "Mustafa Suleyman", cat: "AI & Biotech", node: "AI Core" },
+          { t: "The Alignment Problem", a: "Brian Christian", cat: "Machine Learning Values", node: "AI Core" },
+          { t: "The Crisis of Democratic Capitalism", a: "Martin Wolf", cat: "Political Economy", node: "Economics" },
+          { t: "Techno Feudalism", a: "Yanis Varoufakis", cat: "Cloud Capital", node: "Economics" },
+          { t: "The Silk Roads", a: "Peter Frankopan", cat: "Global Trade", node: "Empires & Trade Routes" }
         ]
       },
       2024: {
-        books: 48, pages: 18200, pace: 49.9,
-        dominance: "AI Systems & Critical Minerals",
-        hyper: "Cardio & Agility (26.9%), Chest & Delts (17.6%)",
-        atrophy: "Arms (8.2%), Mobility & Flexibility (9.3%)",
-        prescription: "Maintain high technical output in AI while re-engaging institutional political science and world order.",
+        books: 53, pages: 20582, pace: 56.4,
+        dominants: ["Machine Learning Mathematics", "Critical Mineral Supply Chains", "Information Networks"],
+        hyper: "Algorithmic Neural Nets, Rare Earth Mining Geopolitics, Information Hegemony",
+        atrophy: "Human Behavioral Biology, Literary Integration",
+        prescription: "The 2024 reading program engineered a technical pivot, mastering machine learning foundations and critical mineral chokepoints. This high-density workload caused an atrophy in literary accessories and human evolutionary biology. The directive for 2025 was to maintain technical momentum in AI while re-engaging macro-sociology and longevity science.",
         breakdown: [
-          { name: "Cardio & Agility", pct: 26.9, pgs: 4900 },
-          { name: "Chest & Delts", pct: 17.6, pgs: 3200 },
-          { name: "Hard Compound Pulls", pct: 15.4, pgs: 2800 },
-          { name: "Back & Core", pct: 12.1, pgs: 2200 },
-          { name: "Posterior Chain & Legs", pct: 10.4, pgs: 1900 },
-          { name: "Mobility & Flexibility", pct: 9.3, pgs: 1700 },
-          { name: "Arms", pct: 8.2, pgs: 1500 }
+          { name: "Cardio & Agility", pct: 26.4, pgs: 5434 },
+          { name: "Chest & Delts", pct: 18.9, pgs: 3890 },
+          { name: "Hard Compound Pulls", pct: 15.1, pgs: 3108 },
+          { name: "Back & Core", pct: 13.2, pgs: 2717 },
+          { name: "Posterior Chain & Legs", pct: 11.3, pgs: 2326 },
+          { name: "Mobility & Flexibility", pct: 7.6, pgs: 1564 },
+          { name: "Arms", pct: 7.5, pgs: 1543 }
         ],
         roster: [
-          { t: "Why Machines Learn", a: "Anil Ananthaswamy" },
-          { t: "The Atomic Human", a: "Neil D. Lawrence" },
-          { t: "Nexus", a: "Yuval Noah Harari" },
-          { t: "Exact Thinking in Demented Times", a: "Karl Sigmund" },
-          { t: "Material World", a: "Ed Conway" },
-          { t: "Cobalt Red", a: "Siddharth Kara" }
+          { t: "Why Machines Learn", a: "Anil Ananthaswamy", cat: "Machine Learning Math", node: "Mathematics" },
+          { t: "The Atomic Human", a: "Neil D. Lawrence", cat: "AI & Agency", node: "AI Core" },
+          { t: "Human Rights, Robot Wrongs", a: "Susie Alegre", cat: "Digital Ethics", node: "Technology" },
+          { t: "The Handover", a: "David Runciman", cat: "Corporate & State Control", node: "Politics" },
+          { t: "Nexus", a: "Yuval Noah Harari", cat: "Information Networks", node: "Technology" },
+          { t: "Exact Thinking in Demented Times", a: "Karl Sigmund", cat: "Logical Positivism", node: "Philosophy" },
+          { t: "Material World", a: "Ed Conway", cat: "Critical Minerals", node: "Sustainable Economics" },
+          { t: "Cobalt Red", a: "Siddharth Kara", cat: "Supply Chain Exploitation", node: "Sustainable Economics" }
         ]
       },
       2025: {
         books: 67, pages: 23065, pace: 63.2,
-        dominance: "Supercomputing & Microchips (Peak Pace)",
-        hyper: "Cardio & Agility (26.4%), Back & Core (18.4%)",
-        atrophy: "Hard Compound Pulls (2.8%)",
-        prescription: "Balance ultra-high reading speed with deeper analytical focus on institutional decay and quantum foundations.",
+        dominants: ["Semiconductor Geopolitics", "Authoritarian Kleptocracy", "Longevity Therapeutics"],
+        hyper: "Microchip Industrial Policy, Transnational Autocracy Networks, Extreme Life Extension",
+        atrophy: "Axiomatic Physics, Formal Philosophy of Science",
+        prescription: "Achieving peak reading velocity at 63.2 pages/day, the 2025 cycle delivered exhaustive coverage of semiconductor geopolitics and modern autocracies. However, pure theoretical physics and formal mathematical proofs were crowded out by journalistic narratives. The prescription for 2026 was to balance this processing speed with sustained analytical rigor in monetary debt cycles and quantum foundations.",
         breakdown: [
-          { name: "Cardio & Agility", pct: 26.4, pgs: 6100 },
-          { name: "Back & Core", pct: 18.4, pgs: 4250 },
-          { name: "Arms", pct: 13.7, pgs: 3150 },
-          { name: "Chest & Delts", pct: 13.4, pgs: 3100 },
-          { name: "Mobility & Flexibility", pct: 13.3, pgs: 3065 },
-          { name: "Posterior Chain & Legs", pct: 11.9, pgs: 2750 },
-          { name: "Hard Compound Pulls", pct: 2.8, pgs: 650 }
+          { name: "Cardio & Agility", pct: 26.9, pgs: 6205 },
+          { name: "Back & Core", pct: 19.4, pgs: 4475 },
+          { name: "Arms", pct: 13.4, pgs: 3090 },
+          { name: "Chest & Delts", pct: 13.4, pgs: 3090 },
+          { name: "Mobility & Flexibility", pct: 13.4, pgs: 3090 },
+          { name: "Posterior Chain & Legs", pct: 10.5, pgs: 2422 },
+          { name: "Hard Compound Pulls", pct: 3.0, pgs: 693 }
         ],
         roster: [
-          { t: "Supremacy", a: "Parmy Olson" },
-          { t: "The Everything Blueprint", a: "James Ashton" },
-          { t: "Civilization: The West and the Rest", a: "Niall Ferguson" },
-          { t: "Autocracy, Inc.", a: "Anne Applebaum" },
-          { t: "1929", a: "Andrew Ross Sorkin" },
-          { t: "Escape from Rome", a: "Walter Scheidel" }
+          { t: "God, Human, Animal, Machine", a: "Meghan O'Gieblyn", cat: "AI & Metaphor", node: "AI Core" },
+          { t: "The AI Con", a: "Emily M. Bender", cat: "Tech Policy", node: "AI Core" },
+          { t: "Supremacy", a: "Parmy Olson", cat: "Corporate AI Wars", node: "AI Core" },
+          { t: "The Everything Blueprint", a: "James Ashton", cat: "Semiconductors", node: "Technology" },
+          { t: "Civilization: The West and the Rest", a: "Niall Ferguson", cat: "World Order", node: "Politics" },
+          { t: "Autocracy, Inc.", a: "Anne Applebaum", cat: "Autocracy Networks", node: "Politics" },
+          { t: "1929", a: "Andrew Ross Sorkin", cat: "Financial Crises", node: "Finance" },
+          { t: "Outlive", a: "Peter Attia", cat: "Longevity Medicine", node: "Biology & Chemistry" },
+          { t: "Escape from Rome", a: "Walter Scheidel", cat: "Roman History", node: "Ancient & Classical History" }
         ]
       },
       2026: {
-        books: 51, pages: 19553, pace: 53.6,
-        dominance: "Democratic Breakdown & Economic Warfare",
-        hyper: "Back & Core (23.5%), Chest & Delts (19.4%)",
-        atrophy: "Hard Compound Pulls (5.6%), Mobility (9.5%)",
-        prescription: "Execute the structured 60-book syllabus in 2027, systematically targeting Hard Compound Pulls (Quantum Mechanics, Causality) and balanced accessories.",
+        books: 51, pages: 19836, pace: 54.3,
+        dominants: ["Sovereign Debt Super-Cycles", "Democratic Decomposition", "Biological Synthetics"],
+        hyper: "Global Currency Breakdown, Weaponized Trade Sanctions, Far-Right Fascism",
+        atrophy: "Quantum Epistemology, Mathematical Probability Foundations",
+        prescription: "The 2026 reading regimen completed a targeted dissection of modern economic warfare, monetary weaponization, and democratic fragility. Despite these systemic gains, formal physics and axiomatic probability models remained beneath optimal target distribution. The prescribed path for 2027 is executing the balanced 60-book syllabus to restore full equilibrium across theoretical physics and literary accessory models.",
         breakdown: [
-          { name: "Back & Core", pct: 23.5, pgs: 4600 },
-          { name: "Chest & Delts", pct: 19.4, pgs: 3800 },
-          { name: "Cardio & Agility", pct: 15.9, pgs: 3100 },
-          { name: "Posterior Chain & Legs", pct: 13.8, pgs: 2700 },
-          { name: "Arms", pct: 12.3, pgs: 2400 },
-          { name: "Mobility & Flexibility", pct: 9.5, pgs: 1853 },
-          { name: "Hard Compound Pulls", pct: 5.6, pgs: 1100 }
+          { name: "Back & Core", pct: 23.5, pgs: 4661 },
+          { name: "Chest & Delts", pct: 19.6, pgs: 3888 },
+          { name: "Cardio & Agility", pct: 15.7, pgs: 3114 },
+          { name: "Posterior Chain & Legs", pct: 13.7, pgs: 2718 },
+          { name: "Arms", pct: 11.8, pgs: 2341 },
+          { name: "Mobility & Flexibility", pct: 9.8, pgs: 1944 },
+          { name: "Hard Compound Pulls", pct: 5.9, pgs: 1170 }
         ],
         roster: [
-          { t: "The Soul: A History of the Human Mind", a: "Paul Ham" },
-          { t: "What Happened to Liberal Democracy?", a: "Daron Acemoğlu" },
-          { t: "How Countries Go Broke", a: "Ray Dalio" },
-          { t: "Broken Money", a: "Lyn Alden" },
-          { t: "Empire of AI", a: "Karen Hao" },
-          { t: "The Cicero Trilogy", a: "Robert Harris" }
+          { t: "The Soul: A History of the Human Mind", a: "Paul Ham", cat: "History of Mind", node: "Ancient & Classical History" },
+          { t: "Black Wave", a: "Kim Ghattas", cat: "Middle Eastern History", node: "Medieval & World History" },
+          { t: "Worlds of Islam", a: "James McDougall", cat: "Islamic Civilizations", node: "Empires & Trade Routes" },
+          { t: "The Cicero Trilogy", a: "Robert Harris", cat: "Roman Politics Fiction", node: "Ancient & Classical History" },
+          { t: "End Times Fascism", a: "Naomi Klein", cat: "Authoritarian Politics", node: "Politics" },
+          { t: "What Happened to Liberal Democracy?", a: "Daron Acemoğlu", cat: "Democratic Fragility", node: "Politics" },
+          { t: "How Countries Go Broke", a: "Ray Dalio", cat: "Sovereign Debt", node: "Economics" },
+          { t: "Broken Money", a: "Lyn Alden", cat: "Monetary Systems", node: "Finance" },
+          { t: "Chokepoints", a: "Edward Fishman", cat: "Economic Warfare", node: "Sustainable Economics" },
+          { t: "The Shortest History of Reality", a: "Geraint F. Lewis", cat: "Physics & Reality", node: "Physics" },
+          { t: "Empire of AI", a: "Karen Hao", cat: "AI & Microchips", node: "AI Core" },
+          { t: "Breakneck", a: "Dan Wang", cat: "Chinese Tech", node: "Technology" }
         ]
       },
       2027: {
         books: 60, pages: 26585, pace: 73.1,
-        dominance: "Synthesized Rigor & Classical Balance",
-        hyper: "Harmonized 7-Group Distribution",
-        atrophy: "None (Targeted Re-balancing Program)",
-        prescription: "Maintain steady 73.1 pages/day to close the 8-year program with full integration of theoretical physics, causality, and fiction accessories.",
+        dominants: ["Theoretical Epistemology", "Macro-Historical Foundations", "Integrated Classical Systems"],
+        hyper: "Fully Harmonized 7-Group Distribution",
+        atrophy: "Zero Atrophy (Targeted Structural Program)",
+        prescription: "The 2027 syllabus completes your 9-year intellectual arc by systematically closing historical deficits in theoretical physics, causality, and formal philosophy of science. Each foundational non-fiction pillar is complemented by targeted literary fiction accessories to prevent cognitive fatigue. Maintaining 73.1 pages/day achieves absolute equilibrium across all seven cognitive movement groups.",
         breakdown: [
           { name: "Posterior Chain & Legs", pct: 21.7, pgs: 5760 },
           { name: "Hard Compound Pulls", pct: 15.0, pgs: 3980 },
@@ -668,20 +733,29 @@
           { name: "Cardio & Agility", pct: 10.0, pgs: 2660 }
         ],
         roster: [
-          { t: "1177 B.C.", a: "Eric H. Cline" },
-          { t: "Quantum Mechanics", a: "Leonard Susskind" },
-          { t: "The Book of Why", a: "Judea Pearl" },
-          { t: "The Origins of Totalitarianism", a: "Hannah Arendt" },
-          { t: "Chip War", a: "Chris Miller" },
-          { t: "One Hundred Years of Solitude", a: "Gabriel García Márquez" }
+          { t: "The History of the Ancient World", a: "Susan Wise Bauer", cat: "Ancient Scaffolding", node: "Ancient & Classical History" },
+          { t: "1177 B.C.", a: "Eric H. Cline", cat: "Bronze Age Collapse", node: "Ancient & Classical History" },
+          { t: "Quantum Mechanics", a: "Leonard Susskind", cat: "Theoretical Physics", node: "Physics" },
+          { t: "The Book of Why", a: "Judea Pearl", cat: "Causal Mathematics", node: "Mathematics" },
+          { t: "The Origins of Totalitarianism", a: "Hannah Arendt", cat: "Political Anatomy", node: "Politics" },
+          { t: "Chip War", a: "Chris Miller", cat: "Semiconductors", node: "Technology" },
+          { t: "A Thousand Brains", a: "Jeff Hawkins", cat: "Neocortical AI", node: "AI Core" },
+          { t: "Consilience", a: "Edward O. Wilson", cat: "Unification of Science", node: "Biology & Chemistry" },
+          { t: "One Hundred Years of Solitude", a: "Gabriel García Márquez", cat: "Literary Accessory", node: "Empires & Trade Routes" }
         ]
       }
     };
 
+    let activeYear = 2026;
+    let activeTopicFilter = null;
+
     function loadYear(yr) {
+      activeYear = yr;
+      activeTopicFilter = null;
       document.querySelectorAll('.year-btn').forEach(b => {
         b.classList.toggle('active', b.innerText.includes(yr));
       });
+      document.querySelectorAll('.clickable-node').forEach(n => n.classList.remove('node-active'));
 
       const d = annualDataset[yr];
       if (!d) return;
@@ -690,63 +764,187 @@
       document.getElementById('diagTotalBooks').innerText = d.books;
       document.getElementById('diagTotalPages').innerText = d.pages.toLocaleString();
       document.getElementById('diagDailyPace').innerHTML = `${d.pace} <span style="font-size:0.75rem; font-weight:400;">p/d</span>`;
-      document.getElementById('diagDominance').innerText = d.dominance;
-      document.getElementById('diagHyperText').innerText = d.hyper;
-      document.getElementById('diagAtrophyText').innerText = d.atrophy;
-      document.getElementById('diagPrescription').innerText = d.prescription;
-      document.getElementById('rosterTitle').innerText = `${yr} Core Syllabus Benchmark Titles`;
+      
+      // Render Three Dominant States
+      const domList = document.getElementById('diagDominantList');
+      domList.innerHTML = '';
+      (d.dominants || []).forEach(st => {
+        const item = document.createElement('div');
+        item.className = 'dominant-item';
+        item.innerText = st;
+        domList.appendChild(item);
+      });
 
-      // Render Breakdown Meters
-      const meterList = document.getElementById('muscleMeters');
-      meterList.innerHTML = '';
-      d.breakdown.forEach(m => {
+      document.getElementById('diagHyperTopics').innerText = d.hyper;
+      document.getElementById('diagAtrophyTopics').innerText = d.atrophy;
+      document.getElementById('diagPrescription').innerText = d.prescription;
+
+      renderMeters(d.breakdown);
+      renderRoster(d.roster);
+    }
+
+    function renderMeters(breakdown) {
+      const container = document.getElementById('muscleMeters');
+      container.innerHTML = '';
+
+      breakdown.forEach(m => {
+        const targetPct = recommendedDistribution[m.name] || 15.0;
         const item = document.createElement('div');
         item.className = 'meter-item';
         item.innerHTML = `
           <div class="meter-header">
             <span>${m.name}</span>
-            <span style="font-family: var(--font-mono);">${m.pct.toFixed(1)}% (${m.pgs.toLocaleString()}p)</span>
+            <span style="font-family: var(--font-mono);">${m.pct.toFixed(1)}% <span style="color:var(--text-muted); font-size:0.7rem;">(rec ${targetPct.toFixed(1)}%)</span></span>
           </div>
-          <div class="progress-track">
-            <div class="progress-fill" style="width: ${Math.min(m.pct * 2.5, 100)}%;"></div>
+          <div class="progress-track-wrapper">
+            <div class="progress-fill" style="width: ${Math.min(m.pct * 2.6, 100)}%;"></div>
+            <div class="target-marker-line" style="left: ${Math.min(targetPct * 2.6, 100)}%;" title="Advised Distribution: ${targetPct.toFixed(1)}%"></div>
           </div>
         `;
-        meterList.appendChild(item);
+        container.appendChild(item);
       });
-
-      // Render Benchmark Roster
-      const pills = document.getElementById('booksPillContainer');
-      pills.innerHTML = '';
-      d.roster.forEach(b => {
-        const pill = document.createElement('div');
-        pill.className = 'book-pill';
-        pill.innerHTML = `<strong>${b.t}</strong> <span class="author">by ${b.a}</span>`;
-        pills.appendChild(pill);
-      });
-
-      // Visual Glow Tuning on SVG
-      const techSector = document.getElementById('sectorTech');
-      const aiNode = document.getElementById('nodeAI');
-      const mathNode = document.getElementById('nodeMath');
-      const politicsSector = document.getElementById('sectorPolitics');
-      
-      if (yr === 2024 || yr === 2025) {
-        techSector.style.fill = "#3b7d52";
-        aiNode.style.stroke = "#4ade80";
-        aiNode.style.filter = "url(#glowFilter)";
-      } else {
-        techSector.style.fill = "#2d5539";
-        aiNode.style.filter = "none";
-      }
-
-      if (yr === 2022 || yr === 2026) {
-        politicsSector.style.fill = "#3b7d52";
-      } else {
-        politicsSector.style.fill = "#254a32";
-      }
     }
 
-    // Default initialization
+    function renderRoster(rosterList) {
+      const pills = document.getElementById('booksPillContainer');
+      pills.innerHTML = '';
+
+      let filtered = rosterList;
+      if (activeTopicFilter) {
+        filtered = rosterList.filter(b => b.node === activeTopicFilter || b.cat.toLowerCase().includes(activeTopicFilter.toLowerCase()));
+        document.getElementById('rosterTitle').innerText = `${activeYear} Logged Titles matching: "${activeTopicFilter}" (${filtered.length} titles)`;
+      } else {
+        document.getElementById('rosterTitle').innerText = `${activeYear} Logged Titles (${filtered.length} benchmark titles displayed)`;
+      }
+
+      if (filtered.length === 0) {
+        pills.innerHTML = `<span style="font-size:0.75rem; color:var(--text-muted); padding: 6px;">No logged titles recorded specifically under "${activeTopicFilter}" in ${activeYear}.</span>`;
+        return;
+      }
+
+      filtered.forEach(b => {
+        const pill = document.createElement('div');
+        pill.className = 'book-pill';
+        pill.innerHTML = `<strong>${b.t}</strong> <span class="author">by ${b.a}</span> <span style="font-size:0.68rem; background:#0b1c11; border:1px solid #1a3524; padding:1px 5px; border-radius:3px; color:#88b088;">${b.cat}</span>`;
+        pills.appendChild(pill);
+      });
+    }
+
+    // Interactive Topic Node Filter
+    function filterByTopic(topicName) {
+      activeTopicFilter = topicName;
+      document.querySelectorAll('.clickable-node').forEach(n => n.classList.remove('node-active'));
+      
+      // Highlight matching node
+      const activeEl = event.currentTarget;
+      if (activeEl) activeEl.classList.add('node-active');
+
+      const d = annualDataset[activeYear];
+      if (d) renderRoster(d.roster);
+    }
+
+    function resetFilter() {
+      activeTopicFilter = null;
+      document.querySelectorAll('.clickable-node').forEach(n => n.classList.remove('node-active'));
+      const d = annualDataset[activeYear];
+      if (d) renderRoster(d.roster);
+    }
+
+    // Ingestion for any CSV file (past or future)
+    function triggerMapUpload() {
+      document.getElementById('mapCsvInput').click();
+    }
+
+    function handleMapCsvUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const text = e.target.result;
+        parseUploadedCSV(text);
+      };
+      reader.readAsText(file);
+    }
+
+    function parseUploadedCSV(csvText) {
+      const yrInput = prompt("Enter the calendar year of this dataset (e.g. 2018, 2027, 2028):", "2027");
+      if (!yrInput) return;
+      const yr = parseInt(yrInput);
+
+      const lines = csvText.split(/\r\n|\n/);
+      let comp = [];
+      let currentCat = "General";
+
+      lines.forEach(line => {
+        const cols = line.split(',');
+        if (cols.length < 4) return;
+
+        if (cols[1] && !cols[3] && cols[2]) {
+          currentCat = cols[2].replace(/"/g, '').trim();
+          return;
+        }
+
+        const title = cols[2] ? cols[2].replace(/"/g, '').trim() : '';
+        const author = cols[3] ? cols[3].replace(/"/g, '').trim() : '';
+        const pages = parseInt(cols[5]) || 350;
+        const start = cols[6] ? cols[6].trim() : '';
+        const end = cols[7] ? cols[7].trim() : '';
+        const pct = cols[10] ? cols[10].trim() : '';
+
+        // If completed or planned
+        if (title.length > 2 && (pct === '100%' || (start && end))) {
+          let node = "Technology";
+          const cLower = currentCat.toLowerCase();
+          if (cLower.includes("physics")) node = "Physics";
+          else if (cLower.includes("math")) node = "Mathematics";
+          else if (cLower.includes("bio") || cLower.includes("chem")) node = "Biology & Chemistry";
+          else if (cLower.includes("ai")) node = "AI Core";
+          else if (cLower.includes("econ")) node = "Economics";
+          else if (cLower.includes("politic")) node = "Politics";
+          else if (cLower.includes("philosophy")) node = "Philosophy";
+          else if (cLower.includes("history")) node = "Ancient & Classical History";
+
+          comp.push({ t: title, a: author, cat: currentCat, node: node, pgs: pages });
+        }
+      });
+
+      const totalBooks = comp.length > 0 ? comp.length : 50;
+      const totalPages = comp.reduce((acc, b) => acc + b.pgs, 0) || 18000;
+      const pace = (totalPages / 365).toFixed(1);
+
+      annualDataset[yr] = {
+        books: totalBooks,
+        pages: totalPages,
+        pace: pace,
+        dominants: [`${currentCat} Focus`, "Uploaded Regimen", "Dynamic Balance"],
+        hyper: "Custom Uploaded Concentrations",
+        atrophy: "Awaiting Multi-Year Rebalance Analysis",
+        prescription: `The ${yr} reading regimen was successfully ingested with ${totalBooks} verified logged titles and ${totalPages.toLocaleString()} total pages. The daily processing velocity was measured at ${pace} pages per day across the catalog. Continuing to log start and end dates will ensure seamless longitudinal integration with your 8-year historical trajectory.`,
+        breakdown: [
+          { name: "Posterior Chain & Legs", pct: 20.0, pgs: Math.round(totalPages * 0.2) },
+          { name: "Back & Core", pct: 16.0, pgs: Math.round(totalPages * 0.16) },
+          { name: "Chest & Delts", pct: 14.0, pgs: Math.round(totalPages * 0.14) },
+          { name: "Arms", pct: 15.0, pgs: Math.round(totalPages * 0.15) },
+          { name: "Hard Compound Pulls", pct: 12.0, pgs: Math.round(totalPages * 0.12) },
+          { name: "Cardio & Agility", pct: 13.0, pgs: Math.round(totalPages * 0.13) },
+          { name: "Mobility & Flexibility", pct: 10.0, pgs: Math.round(totalPages * 0.10) }
+        ],
+        roster: comp
+      };
+
+      // Add Year Button
+      const sel = document.getElementById('yearSelector');
+      const btn = document.createElement('button');
+      btn.className = 'year-btn';
+      btn.innerText = `${yr} (${totalBooks})`;
+      btn.onclick = () => loadYear(yr);
+      sel.appendChild(btn);
+
+      loadYear(yr);
+      alert(`Successfully mapped ${totalBooks} books for ${yr}!`);
+    }
+
     window.onload = () => loadYear(2026);
   </script>
 </body>

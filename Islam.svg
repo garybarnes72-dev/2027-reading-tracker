@@ -1,0 +1,372 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1360" width="100%" role="img" aria-labelledby="title desc">
+  <title id="title">Destiny Disrupted: dynasties and the Sunni-Shi'i map, 622-2026</title>
+  <desc id="desc">A three-panel infographic. The top panel shows Muslim dynasties inside five broad social periods. The middle panel is a heatmap of Sunni and Shi'i prevalence by region and era. The bottom panel lists nine turning points.</desc>
+
+  <defs>
+    <linearGradient id="mixed" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#3f7d5c"/>
+      <stop offset="50%" stop-color="#3f7d5c"/>
+      <stop offset="50%" stop-color="#2f6f8f"/>
+      <stop offset="100%" stop-color="#2f6f8f"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="0" y="0" width="900" height="1360" fill="#fbf9f4"/>
+  <g font-family="Segoe UI, Helvetica, Arial, sans-serif" fill="#23272b">
+
+    <!-- Title -->
+    <text x="30" y="42" font-size="25" font-weight="700">Destiny Disrupted</text>
+    <text x="30" y="68" font-size="15" fill="#3a3f45">Dynasties and the Sunni–Shi'i map, 622–2026</text>
+    <text x="30" y="88" font-size="10.5" fill="#6b6f76" font-style="italic">A visual companion to Tamim Ansary's history of the Islamic world</text>
+
+    <!-- Panel I -->
+    <text x="30" y="120" font-size="18" font-weight="700">I. The shape of Muslim society</text>
+    <text x="30" y="140" font-size="10.5" fill="#6b6f76">Political dynasties (bars) inside five broad social periods (band). Green = Sunni dynasty; blue = Shi'i dynasty.</text>
+
+    <!-- Time axis -->
+    <line x1="180" y1="168" x2="860" y2="168" stroke="#b9b2a3" stroke-width="1"/>
+    <g font-size="8.5" fill="#6b6f76" text-anchor="middle">
+      <text x="180" y="160">600</text>
+      <text x="275.1" y="160">800</text>
+      <text x="370.1" y="160">1000</text>
+      <text x="465.2" y="160">1200</text>
+      <text x="560.2" y="160">1400</text>
+      <text x="655.2" y="160">1600</text>
+      <text x="750.2" y="160">1800</text>
+      <text x="845.2" y="160">2000</text>
+    </g>
+    <g stroke="#cfc8b8" stroke-width="1">
+      <line x1="227.5" y1="164" x2="227.5" y2="172"/>
+      <line x1="322.6" y1="164" x2="322.6" y2="172"/>
+      <line x1="417.6" y1="164" x2="417.6" y2="172"/>
+      <line x1="512.7" y1="164" x2="512.7" y2="172"/>
+      <line x1="607.7" y1="164" x2="607.7" y2="172"/>
+      <line x1="702.7" y1="164" x2="702.7" y2="172"/>
+      <line x1="797.7" y1="164" x2="797.7" y2="172"/>
+    </g>
+
+    <!-- Period band -->
+    <g font-size="9" fill="#3a3f45" text-anchor="middle">
+      <rect x="190.5" y="178" width="60.8" height="22" fill="#e8e1d2"/>
+      <text x="220.9" y="193">Formative</text>
+      <rect x="251.3" y="178" width="241.6" height="22" fill="#dfe8e2"/>
+      <text x="372.1" y="193">Classical / Abbasid</text>
+      <rect x="492.9" y="178" width="115.5" height="22" fill="#e6e2ec"/>
+      <text x="550.7" y="193">Post-Mongol</text>
+      <rect x="608.4" y="178" width="141.8" height="22" fill="#f0e3d7"/>
+      <text x="679.3" y="193">Confessional empires</text>
+      <rect x="750.2" y="178" width="107.8" height="22" fill="#e6e6e6"/>
+      <text x="804.1" y="193">Modern</text>
+    </g>
+    <g stroke="#fbf9f4" stroke-width="1.5">
+      <line x1="251.3" y1="178" x2="251.3" y2="200"/>
+      <line x1="492.9" y1="178" x2="492.9" y2="200"/>
+      <line x1="608.4" y1="178" x2="608.4" y2="200"/>
+      <line x1="750.2" y1="178" x2="750.2" y2="200"/>
+    </g>
+
+    <!-- Dynasty row labels -->
+    <g font-size="10" fill="#23272b" text-anchor="end">
+      <text x="172" y="225">Rashidun</text>
+      <text x="172" y="247">Umayyad (Damascus)</text>
+      <text x="172" y="269">Abbasid (Baghdad)</text>
+      <text x="172" y="291">Umayyad (Córdoba)</text>
+      <text x="172" y="313">Fatimid (Ismaili)</text>
+      <text x="172" y="335">Buyid (Shi'i)</text>
+      <text x="172" y="357">Seljuk</text>
+      <text x="172" y="379">Ayyubid</text>
+      <text x="172" y="401">Mamluk</text>
+      <text x="172" y="423">Ottoman</text>
+      <text x="172" y="445">Safavid</text>
+      <text x="172" y="467">Mughal</text>
+      <text x="172" y="489">Modern states</text>
+    </g>
+
+    <!-- Dynasty bars -->
+    <g stroke="#fbf9f4" stroke-width="1">
+      <rect x="195.2" y="212" width="13.8" height="18" fill="#3f7d5c"/>
+      <rect x="209.0" y="234" width="42.3" height="18" fill="#3f7d5c"/>
+      <rect x="251.3" y="256" width="241.6" height="18" fill="#3f7d5c"/>
+      <rect x="254.2" y="278" width="130.8" height="18" fill="#3f7d5c"/>
+      <rect x="327.0" y="300" width="124.5" height="18" fill="#2f6f8f"/>
+      <rect x="338.9" y="322" width="60.8" height="18" fill="#2f6f8f"/>
+      <rect x="387.8" y="344" width="74.7" height="18" fill="#3f7d5c"/>
+      <rect x="451.5" y="366" width="42.3" height="18" fill="#3f7d5c"/>
+      <rect x="489.1" y="388" width="126.9" height="18" fill="#3f7d5c"/>
+      <rect x="512.4" y="410" width="296.1" height="18" fill="#3f7d5c"/>
+      <rect x="608.4" y="432" width="111.7" height="18" fill="#2f6f8f"/>
+      <rect x="620.3" y="454" width="157.3" height="18" fill="#3f7d5c"/>
+      <rect x="808.5" y="476" width="49.5" height="18" fill="#8a8f98"/>
+    </g>
+
+    <!-- Bar date labels -->
+    <g font-size="8.5" fill="#ffffff" text-anchor="middle">
+      <text x="372.1" y="269">750–1258</text>
+      <text x="319.6" y="291">756–1031</text>
+      <text x="389.3" y="313">909–1171</text>
+      <text x="369.3" y="335">934–1062</text>
+      <text x="425.2" y="357">1037–1194</text>
+      <text x="552.6" y="401">1250–1517</text>
+      <text x="660.5" y="423">1299–1922</text>
+      <text x="664.3" y="445">1501–1736</text>
+      <text x="699.0" y="467">1526–1857</text>
+    </g>
+
+    <!-- Panel II -->
+    <text x="30" y="530" font-size="18" font-weight="700">II. The sectarian map, 622–2026</text>
+    <text x="30" y="550" font-size="10.5" fill="#6b6f76">Dominant sect by region and era. Colour reflects broad popular adherence, not the sect of the ruler; dots mark significant minorities or sub-regional majorities.</text>
+
+    <!-- Heatmap column labels -->
+    <g font-size="8.5" fill="#3a3f45" text-anchor="middle">
+      <text x="219" y="575">622–750</text>
+      <text x="304" y="575">750–945</text>
+      <text x="376" y="575">945–1055</text>
+      <text x="450" y="575">1055–1258</text>
+      <text x="555.5" y="575">1258–1501</text>
+      <text x="660" y="575">1501–1700</text>
+      <text x="754" y="575">1700–1900</text>
+      <text x="830.5" y="575">1900–2026</text>
+    </g>
+
+    <!-- Heatmap row labels -->
+    <g font-size="10" fill="#23272b" text-anchor="end">
+      <text x="172" y="613">Arabia &amp; Gulf</text>
+      <text x="172" y="646">Iraq</text>
+      <text x="172" y="679">Iran &amp; Azerbaijan</text>
+      <text x="172" y="712">Levant</text>
+      <text x="172" y="745">Anatolia</text>
+      <text x="172" y="778">Egypt</text>
+      <text x="172" y="811">North Africa</text>
+      <text x="172" y="844">South Asia</text>
+      <text x="172" y="877">Southeast Asia</text>
+      <text x="172" y="910">Europe &amp; Americas</text>
+    </g>
+
+    <!-- Heatmap cells: Arabia & Gulf -->
+    <g stroke="#fbf9f4" stroke-width="1">
+      <rect x="180" y="595" width="78" height="28" fill="#3f7d5c"/>
+      <rect x="258" y="595" width="92" height="28" fill="#3f7d5c"/>
+      <rect x="350" y="595" width="52" height="28" fill="#3f7d5c"/>
+      <rect x="402" y="595" width="96" height="28" fill="#3f7d5c"/>
+      <rect x="498" y="595" width="115" height="28" fill="#3f7d5c"/>
+      <rect x="613" y="595" width="94" height="28" fill="#3f7d5c"/>
+      <rect x="707" y="595" width="94" height="28" fill="#3f7d5c"/>
+      <rect x="801" y="595" width="59" height="28" fill="#3f7d5c"/>
+    </g>
+    <g fill="#2f6f8f" stroke="#ffffff" stroke-width="1.2">
+      <circle cx="304" cy="609" r="4"/><circle cx="376" cy="609" r="4"/><circle cx="450" cy="609" r="4"/>
+      <circle cx="555.5" cy="609" r="4"/><circle cx="660" cy="609" r="4"/><circle cx="754" cy="609" r="4"/><circle cx="830.5" cy="609" r="4"/>
+    </g>
+
+    <!-- Heatmap cells: Iraq -->
+    <g stroke="#fbf9f4" stroke-width="1">
+      <rect x="180" y="628" width="78" height="28" fill="#3f7d5c"/>
+      <rect x="258" y="628" width="92" height="28" fill="#3f7d5c"/>
+      <rect x="350" y="628" width="52" height="28" fill="url(#mixed)"/>
+      <rect x="402" y="628" width="96" height="28" fill="#3f7d5c"/>
+      <rect x="498" y="628" width="115" height="28" fill="#3f7d5c"/>
+      <rect x="613" y="628" width="94" height="28" fill="url(#mixed)"/>
+      <rect x="707" y="628" width="94" height="28" fill="url(#mixed)"/>
+      <rect x="801" y="628" width="59" height="28" fill="#2f6f8f"/>
+    </g>
+    <g fill="#2f6f8f" stroke="#ffffff" stroke-width="1.2">
+      <circle cx="219" cy="642" r="4"/><circle cx="304" cy="642" r="4"/><circle cx="450" cy="642" r="4"/><circle cx="555.5" cy="642" r="4"/>
+    </g>
+
+    <!-- Heatmap cells: Iran -->
+    <g stroke="#fbf9f4" stroke-width="1">
+      <rect x="180" y="661" width="78" height="28" fill="#3f7d5c"/>
+      <rect x="258" y="661" width="92" height="28" fill="#3f7d5c"/>
+      <rect x="350" y="661" width="52" height="28" fill="#3f7d5c"/>
+      <rect x="402" y="661" width="96" height="28" fill="#3f7d5c"/>
+      <rect x="498" y="661" width="115" height="28" fill="#3f7d5c"/>
+      <rect x="613" y="661" width="94" height="28" fill="#2f6f8f"/>
+      <rect x="707" y="661" width="94" height="28" fill="#2f6f8f"/>
+      <rect x="801" y="661" width="59" height="28" fill="#2f6f8f"/>
+    </g>
+    <g fill="#2f6f8f" stroke="#ffffff" stroke-width="1.2">
+      <circle cx="376" cy="675" r="4"/>
+    </g>
+
+    <!-- Heatmap cells: Levant -->
+    <g stroke="#fbf9f4" stroke-width="1">
+      <rect x="180" y="694" width="78" height="28" fill="#3f7d5c"/>
+      <rect x="258" y="694" width="92" height="28" fill="#3f7d5c"/>
+      <rect x="350" y="694" width="52" height="28" fill="#3f7d5c"/>
+      <rect x="402" y="694" width="96" height="28" fill="#3f7d5c"/>
+      <rect x="498" y="694" width="115" height="28" fill="#3f7d5c"/>
+      <rect x="613" y="694" width="94" height="28" fill="url(#mixed)"/>
+      <rect x="707" y="694" width="94" height="28" fill="url(#mixed)"/>
+      <rect x="801" y="694" width="59" height="28" fill="url(#mixed)"/>
+    </g>
+    <g fill="#2f6f8f" stroke="#ffffff" stroke-width="1.2">
+      <circle cx="376" cy="708" r="4"/><circle cx="450" cy="708" r="4"/><circle cx="555.5" cy="708" r="4"/>
+    </g>
+
+    <!-- Heatmap cells: Anatolia -->
+    <g stroke="#fbf9f4" stroke-width="1">
+      <rect x="180" y="727" width="78" height="28" fill="#ece8df"/>
+      <rect x="258" y="727" width="92" height="28" fill="#ece8df"/>
+      <rect x="350" y="727" width="52" height="28" fill="#ece8df"/>
+      <rect x="402" y="727" width="96" height="28" fill="#3f7d5c"/>
+      <rect x="498" y="727" width="115" height="28" fill="#3f7d5c"/>
+      <rect x="613" y="727" width="94" height="28" fill="#3f7d5c"/>
+      <rect x="707" y="727" width="94" height="28" fill="#3f7d5c"/>
+      <rect x="801" y="727" width="59" height="28" fill="#3f7d5c"/>
+    </g>
+    <g fill="#2f6f8f" stroke="#ffffff" stroke-width="1.2">
+      <circle cx="555.5" cy="741" r="4"/><circle cx="660" cy="741" r="4"/><circle cx="754" cy="741" r="4"/><circle cx="830.5" cy="741" r="4"/>
+    </g>
+
+    <!-- Heatmap cells: Egypt -->
+    <g stroke="#fbf9f4" stroke-width="1">
+      <rect x="180" y="760" width="78" height="28" fill="#3f7d5c"/>
+      <rect x="258" y="760" width="92" height="28" fill="#3f7d5c"/>
+      <rect x="350" y="760" width="52" height="28" fill="#3f7d5c"/>
+      <rect x="402" y="760" width="96" height="28" fill="#3f7d5c"/>
+      <rect x="498" y="760" width="115" height="28" fill="#3f7d5c"/>
+      <rect x="613" y="760" width="94" height="28" fill="#3f7d5c"/>
+      <rect x="707" y="760" width="94" height="28" fill="#3f7d5c"/>
+      <rect x="801" y="760" width="59" height="28" fill="#3f7d5c"/>
+    </g>
+
+    <!-- Heatmap cells: North Africa -->
+    <g stroke="#fbf9f4" stroke-width="1">
+      <rect x="180" y="793" width="78" height="28" fill="#3f7d5c"/>
+      <rect x="258" y="793" width="92" height="28" fill="#3f7d5c"/>
+      <rect x="350" y="793" width="52" height="28" fill="#3f7d5c"/>
+      <rect x="402" y="793" width="96" height="28" fill="#3f7d5c"/>
+      <rect x="498" y="793" width="115" height="28" fill="#3f7d5c"/>
+      <rect x="613" y="793" width="94" height="28" fill="#3f7d5c"/>
+      <rect x="707" y="793" width="94" height="28" fill="#3f7d5c"/>
+      <rect x="801" y="793" width="59" height="28" fill="#3f7d5c"/>
+    </g>
+    <g fill="#2f6f8f" stroke="#ffffff" stroke-width="1.2">
+      <circle cx="376" cy="774" r="4"/>
+      <circle cx="376" cy="807" r="4"/>
+    </g>
+    <!-- Heatmap cells: South Asia -->
+    <g stroke="#fbf9f4" stroke-width="1">
+      <rect x="180" y="826" width="78" height="28" fill="#ece8df"/>
+      <rect x="258" y="826" width="92" height="28" fill="#d9c9a8"/>
+      <rect x="350" y="826" width="52" height="28" fill="#d9c9a8"/>
+      <rect x="402" y="826" width="96" height="28" fill="#3f7d5c"/>
+      <rect x="498" y="826" width="115" height="28" fill="#3f7d5c"/>
+      <rect x="613" y="826" width="94" height="28" fill="#3f7d5c"/>
+      <rect x="707" y="826" width="94" height="28" fill="#3f7d5c"/>
+      <rect x="801" y="826" width="59" height="28" fill="#3f7d5c"/>
+    </g>
+    <g fill="#2f6f8f" stroke="#ffffff" stroke-width="1.2">
+      <circle cx="660" cy="840" r="4"/><circle cx="754" cy="840" r="4"/><circle cx="830.5" cy="840" r="4"/>
+    </g>
+
+    <!-- Heatmap cells: Southeast Asia -->
+    <g stroke="#fbf9f4" stroke-width="1">
+      <rect x="180" y="859" width="78" height="28" fill="#ece8df"/>
+      <rect x="258" y="859" width="92" height="28" fill="#ece8df"/>
+      <rect x="350" y="859" width="52" height="28" fill="#ece8df"/>
+      <rect x="402" y="859" width="96" height="28" fill="#d9c9a8"/>
+      <rect x="498" y="859" width="115" height="28" fill="#3f7d5c"/>
+      <rect x="613" y="859" width="94" height="28" fill="#3f7d5c"/>
+      <rect x="707" y="859" width="94" height="28" fill="#3f7d5c"/>
+      <rect x="801" y="859" width="59" height="28" fill="#3f7d5c"/>
+    </g>
+
+    <!-- Heatmap cells: Europe & Americas -->
+    <g stroke="#fbf9f4" stroke-width="1">
+      <rect x="180" y="892" width="78" height="28" fill="#ece8df"/>
+      <rect x="258" y="892" width="92" height="28" fill="#3f7d5c"/>
+      <rect x="350" y="892" width="52" height="28" fill="#3f7d5c"/>
+      <rect x="402" y="892" width="96" height="28" fill="#3f7d5c"/>
+      <rect x="498" y="892" width="115" height="28" fill="#3f7d5c"/>
+      <rect x="613" y="892" width="94" height="28" fill="#d9c9a8"/>
+      <rect x="707" y="892" width="94" height="28" fill="#d9c9a8"/>
+      <rect x="801" y="892" width="59" height="28" fill="#3f7d5c"/>
+    </g>
+    <g fill="#2f6f8f" stroke="#ffffff" stroke-width="1.2">
+      <circle cx="830.5" cy="906" r="4"/>
+    </g>
+
+    <!-- Legend -->
+    <g font-size="9.5" fill="#23272b">
+      <rect x="30" y="938" width="13" height="13" fill="#3f7d5c"/>
+      <text x="48" y="948">Sunni majority</text>
+      <rect x="300" y="938" width="13" height="13" fill="#2f6f8f"/>
+      <text x="318" y="948">Shi'i majority</text>
+      <rect x="570" y="938" width="13" height="13" fill="url(#mixed)"/>
+      <text x="588" y="948">Mixed / contested</text>
+      <rect x="700" y="938" width="13" height="13" fill="#d9c9a8"/>
+      <text x="718" y="948">Muslim frontier</text>
+
+      <rect x="30" y="960" width="13" height="13" fill="#3f7d5c"/>
+      <circle cx="36.5" cy="966.5" r="3" fill="#2f6f8f" stroke="#ffffff" stroke-width="1"/>
+      <text x="48" y="970">Sunni majority, Shi'i minority</text>
+      <rect x="300" y="960" width="13" height="13" fill="#2f6f8f"/>
+      <circle cx="306.5" cy="966.5" r="3" fill="#3f7d5c" stroke="#ffffff" stroke-width="1"/>
+      <text x="318" y="970">Shi'i majority, Sunni minority</text>
+      <rect x="570" y="960" width="13" height="13" fill="#ece8df"/>
+      <text x="588" y="970">No substantial Muslim population</text>
+    </g>
+
+    <!-- Panel III -->
+    <text x="30" y="1010" font-size="18" font-weight="700">III. Turning points</text>
+
+    <!-- Cards -->
+    <g>
+      <rect x="30" y="1030" width="270" height="58" rx="4" fill="#f3efe6"/>
+      <text x="42" y="1048" font-size="11" font-weight="700" fill="#2f6f8f">680 · Karbala</text>
+      <text x="42" y="1063" font-size="9" fill="#3a3f45">Husayn's death crystallises</text>
+      <text x="42" y="1075" font-size="9" fill="#3a3f45">Shi'i identity.</text>
+
+      <rect x="315" y="1030" width="270" height="58" rx="4" fill="#f3efe6"/>
+      <text x="327" y="1048" font-size="11" font-weight="700" fill="#2f6f8f">750 · Abbasid Revolution</text>
+      <text x="327" y="1063" font-size="9" fill="#3a3f45">The caliphate moves to Baghdad;</text>
+      <text x="327" y="1075" font-size="9" fill="#3a3f45">the classical age begins.</text>
+
+      <rect x="600" y="1030" width="270" height="58" rx="4" fill="#f3efe6"/>
+      <text x="612" y="1048" font-size="11" font-weight="700" fill="#2f6f8f">945 · Buyids take Baghdad</text>
+      <text x="612" y="1063" font-size="9" fill="#3a3f45">A Shi'i dynasty rules the</text>
+      <text x="612" y="1075" font-size="9" fill="#3a3f45">Sunni caliph's capital.</text>
+
+      <rect x="30" y="1098" width="270" height="58" rx="4" fill="#f3efe6"/>
+      <text x="42" y="1116" font-size="11" font-weight="700" fill="#2f6f8f">969 · Fatimids take Cairo</text>
+      <text x="42" y="1131" font-size="9" fill="#3a3f45">An Ismaili counter-caliphate</text>
+      <text x="42" y="1143" font-size="9" fill="#3a3f45">in Egypt.</text>
+
+      <rect x="315" y="1098" width="270" height="58" rx="4" fill="#f3efe6"/>
+      <text x="327" y="1116" font-size="11" font-weight="700" fill="#2f6f8f">1258 · Baghdad sacked</text>
+      <text x="327" y="1131" font-size="9" fill="#3a3f45">The Abbasid caliphate ends;</text>
+      <text x="327" y="1143" font-size="9" fill="#3a3f45">the post-Mongol order begins.</text>
+
+      <rect x="600" y="1098" width="270" height="58" rx="4" fill="#f3efe6"/>
+      <text x="612" y="1116" font-size="11" font-weight="700" fill="#2f6f8f">1501 · Safavids impose</text>
+      <text x="612" y="1131" font-size="9" fill="#3a3f45">Twelver Shi'ism in Iran:</text>
+      <text x="612" y="1143" font-size="9" fill="#3a3f45">the decisive sectarian shift.</text>
+
+      <rect x="30" y="1166" width="270" height="58" rx="4" fill="#f3efe6"/>
+      <text x="42" y="1184" font-size="11" font-weight="700" fill="#2f6f8f">1514 · Chaldiran</text>
+      <text x="42" y="1199" font-size="9" fill="#3a3f45">The Ottoman–Safavid frontier</text>
+      <text x="42" y="1211" font-size="9" fill="#3a3f45">hardens the Sunni–Shi'i divide.</text>
+
+      <rect x="315" y="1166" width="270" height="58" rx="4" fill="#f3efe6"/>
+      <text x="327" y="1184" font-size="11" font-weight="700" fill="#2f6f8f">1924 · Caliphate abolished</text>
+      <text x="327" y="1199" font-size="9" fill="#3a3f45">The end of the political</text>
+      <text x="327" y="1211" font-size="9" fill="#3a3f45">Islamic project.</text>
+
+      <rect x="600" y="1166" width="270" height="58" rx="4" fill="#f3efe6"/>
+      <text x="612" y="1184" font-size="11" font-weight="700" fill="#2f6f8f">1979 · Iranian Revolution</text>
+      <text x="612" y="1199" font-size="9" fill="#3a3f45">A Shi'i clerical state becomes</text>
+      <text x="612" y="1211" font-size="9" fill="#3a3f45">a regional power.</text>
+    </g>
+
+    <!-- Reading the map -->
+    <text x="30" y="1260" font-size="14" font-weight="700">Reading the map</text>
+    <g font-size="10" fill="#3a3f45">
+      <text x="30" y="1282">• Sunni Islam is the majority almost everywhere; Shi'i majorities are concentrated in Iran, Iraq, Azerbaijan and Bahrain,</text>
+      <text x="42" y="1296">with large minorities in Lebanon, Yemen, Pakistan and India.</text>
+      <text x="30" y="1312">• The decisive shift is Iran after 1501, when the Safavids imposed Twelver Shi'ism; the Ottoman–Safavid frontier then hardened the divide.</text>
+      <text x="30" y="1328">• Dynastic patronage changed the political map faster than popular adherence: Buyid and Fatimid power rose and fell, but the demographic map moved slowly.</text>
+      <text x="30" y="1344" font-size="8.5" fill="#6b6f76" font-style="italic">Simplified: Alevis, Ibadis and other heterodox communities do not fit the Sunni–Shi'i binary and are not shown separately.</text>
+    </g>
+  </g>
+</svg>
